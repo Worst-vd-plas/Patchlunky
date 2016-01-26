@@ -1,0 +1,1 @@
+You can place Ionic.Zip.dll in this directory. The reference for it in Patchlunky.csproj points here.
