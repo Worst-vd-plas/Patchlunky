@@ -1,0 +1,7 @@
+# Ignore all files in bin/ and obj/
+Patchlunky/bin/
+Patchlunky/obj/
+
+# Ignore .user and .suo files
+*.user
+*.suo
