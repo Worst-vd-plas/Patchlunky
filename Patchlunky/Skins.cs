@@ -150,19 +150,22 @@ namespace Patchlunky
         //LoadSkins - Loads skins from path by type
         private void LoadSkins(string path, string type, bool isdefault)
         {
-            string[] skins;
-            skins = Directory.GetFiles(path, type);
-
-            foreach (string skinpath in skins)
+            if (Directory.Exists(path))
             {
-                SkinData skin;
-                string name;
+                string[] skins;
+                skins = Directory.GetFiles(path, type);
 
-                name = Path.GetFileNameWithoutExtension(skinpath);
-                skin = new SkinData(name, skinpath, isdefault);
+                foreach (string skinpath in skins)
+                {
+                    SkinData skin;
+                    string name;
 
-                this.Skins.Add(skin);
-                //Msg.Log("Added skin: " + name + ", " + skinpath);
+                    name = Path.GetFileNameWithoutExtension(skinpath);
+                    skin = new SkinData(name, skinpath, isdefault);
+
+                    this.Skins.Add(skin);
+                    //Msg.Log("Added skin: " + name + ", " + skinpath);
+                }
             }
         }
 
