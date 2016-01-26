@@ -579,8 +579,8 @@ namespace Patchlunky
                         if (result == DialogResult.Yes)
                             path = BrowseGameDir();
                         
-                        this.GamePath = path + "/";
                     }
+                    this.GamePath = path + "/";
                 }
                 else if (result == DialogResult.No)
                 {
