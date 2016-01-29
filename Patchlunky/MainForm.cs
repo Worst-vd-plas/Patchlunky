@@ -54,7 +54,7 @@ namespace Patchlunky
             InitializeComponent();
 
             System.Reflection.Assembly ass = System.Reflection.Assembly.GetExecutingAssembly();
-            this.Text = "Patchlunky " + System.Diagnostics.FileVersionInfo.GetVersionInfo(ass.Location).ProductVersion.ToString();
+            this.Text = "Patchlunky " + System.Diagnostics.FileVersionInfo.GetVersionInfo(ass.Location).ProductVersion.ToString() + " Beta";
 
             CharItem = null;
             SkinItem = null;
