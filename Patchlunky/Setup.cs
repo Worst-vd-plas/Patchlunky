@@ -233,6 +233,7 @@ namespace Patchlunky
         // Patch the game files
         public bool PatchGame(bool reset_only)
         {
+            Settings settings = Program.mainForm.Settings;
             ModManager modMan = Program.mainForm.ModMan;
             SkinManager skinMan = Program.mainForm.SkinMan;
             
@@ -305,10 +306,17 @@ namespace Patchlunky
                 if (i == -1)
                     return false; //Missing "PLAYERS" group in archive, stop patching                
 
+                int count = 0;
+
                 foreach(KeyValuePair<string, string> kvp in skinMan.SkinConfig)
                 {
                     SkinData oldSkin = skinMan.GetSkin(kvp.Key);
                     SkinData newSkin = skinMan.GetSkin(kvp.Value);
+
+                    bool skinsMatch = kvp.Key.Equals(kvp.Value);
+
+                    if (skinsMatch && settings.Check("ModsReplaceDefaultSkins", "True"))
+                        continue; //Skip default skins
 
                     int j = archive.Groups[i].Entries.FindIndex(o => o.Name.Equals(oldSkin.Name + ".png", StringComparison.OrdinalIgnoreCase));
                     if (j == -1)
@@ -320,7 +328,12 @@ namespace Patchlunky
                     //Replace entry in the archive.wad
                     archive.Groups[i].Entries[j] = new_entry;
                     //Msg.Log("Patching skin '" + oldSkin.Name + " to '" + newSkin.Name + "'.");
+
+                    if (skinsMatch == false)
+                        count++;
                 }
+
+                if (count > 0) Msg.Log("Patched " + count + " character skins");
 
                 archive.Save();
             }

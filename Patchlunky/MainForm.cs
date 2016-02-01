@@ -182,6 +182,8 @@ namespace Patchlunky
 
             lblStatusGamePath.Text = "Game path: " + (Setup.CheckGameDir() ? "OK." : "MISSING!");
             lblStatusBackup.Text = "Game backups: " + (Setup.CheckBackups() ? "OK." : "MISSING!");
+
+            chkModsReplaceSkins.Checked = Settings.Check("ModsReplaceDefaultSkins", "True");
         }
 
         //Starts patchlunky setup
@@ -270,6 +272,15 @@ namespace Patchlunky
                 }
             }
             Msg.Log("Extracted allsounds.wad to ./Patchlunky_Temp/allsounds/");
+        }
+
+        //ModsReplaceDefaultSkins
+        private void chkModsReplaceSkins_CheckedChanged(object sender, EventArgs e)
+        {
+            if(chkModsReplaceSkins.Checked)
+                Settings.Set("ModsReplaceDefaultSkins", "True");
+            else
+                Settings.Set("ModsReplaceDefaultSkins", "False");
         }
 
         //----------------------------------------------//
@@ -615,6 +626,5 @@ namespace Patchlunky
             }
             UpdateSkinTab();
         }
-
     }
 }
