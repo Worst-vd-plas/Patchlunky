@@ -450,19 +450,16 @@ namespace Patchlunky
 
         public void PatchZipArchive(ModData mod, string archivepath)
         {
-            Archive archive = new Archive(TempPath + archivepath + ".wad");
-            archive.Load();
-
             ZipFile zip = new ZipFile(mod.Path);
-
-            int count = 0;
 
             // Check if the mod has a directory for wad resources
             if (zip.ContainsEntry(archivepath + "/"))
             {
-                //Msg.Log("zip has '" + archivepath + "' folder.");
+                Archive archive = new Archive(TempPath + archivepath + ".wad");
+                archive.Load();
 
                 int i, j;
+                int count = 0;
 
                 // Go through the groups in the archive file.
                 for (i = 0; i < archive.Groups.Count; i++)
@@ -498,70 +495,59 @@ namespace Patchlunky
                         }
                     }
                 }
-            }
-            archive.Save();
+                archive.Save();
 
-            if (count > 0)  Msg.Log("Patched " + count + " " + archivepath + " resources for " + mod.Name);
+                if (count > 0) Msg.Log("Patched " + count + " " + archivepath + " resources for " + mod.Name);
+            }            
         }
 
         public void PatchDirArchive(ModData mod, string archivepath)
         {
-            Archive archive = new Archive(TempPath + archivepath + ".wad");
-            archive.Load();
-
             string archive_dir = mod.Path + archivepath;
-
-            int count = 0;
 
             // Check if the mod has a directory for wad resources
             if (Directory.Exists(archive_dir))
             {
+                Archive archive = new Archive(TempPath + archivepath + ".wad");
+                archive.Load();
+
                 int i, j;
-                string[] directories = Directory.GetDirectories(archive_dir);
+                int count = 0;
 
-                // Go through the subdirectories of the archive folder.
-                foreach (string dir in directories)
+                // Go through the groups in the archive file.
+                for (i = 0; i < archive.Groups.Count; i++)
                 {
-                    // Go through the groups in the archive file.
-                    for (i = 0; i < archive.Groups.Count; i++)
+                    var group = archive.Groups[i];
+
+                    //Check for matching subdirectory and archive group.
+                    if (Directory.Exists(archive_dir + "/" + group.Name))
                     {
-                        var group = archive.Groups[i];
-
-                        //Check for matching subdirectory and archive group.
-                        string dirname = new DirectoryInfo(dir).Name;
-                        if (dirname.Equals(group.Name, StringComparison.OrdinalIgnoreCase))
+                        //Go through the entries in the archive file
+                        for (j = 0; j < archive.Groups[i].Entries.Count; j++)
                         {
-                            string[] files = Directory.GetFiles(dir);
+                            var entry = archive.Groups[i].Entries[j];
 
-                            // Go through the files in the archive subfolders.
-                            foreach (string file in files)
+                            //Check for matching file and archive entry.
+                            string filepath = archive_dir + "/" + group.Name + "/" + entry.Name;
+                            if (File.Exists(filepath))
                             {
-                                //Go through the entries in the archive file
-                                for (j = 0; j < archive.Groups[i].Entries.Count; j++)
-                                {
-                                    var entry = archive.Groups[i].Entries[j];
+                                Byte[] data = File.ReadAllBytes(filepath);
+                                var new_entry = new Entry(entry.Name, data);
 
-                                    //Check for matching file and archive entry.
-                                    string filename = Path.GetFileName(file);
-                                    if (filename.Equals(entry.Name, StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        Byte[] data = File.ReadAllBytes(file);
-                                        var new_entry = new Entry(filename, data);
+                                //Replace entry in the archive.wad with file in mod archive folder.
+                                archive.Groups[i].Entries[j] = new_entry;
 
-                                        //Replace entry in the archive.wad with file in mod archive folder.
-                                        archive.Groups[i].Entries[j] = new_entry;
-                                        //Msg.Log("Patching '" + group.Name + "/" + entry.Name + "' from " + mod.Name);
-                                        count++;
-                                    }
-                                }
+                                //Msg.Log("Patching '" + group.Name + "/" + entry.Name + "' from " + mod.Name);
+                                count++;
                             }
                         }
                     }
                 }
-            }
-            archive.Save();
 
-            if (count > 0) Msg.Log("Patched " + count + " " + archivepath + " resources for " + mod.Name);
+                archive.Save();
+
+                if (count > 0) Msg.Log("Patched " + count + " " + archivepath + " resources for " + mod.Name);
+            }
         }
 
         //Displays dialogs for setting the game path and doing backups
