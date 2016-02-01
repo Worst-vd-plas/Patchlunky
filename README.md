@@ -7,7 +7,7 @@ The Mod Manager is designed to:
  * Allow multiple different mods to be patched to the game.
  * Make mod distribution simple, by having a dedicated file type for mods. (*.plm)
 
-The Skin Manager allows changing the skins of the 20 player characters of the game.
+The Skin Manager allows changing the skins of the 20 player characters in the game.
 
 
 You can download the latest release here: [Patchlunky-1.0.0.0-beta.zip](https://github.com/Worst-vd-plas/Patchlunky/releases/download/v1.0.0.0/Patchlunky-1.0.0.0-beta.zip)
@@ -52,19 +52,19 @@ Patchlunky is licensed under Simplified BSD License (see [LICENSE.Patchlunky.txt
 Patchlunky makes use of the following third-party code:
 
 
-SpelunkyWad
-MIT License (see [LICENSE.SpelunkyWad.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.SpelunkyWad.txt))
+SpelunkyWad  
+MIT License (see [LICENSE.SpelunkyWad.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.SpelunkyWad.txt))  
 https://github.com/Contron/SpelunkyWad
 
-DotNetZip 
-Microsoft Public License (see [LICENSE.DotNetZip.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.txt))
+DotNetZip  
+Microsoft Public License (see [LICENSE.DotNetZip.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.txt))  
 https://dotnetzip.codeplex.com/
 
-ZLIB
-zlib License (see [LICENSE.DotNetZip.zlib.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.zlib.txt))
+ZLIB  
+zlib License (see [LICENSE.DotNetZip.zlib.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.zlib.txt))  
 http://zlib.net/
 
-BZIP2
-BSD License/Apache License 2.0 (see [LICENSE.DotNetZip.bzip2.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.bzip2.txt))
+BZIP2  
+BSD License/Apache License 2.0 (see [LICENSE.DotNetZip.bzip2.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.bzip2.txt))  
 http://www.bzip.org/
 
