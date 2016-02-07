@@ -58,6 +58,7 @@ namespace Patchlunky
             this.Add("ModConfig_Default", "");
             this.Add("SkinConfig_Default", "");
             this.Add("ModsReplaceDefaultSkins", "True");
+            this.Add("ModConfigAutosave", "True");
 
             this.Save(); //Save config to disk.
         }

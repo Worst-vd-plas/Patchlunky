@@ -95,7 +95,10 @@ namespace Patchlunky
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             UpdateModConfiguration();
-            ModMan.SaveConfig(ModMan.CurrentConfig); //TODO: Only auto-save default
+
+            if (Settings.Check("ModConfigAutosave", "True"))
+                ModMan.SaveConfig(ModMan.CurrentConfig);
+
             ModMan.SaveConfigList();
 
             UpdateSkinConfiguration();
@@ -122,7 +125,9 @@ namespace Patchlunky
         private void btnPatch_Click(object sender, EventArgs e)
         {
             UpdateModConfiguration();
-            ModMan.SaveConfig(ModMan.CurrentConfig); //TODO: Only auto-save default
+            
+            if (Settings.Check("ModConfigAutosave", "True"))
+                ModMan.SaveConfig(ModMan.CurrentConfig);
 
             UpdateSkinConfiguration();
             SkinMan.SaveConfig("Default");
@@ -184,6 +189,7 @@ namespace Patchlunky
             lblStatusBackup.Text = "Game backups: " + (Setup.CheckBackups() ? "OK." : "MISSING!");
 
             chkModsReplaceSkins.Checked = Settings.Check("ModsReplaceDefaultSkins", "True");
+            chkModConfigAutosave.Checked = Settings.Check("ModConfigAutosave", "True");
         }
 
         //Starts patchlunky setup
@@ -277,10 +283,13 @@ namespace Patchlunky
         //ModsReplaceDefaultSkins
         private void chkModsReplaceSkins_CheckedChanged(object sender, EventArgs e)
         {
-            if(chkModsReplaceSkins.Checked)
-                Settings.Set("ModsReplaceDefaultSkins", "True");
-            else
-                Settings.Set("ModsReplaceDefaultSkins", "False");
+            Settings.Set("ModsReplaceDefaultSkins", chkModsReplaceSkins.Checked ? "True" : "False");            
+        }
+
+        //ModConfigAutosave
+        private void chkModConfigAutosave_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Set("ModConfigAutosave", chkModConfigAutosave.Checked ? "True" : "False");
         }
 
         //----------------------------------------------//
@@ -626,5 +635,6 @@ namespace Patchlunky
             }
             UpdateSkinTab();
         }
+
     }
 }

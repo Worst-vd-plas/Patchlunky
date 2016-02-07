@@ -62,6 +62,7 @@
             this.picCharacter = new System.Windows.Forms.PictureBox();
             this.lvwCharacters = new System.Windows.Forms.ListView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.chkModsReplaceSkins = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnExtractArchives = new System.Windows.Forms.Button();
@@ -78,7 +79,7 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.chkModsReplaceSkins = new System.Windows.Forms.CheckBox();
+            this.chkModConfigAutosave = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picModImage)).BeginInit();
@@ -434,6 +435,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.chkModConfigAutosave);
             this.tabPage3.Controls.Add(this.chkModsReplaceSkins);
             this.tabPage3.Controls.Add(this.label2);
             this.tabPage3.Controls.Add(this.pictureBox1);
@@ -451,6 +453,17 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // chkModsReplaceSkins
+            // 
+            this.chkModsReplaceSkins.AutoSize = true;
+            this.chkModsReplaceSkins.Location = new System.Drawing.Point(13, 134);
+            this.chkModsReplaceSkins.Name = "chkModsReplaceSkins";
+            this.chkModsReplaceSkins.Size = new System.Drawing.Size(173, 17);
+            this.chkModsReplaceSkins.TabIndex = 11;
+            this.chkModsReplaceSkins.Text = "Mods can replace default skins";
+            this.chkModsReplaceSkins.UseVisualStyleBackColor = true;
+            this.chkModsReplaceSkins.CheckedChanged += new System.EventHandler(this.chkModsReplaceSkins_CheckedChanged);
             // 
             // label2
             // 
@@ -605,16 +618,16 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // chkModsReplaceSkins
+            // chkModConfigAutosave
             // 
-            this.chkModsReplaceSkins.AutoSize = true;
-            this.chkModsReplaceSkins.Location = new System.Drawing.Point(13, 134);
-            this.chkModsReplaceSkins.Name = "chkModsReplaceSkins";
-            this.chkModsReplaceSkins.Size = new System.Drawing.Size(173, 17);
-            this.chkModsReplaceSkins.TabIndex = 11;
-            this.chkModsReplaceSkins.Text = "Mods can replace default skins";
-            this.chkModsReplaceSkins.UseVisualStyleBackColor = true;
-            this.chkModsReplaceSkins.CheckedChanged += new System.EventHandler(this.chkModsReplaceSkins_CheckedChanged);
+            this.chkModConfigAutosave.AutoSize = true;
+            this.chkModConfigAutosave.Location = new System.Drawing.Point(13, 164);
+            this.chkModConfigAutosave.Name = "chkModConfigAutosave";
+            this.chkModConfigAutosave.Size = new System.Drawing.Size(158, 17);
+            this.chkModConfigAutosave.TabIndex = 12;
+            this.chkModConfigAutosave.Text = "Autosave mod configuration";
+            this.chkModConfigAutosave.UseVisualStyleBackColor = true;
+            this.chkModConfigAutosave.CheckedChanged += new System.EventHandler(this.chkModConfigAutosave_CheckedChanged);
             // 
             // MainForm
             // 
@@ -702,6 +715,7 @@
         private System.Windows.Forms.Label lblSkin;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox chkModsReplaceSkins;
+        private System.Windows.Forms.CheckBox chkModConfigAutosave;
     }
 }
 
