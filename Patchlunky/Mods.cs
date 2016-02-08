@@ -148,13 +148,12 @@ namespace Patchlunky
         {
             string path = Program.mainForm.Setup.AppPath + "Mods/";
 
-            Msg.Log("Loading mods.");
-
+            
             LoadMods(path, "/");
             LoadMods(path, "*.zip");
             LoadMods(path, "*.plm");
 
-            Msg.Log("Found " + Mods.Count + " mods.");
+            Msg.Log("Loaded " + Mods.Count + " mods.");
         }
 
         //LoadMods - Loads mods of given type
@@ -204,7 +203,7 @@ namespace Patchlunky
                 this.Configs.Add(configname);
             }
 
-            Msg.Log("Loaded modconfig list: " + Configs.Count + " mod configurations.");
+            Msg.Log("Loaded " + Configs.Count + " mod configurations.");
         }
 
         //SaveConfigs - Saves the mod configuration list

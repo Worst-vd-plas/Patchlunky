@@ -77,17 +77,19 @@ namespace Patchlunky
             //DebugPrintSettings();
 
             ModMan.LoadAllMods();
-            ModMan.LoadConfigList();
-            //ModMan.LoadConfig("Default");
-            
             SkinMan.LoadAllSkins();
-            SkinMan.LoadConfig("Default");
 
+            ModMan.LoadConfigList();            
+            SkinMan.LoadConfigList();
+            //ModMan.LoadConfig("Default");
+            //SkinMan.LoadConfig("Default");
 
             UpdateModList();            
             UpdateModConfigList();
 
             UpdateCharacterList();
+            UpdateSkinList();
+            UpdateSkinConfigList();
 
             UpdateSettingsTab();
         }
@@ -95,15 +97,16 @@ namespace Patchlunky
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             UpdateModConfiguration();
+            UpdateSkinConfiguration();
 
             if (Settings.Check("ModConfigAutosave", "True"))
                 ModMan.SaveConfig(ModMan.CurrentConfig);
 
+            if (Settings.Check("SkinConfigAutosave", "True"))            
+                SkinMan.SaveConfig(SkinMan.CurrentConfig);
+            
             ModMan.SaveConfigList();
-
-            UpdateSkinConfiguration();
-            SkinMan.SaveConfig("Default");
-
+            SkinMan.SaveConfigList();
 
             Settings.Set("GameDir", Setup.GamePath);            
             Settings.Save();
@@ -125,12 +128,13 @@ namespace Patchlunky
         private void btnPatch_Click(object sender, EventArgs e)
         {
             UpdateModConfiguration();
-            
-            if (Settings.Check("ModConfigAutosave", "True"))
-                ModMan.SaveConfig(ModMan.CurrentConfig);
-
             UpdateSkinConfiguration();
-            SkinMan.SaveConfig("Default");
+
+            if (Settings.Check("ModConfigAutosave", "True"))
+                ModMan.SaveConfig(ModMan.CurrentConfig);            
+
+            if (Settings.Check("SkinConfigAutosave", "True"))
+                SkinMan.SaveConfig(SkinMan.CurrentConfig);
 
             //Debug
             //foreach (var mod in ModMan.Mods)
@@ -190,6 +194,7 @@ namespace Patchlunky
 
             chkModsReplaceSkins.Checked = Settings.Check("ModsReplaceDefaultSkins", "True");
             chkModConfigAutosave.Checked = Settings.Check("ModConfigAutosave", "True");
+            chkSkinConfigAutosave.Checked = Settings.Check("SkinConfigAutosave", "True");
         }
 
         //Starts patchlunky setup
@@ -290,6 +295,12 @@ namespace Patchlunky
         private void chkModConfigAutosave_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Set("ModConfigAutosave", chkModConfigAutosave.Checked ? "True" : "False");
+        }
+
+        //SkinConfigAutosave
+        private void chkSkinConfigAutosave_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Set("SkinConfigAutosave", chkSkinConfigAutosave.Checked ? "True" : "False");
         }
 
         //----------------------------------------------//
@@ -408,46 +419,46 @@ namespace Patchlunky
         //Clears and Recreates the list of modconfigs
         private void UpdateModConfigList()
         {
-            cboConfig.Items.Clear();
+            cboModConfig.Items.Clear();
 
             foreach (var conf in ModMan.Configs)
             {
-                cboConfig.Items.Add(conf);
+                cboModConfig.Items.Add(conf);
             }
 
-            cboConfig.SelectedItem = ModMan.CurrentConfig;
-        }
-
-        //Save mod configuration button
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            UpdateModConfiguration();
-
-            string modconfig = cboConfig.Text;
-            if (ModMan.ConfigExists(modconfig) == false)
-            {
-                ModMan.Configs.Add(modconfig);
-                cboConfig.Items.Add(modconfig);                
-            }
-            ModMan.SaveConfig(modconfig);
+            cboModConfig.SelectedItem = ModMan.CurrentConfig;
         }
 
         //Mod configuration list index changed
-        private void cboConfig_SelectedIndexChanged(object sender, EventArgs e)
+        private void cboModConfig_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string modconfig = cboConfig.Text;
-            if (ModMan.ConfigExists(modconfig))
+            string config = cboModConfig.Text;
+            if (ModMan.ConfigExists(config))
             {
-                ModMan.CurrentConfig = modconfig;
-                ModMan.LoadConfig(modconfig);
+                ModMan.CurrentConfig = config;
+                ModMan.LoadConfig(config);
                 UpdateModList();
             }
         }
 
-        //Delete mod configuration button
-        private void btnDelete_Click(object sender, EventArgs e)
+        //Save mod configuration button
+        private void btnSaveModConfig_Click(object sender, EventArgs e)
         {
-            string modconfig = cboConfig.Text;
+            UpdateModConfiguration();
+
+            string modconfig = cboModConfig.Text;
+            if (ModMan.ConfigExists(modconfig) == false)
+            {
+                ModMan.Configs.Add(modconfig);
+                cboModConfig.Items.Add(modconfig);
+            }
+            ModMan.SaveConfig(modconfig);
+        }
+
+        //Delete mod configuration button
+        private void btnDeleteModConfig_Click(object sender, EventArgs e)
+        {
+            string modconfig = cboModConfig.Text;
             
             if (modconfig.Equals("Default")) return;
 
@@ -455,10 +466,10 @@ namespace Patchlunky
             {
                 ModMan.RemoveConfig(modconfig);
                 ModMan.Configs.Remove(modconfig);
-                cboConfig.Items.Remove(modconfig);
+                cboModConfig.Items.Remove(modconfig);
 
                 //Switch back to default config
-                cboConfig.SelectedItem = "Default";
+                cboModConfig.SelectedItem = "Default";
             }
         }
 
@@ -515,23 +526,30 @@ namespace Patchlunky
             }
         }
 
-        //Clears and Recreates the listviews of characters and skins
+        //Clears and Recreates the listview of skins
+        private void UpdateSkinList()
+        {
+            lvwSkins.Clear();
+            lvwSkins.LargeImageList = SkinMan.SkinImageList;
+
+            //Fill skin list
+            foreach (var skin in SkinMan.Skins)
+                lvwSkins.Items.Add(skin.Name, skin.Name);
+        }
+
+        //Clears and Recreates the listview of characters
         private void UpdateCharacterList()
         {
             lvwCharacters.Clear();
-            lvwSkins.Clear();
-
             lvwCharacters.LargeImageList = SkinMan.SkinImageList;
-            lvwSkins.LargeImageList = SkinMan.SkinImageList;
-
-            //Fill character and skin list
+            
+            //Fill character list
             foreach (var skin in SkinMan.Skins)
             {
                 if (skin.IsDefault == true)
                 {
                     lvwCharacters.Items.Add(skin.Name, skin.Name, skin.Name);
                 }
-                lvwSkins.Items.Add(skin.Name, skin.Name);
             }
 
             //Adjust character list to match the skin config
@@ -555,7 +573,12 @@ namespace Patchlunky
         private void SwitchSkinView(bool characters)
         {
             lvwCharacters.Visible = characters;
-            lblCharSelect.Visible = characters;  
+            lblCharSelect.Visible = characters;
+            cboSkinConfig.Enabled = characters;
+            btnSaveSkinConfig.Enabled = characters;
+            btnDeleteSkinConfig.Enabled = characters;
+            btnResetSkins.Enabled = characters;
+            btnRestoreSkin.Enabled = characters;
 
             lvwSkins.Visible = !characters;
             lblSkinSelect.Visible = !characters;
@@ -634,6 +657,63 @@ namespace Patchlunky
                 item.ImageKey = item.Name;
             }
             UpdateSkinTab();
+        }
+
+        //Clears and Recreates the list of skinconfigs
+        private void UpdateSkinConfigList()
+        {
+            cboSkinConfig.Items.Clear();
+
+            foreach (var conf in SkinMan.Configs)
+            {
+                cboSkinConfig.Items.Add(conf);
+            }
+
+            cboSkinConfig.SelectedItem = SkinMan.CurrentConfig;
+        }
+
+        //Skin configuration list index changed
+        private void cboSkinConfig_SelectedIndexChanged(object sender, EventArgs e)
+        {                    
+            string config = cboSkinConfig.Text;
+            if (SkinMan.ConfigExists(config))
+            {
+                SkinMan.CurrentConfig = config;
+                SkinMan.LoadConfig(config);
+                UpdateCharacterList();
+            }
+        }
+
+        //Save skin configuration button
+        private void btnSaveSkinConfig_Click(object sender, EventArgs e)
+        {
+            UpdateSkinConfiguration();
+
+            string config = cboSkinConfig.Text;
+            if (SkinMan.ConfigExists(config) == false)
+            {
+                SkinMan.Configs.Add(config);
+                cboSkinConfig.Items.Add(config);
+            }
+            SkinMan.SaveConfig(config);
+        }
+
+        //Delete skin configuration button
+        private void btnDeleteSkinConfig_Click(object sender, EventArgs e)
+        {
+            string config = cboSkinConfig.Text;
+
+            if (config.Equals("Default")) return;
+
+            if (SkinMan.ConfigExists(config))
+            {
+                SkinMan.RemoveConfig(config);
+                SkinMan.Configs.Remove(config);
+                cboSkinConfig.Items.Remove(config);
+
+                //Switch back to default config
+                cboSkinConfig.SelectedItem = "Default";
+            }
         }
 
     }

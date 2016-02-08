@@ -73,12 +73,15 @@ namespace Patchlunky
         public List<SkinData> Skins;
         public ImageList SkinImageList;
         public Dictionary<string, string> SkinConfig;
+        public List<string> Configs;
+        public string CurrentConfig;
 
         public SkinManager()
         {
             this.Skins = new List<SkinData>();
             this.SkinImageList = new ImageList();
             this.SkinConfig = new Dictionary<string, string>();
+            this.Configs = new List<string>();
         }
         
         //Extracts the original skins from the backups
@@ -129,13 +132,12 @@ namespace Patchlunky
             Setup setup = Program.mainForm.Setup;
 
             ExtractDefaultSkins();
-
-            Msg.Log("Loading character skins.");
+            
 
             LoadSkins(setup.BackupPath + "Characters/", "*.png", true); //Original skins
             LoadSkins(setup.AppPath + "Skins/", "*.png", false); //Custom skins
 
-            Msg.Log("Found " + Skins.Count + " skins.");
+            Msg.Log("Loaded " + Skins.Count + " character skins.");
 
             //Create imagelist
             this.SkinImageList.ImageSize = new Size(80, 80);
@@ -167,6 +169,53 @@ namespace Patchlunky
                     //Msg.Log("Added skin: " + name + ", " + skinpath);
                 }
             }
+        }
+
+        //LoadConfigs - Loads the skin configuration list
+        public void LoadConfigList()
+        {
+            Settings settings = Program.mainForm.Settings;
+
+            this.CurrentConfig = settings.Get("SkinConfig");
+            string configs = settings.Get("SkinConfigList");
+            if (configs == null) return;
+
+            this.Configs.Clear();
+
+            string[] confignames = configs.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < confignames.Length; i++)
+            {
+                string configname = confignames[i];
+
+                this.Configs.Add(configname);
+            }
+
+            Msg.Log("Loaded " + Configs.Count + " skin configurations.");
+        }
+
+        //SaveConfigs - Saves the skin configuration list
+        public void SaveConfigList()
+        {
+            Settings settings = Program.mainForm.Settings;
+            string configs = "";
+            foreach (string conf in this.Configs)
+            {
+                configs += conf + "|";
+            }
+            settings.Set("SkinConfigList", configs);
+            settings.Set("SkinConfig", this.CurrentConfig);
+
+            Msg.Log("Saved skinconfig list: " + Configs.Count + " skin configurations.");
+        }
+
+        //ConfigExists - Checks if a skin configuration exists
+        public bool ConfigExists(string configname)
+        {
+            string config = Configs.Find(o => o.Equals(configname, StringComparison.OrdinalIgnoreCase));
+            if (config == null)
+                return false;
+
+            return true;
         }
 
         //LoadConfig - Loads a skin configuration
@@ -207,6 +256,15 @@ namespace Patchlunky
             settings.Set("SkinConfig_" + configname, config);
 
             Msg.Log("Saved skinconfig '" + configname + "'.");
+        }
+
+        //RemoveConfig - Removes a skin configuration
+        public void RemoveConfig(string configname)
+        {
+            Settings settings = Program.mainForm.Settings;
+            settings.Remove("SkinConfig_" + configname);
+
+            Msg.Log("Removed skinconfig '" + configname + "'.");
         }
 
     }

@@ -34,9 +34,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.lblModName = new System.Windows.Forms.Label();
             this.picModImage = new System.Windows.Forms.PictureBox();
-            this.btnDelete = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.cboConfig = new System.Windows.Forms.ComboBox();
+            this.btnDeleteModConfig = new System.Windows.Forms.Button();
+            this.btnSaveModConfig = new System.Windows.Forms.Button();
+            this.cboModConfig = new System.Windows.Forms.ComboBox();
             this.lblModText = new System.Windows.Forms.Label();
             this.lblModList = new System.Windows.Forms.Label();
             this.lblLoadOrder = new System.Windows.Forms.Label();
@@ -51,6 +51,7 @@
             this.btnModDown = new System.Windows.Forms.Button();
             this.btnModUp = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.cboSkinConfig = new System.Windows.Forms.ComboBox();
             this.lblSkin = new System.Windows.Forms.Label();
             this.btnRestoreSkin = new System.Windows.Forms.Button();
             this.lblSkinSelect = new System.Windows.Forms.Label();
@@ -62,6 +63,7 @@
             this.picCharacter = new System.Windows.Forms.PictureBox();
             this.lvwCharacters = new System.Windows.Forms.ListView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.chkModConfigAutosave = new System.Windows.Forms.CheckBox();
             this.chkModsReplaceSkins = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -79,7 +81,9 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.chkModConfigAutosave = new System.Windows.Forms.CheckBox();
+            this.btnSaveSkinConfig = new System.Windows.Forms.Button();
+            this.btnDeleteSkinConfig = new System.Windows.Forms.Button();
+            this.chkSkinConfigAutosave = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picModImage)).BeginInit();
@@ -106,9 +110,9 @@
             // 
             this.tabPage1.Controls.Add(this.lblModName);
             this.tabPage1.Controls.Add(this.picModImage);
-            this.tabPage1.Controls.Add(this.btnDelete);
-            this.tabPage1.Controls.Add(this.btnSave);
-            this.tabPage1.Controls.Add(this.cboConfig);
+            this.tabPage1.Controls.Add(this.btnDeleteModConfig);
+            this.tabPage1.Controls.Add(this.btnSaveModConfig);
+            this.tabPage1.Controls.Add(this.cboModConfig);
             this.tabPage1.Controls.Add(this.lblModText);
             this.tabPage1.Controls.Add(this.lblModList);
             this.tabPage1.Controls.Add(this.lblLoadOrder);
@@ -149,35 +153,35 @@
             this.picModImage.TabIndex = 23;
             this.picModImage.TabStop = false;
             // 
-            // btnDelete
+            // btnDeleteModConfig
             // 
-            this.btnDelete.Location = new System.Drawing.Point(288, 7);
-            this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(49, 21);
-            this.btnDelete.TabIndex = 22;
-            this.btnDelete.Text = "Delete";
-            this.btnDelete.UseVisualStyleBackColor = true;
-            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            this.btnDeleteModConfig.Location = new System.Drawing.Point(288, 7);
+            this.btnDeleteModConfig.Name = "btnDeleteModConfig";
+            this.btnDeleteModConfig.Size = new System.Drawing.Size(49, 21);
+            this.btnDeleteModConfig.TabIndex = 22;
+            this.btnDeleteModConfig.Text = "Delete";
+            this.btnDeleteModConfig.UseVisualStyleBackColor = true;
+            this.btnDeleteModConfig.Click += new System.EventHandler(this.btnDeleteModConfig_Click);
             // 
-            // btnSave
+            // btnSaveModConfig
             // 
-            this.btnSave.Location = new System.Drawing.Point(238, 7);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(44, 21);
-            this.btnSave.TabIndex = 21;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            this.btnSaveModConfig.Location = new System.Drawing.Point(238, 7);
+            this.btnSaveModConfig.Name = "btnSaveModConfig";
+            this.btnSaveModConfig.Size = new System.Drawing.Size(44, 21);
+            this.btnSaveModConfig.TabIndex = 21;
+            this.btnSaveModConfig.Text = "Save";
+            this.btnSaveModConfig.UseVisualStyleBackColor = true;
+            this.btnSaveModConfig.Click += new System.EventHandler(this.btnSaveModConfig_Click);
             // 
-            // cboConfig
+            // cboModConfig
             // 
-            this.cboConfig.FormattingEnabled = true;
-            this.cboConfig.Location = new System.Drawing.Point(8, 7);
-            this.cboConfig.Name = "cboConfig";
-            this.cboConfig.Size = new System.Drawing.Size(224, 21);
-            this.cboConfig.TabIndex = 19;
-            this.cboConfig.Text = "Default";
-            this.cboConfig.SelectedIndexChanged += new System.EventHandler(this.cboConfig_SelectedIndexChanged);
+            this.cboModConfig.FormattingEnabled = true;
+            this.cboModConfig.Location = new System.Drawing.Point(8, 7);
+            this.cboModConfig.Name = "cboModConfig";
+            this.cboModConfig.Size = new System.Drawing.Size(224, 21);
+            this.cboModConfig.TabIndex = 19;
+            this.cboModConfig.Text = "Default";
+            this.cboModConfig.SelectedIndexChanged += new System.EventHandler(this.cboModConfig_SelectedIndexChanged);
             // 
             // lblModText
             // 
@@ -306,6 +310,9 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnDeleteSkinConfig);
+            this.tabPage2.Controls.Add(this.btnSaveSkinConfig);
+            this.tabPage2.Controls.Add(this.cboSkinConfig);
             this.tabPage2.Controls.Add(this.lblSkin);
             this.tabPage2.Controls.Add(this.btnRestoreSkin);
             this.tabPage2.Controls.Add(this.lblSkinSelect);
@@ -324,10 +331,20 @@
             this.tabPage2.Text = "Character Skins";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // cboSkinConfig
+            // 
+            this.cboSkinConfig.FormattingEnabled = true;
+            this.cboSkinConfig.Location = new System.Drawing.Point(8, 7);
+            this.cboSkinConfig.Name = "cboSkinConfig";
+            this.cboSkinConfig.Size = new System.Drawing.Size(299, 21);
+            this.cboSkinConfig.TabIndex = 14;
+            this.cboSkinConfig.Text = "Default";
+            this.cboSkinConfig.SelectedIndexChanged += new System.EventHandler(this.cboSkinConfig_SelectedIndexChanged);
+            // 
             // lblSkin
             // 
             this.lblSkin.AutoSize = true;
-            this.lblSkin.Location = new System.Drawing.Point(592, 40);
+            this.lblSkin.Location = new System.Drawing.Point(592, 63);
             this.lblSkin.Name = "lblSkin";
             this.lblSkin.Size = new System.Drawing.Size(31, 13);
             this.lblSkin.TabIndex = 13;
@@ -335,7 +352,7 @@
             // 
             // btnRestoreSkin
             // 
-            this.btnRestoreSkin.Location = new System.Drawing.Point(449, 277);
+            this.btnRestoreSkin.Location = new System.Drawing.Point(449, 301);
             this.btnRestoreSkin.Name = "btnRestoreSkin";
             this.btnRestoreSkin.Size = new System.Drawing.Size(206, 36);
             this.btnRestoreSkin.TabIndex = 12;
@@ -346,7 +363,7 @@
             // lblSkinSelect
             // 
             this.lblSkinSelect.AutoSize = true;
-            this.lblSkinSelect.Location = new System.Drawing.Point(8, 6);
+            this.lblSkinSelect.Location = new System.Drawing.Point(8, 33);
             this.lblSkinSelect.Name = "lblSkinSelect";
             this.lblSkinSelect.Size = new System.Drawing.Size(151, 13);
             this.lblSkinSelect.TabIndex = 11;
@@ -356,7 +373,7 @@
             // lblCharSelect
             // 
             this.lblCharSelect.AutoSize = true;
-            this.lblCharSelect.Location = new System.Drawing.Point(8, 6);
+            this.lblCharSelect.Location = new System.Drawing.Point(8, 33);
             this.lblCharSelect.Name = "lblCharSelect";
             this.lblCharSelect.Size = new System.Drawing.Size(212, 13);
             this.lblCharSelect.TabIndex = 10;
@@ -365,7 +382,7 @@
             // lblCharacter
             // 
             this.lblCharacter.AutoSize = true;
-            this.lblCharacter.Location = new System.Drawing.Point(458, 31);
+            this.lblCharacter.Location = new System.Drawing.Point(458, 54);
             this.lblCharacter.Name = "lblCharacter";
             this.lblCharacter.Size = new System.Drawing.Size(100, 13);
             this.lblCharacter.TabIndex = 9;
@@ -375,7 +392,7 @@
             // 
             this.picSkin.BackColor = System.Drawing.Color.AliceBlue;
             this.picSkin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picSkin.Location = new System.Drawing.Point(567, 56);
+            this.picSkin.Location = new System.Drawing.Point(567, 79);
             this.picSkin.Name = "picSkin";
             this.picSkin.Size = new System.Drawing.Size(80, 80);
             this.picSkin.TabIndex = 8;
@@ -385,7 +402,7 @@
             // 
             this.lvwSkins.BackColor = System.Drawing.Color.AliceBlue;
             this.lvwSkins.HideSelection = false;
-            this.lvwSkins.Location = new System.Drawing.Point(8, 27);
+            this.lvwSkins.Location = new System.Drawing.Point(8, 50);
             this.lvwSkins.MultiSelect = false;
             this.lvwSkins.Name = "lvwSkins";
             this.lvwSkins.Size = new System.Drawing.Size(435, 328);
@@ -399,7 +416,7 @@
             // 
             // btnResetSkins
             // 
-            this.btnResetSkins.Location = new System.Drawing.Point(449, 319);
+            this.btnResetSkins.Location = new System.Drawing.Point(449, 342);
             this.btnResetSkins.Name = "btnResetSkins";
             this.btnResetSkins.Size = new System.Drawing.Size(206, 36);
             this.btnResetSkins.TabIndex = 6;
@@ -411,7 +428,7 @@
             // 
             this.picCharacter.BackColor = System.Drawing.Color.WhiteSmoke;
             this.picCharacter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picCharacter.Location = new System.Drawing.Point(461, 47);
+            this.picCharacter.Location = new System.Drawing.Point(461, 70);
             this.picCharacter.Name = "picCharacter";
             this.picCharacter.Size = new System.Drawing.Size(100, 100);
             this.picCharacter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -422,7 +439,7 @@
             // 
             this.lvwCharacters.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lvwCharacters.HideSelection = false;
-            this.lvwCharacters.Location = new System.Drawing.Point(8, 27);
+            this.lvwCharacters.Location = new System.Drawing.Point(8, 50);
             this.lvwCharacters.MultiSelect = false;
             this.lvwCharacters.Name = "lvwCharacters";
             this.lvwCharacters.Size = new System.Drawing.Size(435, 328);
@@ -435,6 +452,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.chkSkinConfigAutosave);
             this.tabPage3.Controls.Add(this.chkModConfigAutosave);
             this.tabPage3.Controls.Add(this.chkModsReplaceSkins);
             this.tabPage3.Controls.Add(this.label2);
@@ -454,6 +472,17 @@
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // chkModConfigAutosave
+            // 
+            this.chkModConfigAutosave.AutoSize = true;
+            this.chkModConfigAutosave.Location = new System.Drawing.Point(13, 164);
+            this.chkModConfigAutosave.Name = "chkModConfigAutosave";
+            this.chkModConfigAutosave.Size = new System.Drawing.Size(158, 17);
+            this.chkModConfigAutosave.TabIndex = 12;
+            this.chkModConfigAutosave.Text = "Autosave mod configuration";
+            this.chkModConfigAutosave.UseVisualStyleBackColor = true;
+            this.chkModConfigAutosave.CheckedChanged += new System.EventHandler(this.chkModConfigAutosave_CheckedChanged);
+            // 
             // chkModsReplaceSkins
             // 
             this.chkModsReplaceSkins.AutoSize = true;
@@ -469,7 +498,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Miriam", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(112, 224);
+            this.label2.Location = new System.Drawing.Point(112, 242);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(285, 32);
             this.label2.TabIndex = 10;
@@ -478,7 +507,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Patchlunky.Properties.Resources.under_construction;
-            this.pictureBox1.Location = new System.Drawing.Point(27, 211);
+            this.pictureBox1.Location = new System.Drawing.Point(27, 229);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(64, 64);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -618,16 +647,36 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // chkModConfigAutosave
+            // btnSaveSkinConfig
             // 
-            this.chkModConfigAutosave.AutoSize = true;
-            this.chkModConfigAutosave.Location = new System.Drawing.Point(13, 164);
-            this.chkModConfigAutosave.Name = "chkModConfigAutosave";
-            this.chkModConfigAutosave.Size = new System.Drawing.Size(158, 17);
-            this.chkModConfigAutosave.TabIndex = 12;
-            this.chkModConfigAutosave.Text = "Autosave mod configuration";
-            this.chkModConfigAutosave.UseVisualStyleBackColor = true;
-            this.chkModConfigAutosave.CheckedChanged += new System.EventHandler(this.chkModConfigAutosave_CheckedChanged);
+            this.btnSaveSkinConfig.Location = new System.Drawing.Point(313, 7);
+            this.btnSaveSkinConfig.Name = "btnSaveSkinConfig";
+            this.btnSaveSkinConfig.Size = new System.Drawing.Size(44, 21);
+            this.btnSaveSkinConfig.TabIndex = 22;
+            this.btnSaveSkinConfig.Text = "Save";
+            this.btnSaveSkinConfig.UseVisualStyleBackColor = true;
+            this.btnSaveSkinConfig.Click += new System.EventHandler(this.btnSaveSkinConfig_Click);
+            // 
+            // btnDeleteSkinConfig
+            // 
+            this.btnDeleteSkinConfig.Location = new System.Drawing.Point(363, 7);
+            this.btnDeleteSkinConfig.Name = "btnDeleteSkinConfig";
+            this.btnDeleteSkinConfig.Size = new System.Drawing.Size(49, 21);
+            this.btnDeleteSkinConfig.TabIndex = 23;
+            this.btnDeleteSkinConfig.Text = "Delete";
+            this.btnDeleteSkinConfig.UseVisualStyleBackColor = true;
+            this.btnDeleteSkinConfig.Click += new System.EventHandler(this.btnDeleteSkinConfig_Click);
+            // 
+            // chkSkinConfigAutosave
+            // 
+            this.chkSkinConfigAutosave.AutoSize = true;
+            this.chkSkinConfigAutosave.Location = new System.Drawing.Point(13, 187);
+            this.chkSkinConfigAutosave.Name = "chkSkinConfigAutosave";
+            this.chkSkinConfigAutosave.Size = new System.Drawing.Size(157, 17);
+            this.chkSkinConfigAutosave.TabIndex = 13;
+            this.chkSkinConfigAutosave.Text = "Autosave skin configuration";
+            this.chkSkinConfigAutosave.UseVisualStyleBackColor = true;
+            this.chkSkinConfigAutosave.CheckedChanged += new System.EventHandler(this.chkSkinConfigAutosave_CheckedChanged);
             // 
             // MainForm
             // 
@@ -691,9 +740,9 @@
         private System.Windows.Forms.Button btnTop;
         private System.Windows.Forms.Button btnAll;
         private System.Windows.Forms.Button btnNone;
-        private System.Windows.Forms.Button btnDelete;
-        private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.ComboBox cboConfig;
+        private System.Windows.Forms.Button btnDeleteModConfig;
+        private System.Windows.Forms.Button btnSaveModConfig;
+        private System.Windows.Forms.ComboBox cboModConfig;
         private System.Windows.Forms.Label lblModText;
         private System.Windows.Forms.Label lblModList;
         private System.Windows.Forms.Label lblLoadOrder;
@@ -716,6 +765,10 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox chkModsReplaceSkins;
         private System.Windows.Forms.CheckBox chkModConfigAutosave;
+        private System.Windows.Forms.ComboBox cboSkinConfig;
+        private System.Windows.Forms.Button btnDeleteSkinConfig;
+        private System.Windows.Forms.Button btnSaveSkinConfig;
+        private System.Windows.Forms.CheckBox chkSkinConfigAutosave;
     }
 }
 
