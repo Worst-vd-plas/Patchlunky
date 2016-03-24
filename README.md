@@ -10,7 +10,7 @@ The Mod Manager is designed to:
 The Skin Manager allows changing the skins of the 20 player characters in the game.
 
 
-You can download the latest release here: [Patchlunky-1.0.0.0-beta.zip](https://github.com/Worst-vd-plas/Patchlunky/releases/download/v1.0.0.0/Patchlunky-1.0.0.0-beta.zip)
+You can download the latest release here: [Patchlunky Releases](https://github.com/Worst-vd-plas/Patchlunky/releases)
 
 See [README.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/README.txt) for instructions on how to use Patchlunky.
 

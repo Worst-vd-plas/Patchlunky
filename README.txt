@@ -79,7 +79,7 @@ configurations specify which mods are checked, and what the order of the mods is
 custom mod configurations by typing a name in the combo box and pressing the 'Save' button next 
 to it.
 
-You can select a mod in the mod list, and press the up/down buttons to move it before/after
+You can select a mod in the mod list and click the up/down buttons to move it before/after
 another mod to change the order the mods are patched to the game. This only makes difference
 if two mods affect the same resources in the game, and you wish to have one override the other.
 
@@ -91,6 +91,9 @@ a character to switch to the skin browser, which looks the same but the backgrou
 instead. It includes the default skins and also any skins it finds from the Skins folder located 
 inside the Patchlunky folder. Double-clicking a skin will assign it to the character you 
 previously chose.
+
+The Character Skins tab also includes a combo box for selecting the active skin configuration.
+It works the same way as mod configurations do, but for skins.
 
 
 Settings
@@ -105,6 +108,17 @@ Restore default game files:
   This will replace the game files with the backups that were created with the Patchlunky setup
   wizard. If you want skins but no mods, you should instead uncheck all the mods, and press the
   Patch Game button so that it only patches the skins.
+
+Mods can replace default skins:
+  This setting allows mods to replace any character skins that have no custom skins assigned to
+  them. If you want to see character skins embedded inside a mod, make sure this setting is
+  enabled, and also select 'Reset ALL characters to default' in the Character Skins tab.
+
+Autosave mod configuration:
+  Enables saving the current mod configuration when patching or closing patchlunky.
+
+Autosave skin configuration:
+  Enables saving the current skin configuration when patching or closing patchlunky.
 
 
 4. Making mods for Patchlunky
@@ -148,8 +162,6 @@ If everything works, you are ready to distribute the .plm file containing your m
 5. Planned Features
 ===================
  
- * A setting for wether or not mods can override skins (currently skins always override mods)
- * Skin configurations
  * A feature that allows mods to replace specific strings instead of the whole file.
  * A feature that allows mods to replace a portion of an image instead of the whole file.
  * A tab for adjusting some Spelunky settings such as windowed mode and resolution.
@@ -157,6 +169,12 @@ If everything works, you are ready to distribute the .plm file containing your m
 
 6. Changelog
 ============
+
+- version 1.0.0.1 Beta
+ * Minor update
+ * Added skin configurations
+ * Autosave settings for saving configurations on patch/exit.
+ * Setting for allowing mods to replace default skins.
 
 - version 1.0.0.0 Beta
  * Initial release
