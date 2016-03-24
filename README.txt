@@ -1,6 +1,6 @@
 
 Patchlunky - Spelunky HD Mod Manager
-Version 1.0.0.0 Beta
+Version 1.0.0.1 Beta
 Copyright (c) 2016, Worst-vd-plas
 
 Web site: https://github.com/Worst-vd-plas/Patchlunky
