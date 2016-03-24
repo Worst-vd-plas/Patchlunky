@@ -88,6 +88,7 @@ namespace Patchlunky
                 Directory.CreateDirectory(BackupPath + "Localization/");
                 Directory.CreateDirectory(BackupPath + "Animations/");
                 Directory.CreateDirectory(BackupPath + "Shaders/");
+                Directory.CreateDirectory(BackupPath + "Characters/");
             }
         }
 
