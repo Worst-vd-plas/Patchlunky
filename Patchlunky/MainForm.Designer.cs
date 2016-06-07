@@ -51,6 +51,8 @@
             this.btnModDown = new System.Windows.Forms.Button();
             this.btnModUp = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnDeleteSkinConfig = new System.Windows.Forms.Button();
+            this.btnSaveSkinConfig = new System.Windows.Forms.Button();
             this.cboSkinConfig = new System.Windows.Forms.ComboBox();
             this.lblSkin = new System.Windows.Forms.Label();
             this.btnRestoreSkin = new System.Windows.Forms.Button();
@@ -63,6 +65,7 @@
             this.picCharacter = new System.Windows.Forms.PictureBox();
             this.lvwCharacters = new System.Windows.Forms.ListView();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.chkSkinConfigAutosave = new System.Windows.Forms.CheckBox();
             this.chkModConfigAutosave = new System.Windows.Forms.CheckBox();
             this.chkModsReplaceSkins = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -81,9 +84,6 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnSaveSkinConfig = new System.Windows.Forms.Button();
-            this.btnDeleteSkinConfig = new System.Windows.Forms.Button();
-            this.chkSkinConfigAutosave = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picModImage)).BeginInit();
@@ -160,6 +160,7 @@
             this.btnDeleteModConfig.Size = new System.Drawing.Size(49, 21);
             this.btnDeleteModConfig.TabIndex = 22;
             this.btnDeleteModConfig.Text = "Delete";
+            this.toolTip1.SetToolTip(this.btnDeleteModConfig, "Deletes the currently selected mod configuration.");
             this.btnDeleteModConfig.UseVisualStyleBackColor = true;
             this.btnDeleteModConfig.Click += new System.EventHandler(this.btnDeleteModConfig_Click);
             // 
@@ -170,6 +171,7 @@
             this.btnSaveModConfig.Size = new System.Drawing.Size(44, 21);
             this.btnSaveModConfig.TabIndex = 21;
             this.btnSaveModConfig.Text = "Save";
+            this.toolTip1.SetToolTip(this.btnSaveModConfig, "Saves the currently selected mod configuration.");
             this.btnSaveModConfig.UseVisualStyleBackColor = true;
             this.btnSaveModConfig.Click += new System.EventHandler(this.btnSaveModConfig_Click);
             // 
@@ -331,6 +333,28 @@
             this.tabPage2.Text = "Character Skins";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // btnDeleteSkinConfig
+            // 
+            this.btnDeleteSkinConfig.Location = new System.Drawing.Point(363, 7);
+            this.btnDeleteSkinConfig.Name = "btnDeleteSkinConfig";
+            this.btnDeleteSkinConfig.Size = new System.Drawing.Size(49, 21);
+            this.btnDeleteSkinConfig.TabIndex = 23;
+            this.btnDeleteSkinConfig.Text = "Delete";
+            this.toolTip1.SetToolTip(this.btnDeleteSkinConfig, "Deletes the currently selected skin configuration.");
+            this.btnDeleteSkinConfig.UseVisualStyleBackColor = true;
+            this.btnDeleteSkinConfig.Click += new System.EventHandler(this.btnDeleteSkinConfig_Click);
+            // 
+            // btnSaveSkinConfig
+            // 
+            this.btnSaveSkinConfig.Location = new System.Drawing.Point(313, 7);
+            this.btnSaveSkinConfig.Name = "btnSaveSkinConfig";
+            this.btnSaveSkinConfig.Size = new System.Drawing.Size(44, 21);
+            this.btnSaveSkinConfig.TabIndex = 22;
+            this.btnSaveSkinConfig.Text = "Save";
+            this.toolTip1.SetToolTip(this.btnSaveSkinConfig, "Saves the currently selected skin configuration.");
+            this.btnSaveSkinConfig.UseVisualStyleBackColor = true;
+            this.btnSaveSkinConfig.Click += new System.EventHandler(this.btnSaveSkinConfig_Click);
+            // 
             // cboSkinConfig
             // 
             this.cboSkinConfig.FormattingEnabled = true;
@@ -357,6 +381,7 @@
             this.btnRestoreSkin.Size = new System.Drawing.Size(206, 36);
             this.btnRestoreSkin.TabIndex = 12;
             this.btnRestoreSkin.Text = "Reset selected character to default";
+            this.toolTip1.SetToolTip(this.btnRestoreSkin, "This will give the selected character its default skin.");
             this.btnRestoreSkin.UseVisualStyleBackColor = true;
             this.btnRestoreSkin.Click += new System.EventHandler(this.btnRestoreSkin_Click);
             // 
@@ -421,6 +446,7 @@
             this.btnResetSkins.Size = new System.Drawing.Size(206, 36);
             this.btnResetSkins.TabIndex = 6;
             this.btnResetSkins.Text = "Reset ALL characters to default";
+            this.toolTip1.SetToolTip(this.btnResetSkins, "This will give all characters their default skins.");
             this.btnResetSkins.UseVisualStyleBackColor = true;
             this.btnResetSkins.Click += new System.EventHandler(this.btnResetSkins_Click);
             // 
@@ -472,6 +498,19 @@
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // chkSkinConfigAutosave
+            // 
+            this.chkSkinConfigAutosave.AutoSize = true;
+            this.chkSkinConfigAutosave.Location = new System.Drawing.Point(13, 187);
+            this.chkSkinConfigAutosave.Name = "chkSkinConfigAutosave";
+            this.chkSkinConfigAutosave.Size = new System.Drawing.Size(157, 17);
+            this.chkSkinConfigAutosave.TabIndex = 13;
+            this.chkSkinConfigAutosave.Text = "Autosave skin configuration";
+            this.toolTip1.SetToolTip(this.chkSkinConfigAutosave, "Enables saving the current skin configuration when patching or closing patchlunky" +
+                    ".");
+            this.chkSkinConfigAutosave.UseVisualStyleBackColor = true;
+            this.chkSkinConfigAutosave.CheckedChanged += new System.EventHandler(this.chkSkinConfigAutosave_CheckedChanged);
+            // 
             // chkModConfigAutosave
             // 
             this.chkModConfigAutosave.AutoSize = true;
@@ -480,6 +519,8 @@
             this.chkModConfigAutosave.Size = new System.Drawing.Size(158, 17);
             this.chkModConfigAutosave.TabIndex = 12;
             this.chkModConfigAutosave.Text = "Autosave mod configuration";
+            this.toolTip1.SetToolTip(this.chkModConfigAutosave, "Enables saving the current mod configuration when patching or closing patchlunky." +
+                    "");
             this.chkModConfigAutosave.UseVisualStyleBackColor = true;
             this.chkModConfigAutosave.CheckedChanged += new System.EventHandler(this.chkModConfigAutosave_CheckedChanged);
             // 
@@ -491,6 +532,8 @@
             this.chkModsReplaceSkins.Size = new System.Drawing.Size(173, 17);
             this.chkModsReplaceSkins.TabIndex = 11;
             this.chkModsReplaceSkins.Text = "Mods can replace default skins";
+            this.toolTip1.SetToolTip(this.chkModsReplaceSkins, "This setting allows mods to replace any character skins that have no custom skins" +
+                    " assigned to them.");
             this.chkModsReplaceSkins.UseVisualStyleBackColor = true;
             this.chkModsReplaceSkins.CheckedChanged += new System.EventHandler(this.chkModsReplaceSkins_CheckedChanged);
             // 
@@ -533,6 +576,8 @@
             this.btnRestore.Size = new System.Drawing.Size(94, 60);
             this.btnRestore.TabIndex = 7;
             this.btnRestore.Text = "Restore default game files";
+            this.toolTip1.SetToolTip(this.btnRestore, "This will replace the game files with the backups that were created with the Patc" +
+                    "hlunky setup wizard.");
             this.btnRestore.UseVisualStyleBackColor = true;
             this.btnRestore.Click += new System.EventHandler(this.btnRestore_Click);
             // 
@@ -543,6 +588,7 @@
             this.btnSetup.Size = new System.Drawing.Size(99, 60);
             this.btnSetup.TabIndex = 6;
             this.btnSetup.Text = "Setup Patchlunky";
+            this.toolTip1.SetToolTip(this.btnSetup, "You can press this button to force the Patchlunky Setup wizard to run again.");
             this.btnSetup.UseVisualStyleBackColor = true;
             this.btnSetup.Click += new System.EventHandler(this.btnSetup_Click);
             // 
@@ -582,6 +628,7 @@
             this.btnGamePath.Size = new System.Drawing.Size(77, 22);
             this.btnGamePath.TabIndex = 2;
             this.btnGamePath.Text = "Browse";
+            this.toolTip1.SetToolTip(this.btnGamePath, "Manually set the Spelunky path by browsing to the directory.");
             this.btnGamePath.UseVisualStyleBackColor = true;
             this.btnGamePath.Click += new System.EventHandler(this.btnGamePath_Click);
             // 
@@ -617,6 +664,8 @@
             this.btnPatch.Size = new System.Drawing.Size(83, 35);
             this.btnPatch.TabIndex = 8;
             this.btnPatch.Text = "Patch Game";
+            this.toolTip1.SetToolTip(this.btnPatch, "Patch the currently checked Mods and Skins to the game.\r\n(Make sure that you don\'" +
+                    "t have Spelunky opened when pressing this)");
             this.btnPatch.UseVisualStyleBackColor = true;
             this.btnPatch.Click += new System.EventHandler(this.btnPatch_Click);
             // 
@@ -638,6 +687,7 @@
             this.btnRunGame.Size = new System.Drawing.Size(96, 32);
             this.btnRunGame.TabIndex = 24;
             this.btnRunGame.Text = "Launch Game";
+            this.toolTip1.SetToolTip(this.btnRunGame, "Launch Spelunky HD.");
             this.btnRunGame.UseVisualStyleBackColor = true;
             this.btnRunGame.Click += new System.EventHandler(this.btnRunGame_Click);
             // 
@@ -646,37 +696,6 @@
             this.toolTip1.AutoPopDelay = 8000;
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
-            // 
-            // btnSaveSkinConfig
-            // 
-            this.btnSaveSkinConfig.Location = new System.Drawing.Point(313, 7);
-            this.btnSaveSkinConfig.Name = "btnSaveSkinConfig";
-            this.btnSaveSkinConfig.Size = new System.Drawing.Size(44, 21);
-            this.btnSaveSkinConfig.TabIndex = 22;
-            this.btnSaveSkinConfig.Text = "Save";
-            this.btnSaveSkinConfig.UseVisualStyleBackColor = true;
-            this.btnSaveSkinConfig.Click += new System.EventHandler(this.btnSaveSkinConfig_Click);
-            // 
-            // btnDeleteSkinConfig
-            // 
-            this.btnDeleteSkinConfig.Location = new System.Drawing.Point(363, 7);
-            this.btnDeleteSkinConfig.Name = "btnDeleteSkinConfig";
-            this.btnDeleteSkinConfig.Size = new System.Drawing.Size(49, 21);
-            this.btnDeleteSkinConfig.TabIndex = 23;
-            this.btnDeleteSkinConfig.Text = "Delete";
-            this.btnDeleteSkinConfig.UseVisualStyleBackColor = true;
-            this.btnDeleteSkinConfig.Click += new System.EventHandler(this.btnDeleteSkinConfig_Click);
-            // 
-            // chkSkinConfigAutosave
-            // 
-            this.chkSkinConfigAutosave.AutoSize = true;
-            this.chkSkinConfigAutosave.Location = new System.Drawing.Point(13, 187);
-            this.chkSkinConfigAutosave.Name = "chkSkinConfigAutosave";
-            this.chkSkinConfigAutosave.Size = new System.Drawing.Size(157, 17);
-            this.chkSkinConfigAutosave.TabIndex = 13;
-            this.chkSkinConfigAutosave.Text = "Autosave skin configuration";
-            this.chkSkinConfigAutosave.UseVisualStyleBackColor = true;
-            this.chkSkinConfigAutosave.CheckedChanged += new System.EventHandler(this.chkSkinConfigAutosave_CheckedChanged);
             // 
             // MainForm
             // 
