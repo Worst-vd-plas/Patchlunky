@@ -654,12 +654,33 @@ namespace Patchlunky
         }
 
         //Attempts to find where the game is installed
-        //TODO: Add support for finding GOG version too
         private string FindGameDir()
         {
+            DialogResult result;
+            string message;
+            string path;
+
+            //GOG Spelunky install
+            RegistryKey GOGRegKey;
+            const string GOGgameID = "1207659257"; //GOG gameID for Spelunky
+            string path_gog = null;
+
+            //Steam Spelunky install
             RegistryKey SteamRegKey;
             List<string> SteamDirs = new List<string>();
-            string path;
+            string path_steam = null;
+
+
+            //Check Registry for GOG install directory
+            GOGRegKey = Registry.LocalMachine.OpenSubKey("Software\\GOG.com\\Games\\" + GOGgameID);
+            if (GOGRegKey != null)
+            {
+                path = (string)GOGRegKey.GetValue("PATH");
+                if (Directory.Exists(path))
+                {
+                    path_gog = path;
+                }
+            }
 
             //Check Registry for steam install directory            
             SteamRegKey = Registry.LocalMachine.OpenSubKey("Software\\Valve\\Steam");
@@ -695,17 +716,55 @@ namespace Patchlunky
                             return null;
                         }
                     }
+
+                    //Check the steam directories for Spelunky installs
+                    for (int i = 0; i < SteamDirs.Count; i++)
+                    {
+                        path = SteamDirs[i] + "\\steamapps\\common\\Spelunky";
+                        if (Directory.Exists(path))
+                        {
+                            path_steam = path;
+                            break;
+                        }
+                    }
                 }
             }
 
-            for (int i = 0; i < SteamDirs.Count; i++)
+            //If both a Steam and GOG version is found.
+            if ((path_steam != null) && (path_gog != null))
             {
-                path = SteamDirs[i] + "\\steamapps\\common\\Spelunky";
-                if (Directory.Exists(path))
+                message = "Found BOTH the Steam and GOG versions of Spelunky." + Environment.NewLine
+                + Environment.NewLine +
+                "Choose which Spelunky version should be used with Patchlunky: " + Environment.NewLine +
+                "(YES): Steam version " + Environment.NewLine +
+                "(NO): GOG version " + Environment.NewLine;
+                result = Msg.MsgBox(message, "Patchlunky Setup", MessageBoxButtons.YesNoCancel);
+
+                if (result == DialogResult.Yes)
                 {
-                    return path;
+                    Msg.Log("Using Steam spelunky directory.");
+                    return path_steam;
                 }
+                else if (result == DialogResult.No)
+                {
+                    Msg.Log("Using GOG spelunky directory.");
+                    return path_gog;
+                }
+                else /*if (result == DialogResult.Cancel)*/ return null;
             }
+            //Steam version found
+            else if (path_steam != null)
+            {
+                Msg.Log("Using Steam spelunky directory.");
+                return path_steam;
+            }
+            //GOG version found
+            else if (path_gog != null)
+            {
+                Msg.Log("Using GOG spelunky directory.");
+                return path_gog;
+            }
+            //Found neither version
             return null;
         }
     }

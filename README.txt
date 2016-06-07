@@ -48,7 +48,7 @@ It supports the default skins aswell as any skins it finds in the Skins folder.
 ===================
 
 When you launch Patchlunky for the first time, the setup wizard will notify you about 
-needing the path to the game. If you have the steam version of Spelunky HD, you can 
+needing the path to the game. If you have the steam or GOG version of Spelunky HD, you can 
 let Patchlunky find the game folder automatically, otherwise you'll need to browse to 
 it manually.
 
