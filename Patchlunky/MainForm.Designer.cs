@@ -84,6 +84,7 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.prgCombinePngs = new System.Windows.Forms.ProgressBar();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picModImage)).BeginInit();
@@ -101,9 +102,10 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(673, 413);
+            this.tabControl1.Size = new System.Drawing.Size(1010, 635);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -126,10 +128,11 @@
             this.tabPage1.Controls.Add(this.chklstMods);
             this.tabPage1.Controls.Add(this.btnModDown);
             this.tabPage1.Controls.Add(this.btnModUp);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(665, 387);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPage1.Size = new System.Drawing.Size(1002, 602);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Mods";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -137,27 +140,30 @@
             // lblModName
             // 
             this.lblModName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblModName.Location = new System.Drawing.Point(401, 22);
+            this.lblModName.Location = new System.Drawing.Point(602, 34);
+            this.lblModName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblModName.Name = "lblModName";
-            this.lblModName.Size = new System.Drawing.Size(256, 19);
+            this.lblModName.Size = new System.Drawing.Size(383, 28);
             this.lblModName.TabIndex = 24;
             // 
             // picModImage
             // 
             this.picModImage.BackColor = System.Drawing.Color.Black;
             this.picModImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picModImage.Location = new System.Drawing.Point(401, 46);
+            this.picModImage.Location = new System.Drawing.Point(602, 71);
+            this.picModImage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.picModImage.Name = "picModImage";
-            this.picModImage.Size = new System.Drawing.Size(256, 144);
+            this.picModImage.Size = new System.Drawing.Size(383, 220);
             this.picModImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picModImage.TabIndex = 23;
             this.picModImage.TabStop = false;
             // 
             // btnDeleteModConfig
             // 
-            this.btnDeleteModConfig.Location = new System.Drawing.Point(288, 7);
+            this.btnDeleteModConfig.Location = new System.Drawing.Point(432, 11);
+            this.btnDeleteModConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnDeleteModConfig.Name = "btnDeleteModConfig";
-            this.btnDeleteModConfig.Size = new System.Drawing.Size(49, 21);
+            this.btnDeleteModConfig.Size = new System.Drawing.Size(74, 32);
             this.btnDeleteModConfig.TabIndex = 22;
             this.btnDeleteModConfig.Text = "Delete";
             this.toolTip1.SetToolTip(this.btnDeleteModConfig, "Deletes the currently selected mod configuration.");
@@ -166,9 +172,10 @@
             // 
             // btnSaveModConfig
             // 
-            this.btnSaveModConfig.Location = new System.Drawing.Point(238, 7);
+            this.btnSaveModConfig.Location = new System.Drawing.Point(357, 11);
+            this.btnSaveModConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSaveModConfig.Name = "btnSaveModConfig";
-            this.btnSaveModConfig.Size = new System.Drawing.Size(44, 21);
+            this.btnSaveModConfig.Size = new System.Drawing.Size(66, 32);
             this.btnSaveModConfig.TabIndex = 21;
             this.btnSaveModConfig.Text = "Save";
             this.toolTip1.SetToolTip(this.btnSaveModConfig, "Saves the currently selected mod configuration.");
@@ -178,9 +185,10 @@
             // cboModConfig
             // 
             this.cboModConfig.FormattingEnabled = true;
-            this.cboModConfig.Location = new System.Drawing.Point(8, 7);
+            this.cboModConfig.Location = new System.Drawing.Point(12, 11);
+            this.cboModConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cboModConfig.Name = "cboModConfig";
-            this.cboModConfig.Size = new System.Drawing.Size(224, 21);
+            this.cboModConfig.Size = new System.Drawing.Size(334, 28);
             this.cboModConfig.TabIndex = 19;
             this.cboModConfig.Text = "Default";
             this.cboModConfig.SelectedIndexChanged += new System.EventHandler(this.cboModConfig_SelectedIndexChanged);
@@ -188,63 +196,70 @@
             // lblModText
             // 
             this.lblModText.AutoSize = true;
-            this.lblModText.Location = new System.Drawing.Point(398, 7);
+            this.lblModText.Location = new System.Drawing.Point(597, 11);
+            this.lblModText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblModText.Name = "lblModText";
-            this.lblModText.Size = new System.Drawing.Size(75, 13);
+            this.lblModText.Size = new System.Drawing.Size(111, 20);
             this.lblModText.TabIndex = 18;
             this.lblModText.Text = "Selected mod:";
             // 
             // lblModList
             // 
             this.lblModList.AutoSize = true;
-            this.lblModList.Location = new System.Drawing.Point(5, 31);
+            this.lblModList.Location = new System.Drawing.Point(8, 48);
+            this.lblModList.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblModList.Name = "lblModList";
-            this.lblModList.Size = new System.Drawing.Size(169, 13);
+            this.lblModList.Size = new System.Drawing.Size(252, 20);
             this.lblModList.TabIndex = 17;
             this.lblModList.Text = "Select mods to patch to the game:";
             // 
             // lblLoadOrder
             // 
             this.lblLoadOrder.AutoSize = true;
-            this.lblLoadOrder.Location = new System.Drawing.Point(8, 368);
+            this.lblLoadOrder.Location = new System.Drawing.Point(12, 566);
+            this.lblLoadOrder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLoadOrder.Name = "lblLoadOrder";
-            this.lblLoadOrder.Size = new System.Drawing.Size(238, 13);
+            this.lblLoadOrder.Size = new System.Drawing.Size(354, 20);
             this.lblLoadOrder.TabIndex = 16;
             this.lblLoadOrder.Text = "Mods higher in the list override mods below them.";
             // 
             // txtModInfo
             // 
-            this.txtModInfo.Location = new System.Drawing.Point(401, 196);
+            this.txtModInfo.Location = new System.Drawing.Point(602, 302);
+            this.txtModInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtModInfo.Multiline = true;
             this.txtModInfo.Name = "txtModInfo";
             this.txtModInfo.ReadOnly = true;
             this.txtModInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtModInfo.Size = new System.Drawing.Size(256, 169);
+            this.txtModInfo.Size = new System.Drawing.Size(382, 258);
             this.txtModInfo.TabIndex = 15;
             // 
             // lblSelect
             // 
             this.lblSelect.AutoSize = true;
-            this.lblSelect.Location = new System.Drawing.Point(341, 273);
+            this.lblSelect.Location = new System.Drawing.Point(512, 420);
+            this.lblSelect.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSelect.Name = "lblSelect";
-            this.lblSelect.Size = new System.Drawing.Size(40, 13);
+            this.lblSelect.Size = new System.Drawing.Size(58, 20);
             this.lblSelect.TabIndex = 14;
             this.lblSelect.Text = "Select:";
             // 
             // lblMove
             // 
             this.lblMove.AutoSize = true;
-            this.lblMove.Location = new System.Drawing.Point(341, 57);
+            this.lblMove.Location = new System.Drawing.Point(512, 88);
+            this.lblMove.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMove.Name = "lblMove";
-            this.lblMove.Size = new System.Drawing.Size(37, 13);
+            this.lblMove.Size = new System.Drawing.Size(51, 20);
             this.lblMove.TabIndex = 13;
             this.lblMove.Text = "Move:";
             // 
             // btnBottom
             // 
-            this.btnBottom.Location = new System.Drawing.Point(344, 196);
+            this.btnBottom.Location = new System.Drawing.Point(516, 302);
+            this.btnBottom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnBottom.Name = "btnBottom";
-            this.btnBottom.Size = new System.Drawing.Size(49, 35);
+            this.btnBottom.Size = new System.Drawing.Size(74, 54);
             this.btnBottom.TabIndex = 12;
             this.btnBottom.Text = "Bottom";
             this.btnBottom.UseVisualStyleBackColor = true;
@@ -252,9 +267,10 @@
             // 
             // btnTop
             // 
-            this.btnTop.Location = new System.Drawing.Point(344, 73);
+            this.btnTop.Location = new System.Drawing.Point(516, 112);
+            this.btnTop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnTop.Name = "btnTop";
-            this.btnTop.Size = new System.Drawing.Size(49, 35);
+            this.btnTop.Size = new System.Drawing.Size(74, 54);
             this.btnTop.TabIndex = 11;
             this.btnTop.Text = "Top";
             this.btnTop.UseVisualStyleBackColor = true;
@@ -262,9 +278,10 @@
             // 
             // btnAll
             // 
-            this.btnAll.Location = new System.Drawing.Point(344, 289);
+            this.btnAll.Location = new System.Drawing.Point(516, 445);
+            this.btnAll.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAll.Name = "btnAll";
-            this.btnAll.Size = new System.Drawing.Size(49, 35);
+            this.btnAll.Size = new System.Drawing.Size(74, 54);
             this.btnAll.TabIndex = 10;
             this.btnAll.Text = "All";
             this.btnAll.UseVisualStyleBackColor = true;
@@ -272,9 +289,10 @@
             // 
             // btnNone
             // 
-            this.btnNone.Location = new System.Drawing.Point(344, 330);
+            this.btnNone.Location = new System.Drawing.Point(516, 508);
+            this.btnNone.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnNone.Name = "btnNone";
-            this.btnNone.Size = new System.Drawing.Size(49, 35);
+            this.btnNone.Size = new System.Drawing.Size(74, 54);
             this.btnNone.TabIndex = 9;
             this.btnNone.Text = "None";
             this.btnNone.UseVisualStyleBackColor = true;
@@ -283,18 +301,20 @@
             // chklstMods
             // 
             this.chklstMods.FormattingEnabled = true;
-            this.chklstMods.Location = new System.Drawing.Point(8, 46);
+            this.chklstMods.Location = new System.Drawing.Point(12, 71);
+            this.chklstMods.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chklstMods.Name = "chklstMods";
-            this.chklstMods.Size = new System.Drawing.Size(329, 319);
+            this.chklstMods.Size = new System.Drawing.Size(492, 487);
             this.chklstMods.TabIndex = 3;
             this.chklstMods.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.chklstMods_ItemCheck);
             this.chklstMods.SelectedIndexChanged += new System.EventHandler(this.chklstMods_SelectedIndexChanged);
             // 
             // btnModDown
             // 
-            this.btnModDown.Location = new System.Drawing.Point(344, 155);
+            this.btnModDown.Location = new System.Drawing.Point(516, 238);
+            this.btnModDown.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnModDown.Name = "btnModDown";
-            this.btnModDown.Size = new System.Drawing.Size(49, 35);
+            this.btnModDown.Size = new System.Drawing.Size(74, 54);
             this.btnModDown.TabIndex = 2;
             this.btnModDown.Text = "Down";
             this.btnModDown.UseVisualStyleBackColor = true;
@@ -302,9 +322,10 @@
             // 
             // btnModUp
             // 
-            this.btnModUp.Location = new System.Drawing.Point(344, 114);
+            this.btnModUp.Location = new System.Drawing.Point(516, 175);
+            this.btnModUp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnModUp.Name = "btnModUp";
-            this.btnModUp.Size = new System.Drawing.Size(49, 35);
+            this.btnModUp.Size = new System.Drawing.Size(74, 54);
             this.btnModUp.TabIndex = 1;
             this.btnModUp.Text = "Up";
             this.btnModUp.UseVisualStyleBackColor = true;
@@ -325,19 +346,21 @@
             this.tabPage2.Controls.Add(this.btnResetSkins);
             this.tabPage2.Controls.Add(this.picCharacter);
             this.tabPage2.Controls.Add(this.lvwCharacters);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 29);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(665, 387);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPage2.Size = new System.Drawing.Size(1002, 602);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Character Skins";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // btnDeleteSkinConfig
             // 
-            this.btnDeleteSkinConfig.Location = new System.Drawing.Point(363, 7);
+            this.btnDeleteSkinConfig.Location = new System.Drawing.Point(544, 11);
+            this.btnDeleteSkinConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnDeleteSkinConfig.Name = "btnDeleteSkinConfig";
-            this.btnDeleteSkinConfig.Size = new System.Drawing.Size(49, 21);
+            this.btnDeleteSkinConfig.Size = new System.Drawing.Size(74, 32);
             this.btnDeleteSkinConfig.TabIndex = 23;
             this.btnDeleteSkinConfig.Text = "Delete";
             this.toolTip1.SetToolTip(this.btnDeleteSkinConfig, "Deletes the currently selected skin configuration.");
@@ -346,9 +369,10 @@
             // 
             // btnSaveSkinConfig
             // 
-            this.btnSaveSkinConfig.Location = new System.Drawing.Point(313, 7);
+            this.btnSaveSkinConfig.Location = new System.Drawing.Point(470, 11);
+            this.btnSaveSkinConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSaveSkinConfig.Name = "btnSaveSkinConfig";
-            this.btnSaveSkinConfig.Size = new System.Drawing.Size(44, 21);
+            this.btnSaveSkinConfig.Size = new System.Drawing.Size(66, 32);
             this.btnSaveSkinConfig.TabIndex = 22;
             this.btnSaveSkinConfig.Text = "Save";
             this.toolTip1.SetToolTip(this.btnSaveSkinConfig, "Saves the currently selected skin configuration.");
@@ -358,9 +382,10 @@
             // cboSkinConfig
             // 
             this.cboSkinConfig.FormattingEnabled = true;
-            this.cboSkinConfig.Location = new System.Drawing.Point(8, 7);
+            this.cboSkinConfig.Location = new System.Drawing.Point(12, 11);
+            this.cboSkinConfig.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cboSkinConfig.Name = "cboSkinConfig";
-            this.cboSkinConfig.Size = new System.Drawing.Size(299, 21);
+            this.cboSkinConfig.Size = new System.Drawing.Size(446, 28);
             this.cboSkinConfig.TabIndex = 14;
             this.cboSkinConfig.Text = "Default";
             this.cboSkinConfig.SelectedIndexChanged += new System.EventHandler(this.cboSkinConfig_SelectedIndexChanged);
@@ -368,17 +393,19 @@
             // lblSkin
             // 
             this.lblSkin.AutoSize = true;
-            this.lblSkin.Location = new System.Drawing.Point(592, 63);
+            this.lblSkin.Location = new System.Drawing.Point(888, 97);
+            this.lblSkin.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSkin.Name = "lblSkin";
-            this.lblSkin.Size = new System.Drawing.Size(31, 13);
+            this.lblSkin.Size = new System.Drawing.Size(44, 20);
             this.lblSkin.TabIndex = 13;
             this.lblSkin.Text = "Skin:";
             // 
             // btnRestoreSkin
             // 
-            this.btnRestoreSkin.Location = new System.Drawing.Point(449, 301);
+            this.btnRestoreSkin.Location = new System.Drawing.Point(674, 463);
+            this.btnRestoreSkin.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRestoreSkin.Name = "btnRestoreSkin";
-            this.btnRestoreSkin.Size = new System.Drawing.Size(206, 36);
+            this.btnRestoreSkin.Size = new System.Drawing.Size(309, 55);
             this.btnRestoreSkin.TabIndex = 12;
             this.btnRestoreSkin.Text = "Reset selected character to default";
             this.toolTip1.SetToolTip(this.btnRestoreSkin, "This will give the selected character its default skin.");
@@ -388,9 +415,10 @@
             // lblSkinSelect
             // 
             this.lblSkinSelect.AutoSize = true;
-            this.lblSkinSelect.Location = new System.Drawing.Point(8, 33);
+            this.lblSkinSelect.Location = new System.Drawing.Point(12, 51);
+            this.lblSkinSelect.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSkinSelect.Name = "lblSkinSelect";
-            this.lblSkinSelect.Size = new System.Drawing.Size(151, 13);
+            this.lblSkinSelect.Size = new System.Drawing.Size(220, 20);
             this.lblSkinSelect.TabIndex = 11;
             this.lblSkinSelect.Text = "Double-click a skin to select it:";
             this.lblSkinSelect.Visible = false;
@@ -398,18 +426,20 @@
             // lblCharSelect
             // 
             this.lblCharSelect.AutoSize = true;
-            this.lblCharSelect.Location = new System.Drawing.Point(8, 33);
+            this.lblCharSelect.Location = new System.Drawing.Point(12, 51);
+            this.lblCharSelect.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCharSelect.Name = "lblCharSelect";
-            this.lblCharSelect.Size = new System.Drawing.Size(212, 13);
+            this.lblCharSelect.Size = new System.Drawing.Size(310, 20);
             this.lblCharSelect.TabIndex = 10;
             this.lblCharSelect.Text = "Double-click a character to change its skin:";
             // 
             // lblCharacter
             // 
             this.lblCharacter.AutoSize = true;
-            this.lblCharacter.Location = new System.Drawing.Point(458, 54);
+            this.lblCharacter.Location = new System.Drawing.Point(687, 83);
+            this.lblCharacter.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCharacter.Name = "lblCharacter";
-            this.lblCharacter.Size = new System.Drawing.Size(100, 13);
+            this.lblCharacter.Size = new System.Drawing.Size(147, 20);
             this.lblCharacter.TabIndex = 9;
             this.lblCharacter.Text = "Selected character:";
             // 
@@ -417,9 +447,10 @@
             // 
             this.picSkin.BackColor = System.Drawing.Color.AliceBlue;
             this.picSkin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picSkin.Location = new System.Drawing.Point(567, 79);
+            this.picSkin.Location = new System.Drawing.Point(850, 122);
+            this.picSkin.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.picSkin.Name = "picSkin";
-            this.picSkin.Size = new System.Drawing.Size(80, 80);
+            this.picSkin.Size = new System.Drawing.Size(119, 122);
             this.picSkin.TabIndex = 8;
             this.picSkin.TabStop = false;
             // 
@@ -427,10 +458,11 @@
             // 
             this.lvwSkins.BackColor = System.Drawing.Color.AliceBlue;
             this.lvwSkins.HideSelection = false;
-            this.lvwSkins.Location = new System.Drawing.Point(8, 50);
+            this.lvwSkins.Location = new System.Drawing.Point(12, 77);
+            this.lvwSkins.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvwSkins.MultiSelect = false;
             this.lvwSkins.Name = "lvwSkins";
-            this.lvwSkins.Size = new System.Drawing.Size(435, 328);
+            this.lvwSkins.Size = new System.Drawing.Size(650, 502);
             this.lvwSkins.TabIndex = 7;
             this.lvwSkins.TileSize = new System.Drawing.Size(80, 80);
             this.lvwSkins.UseCompatibleStateImageBehavior = false;
@@ -441,9 +473,10 @@
             // 
             // btnResetSkins
             // 
-            this.btnResetSkins.Location = new System.Drawing.Point(449, 342);
+            this.btnResetSkins.Location = new System.Drawing.Point(674, 526);
+            this.btnResetSkins.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnResetSkins.Name = "btnResetSkins";
-            this.btnResetSkins.Size = new System.Drawing.Size(206, 36);
+            this.btnResetSkins.Size = new System.Drawing.Size(309, 55);
             this.btnResetSkins.TabIndex = 6;
             this.btnResetSkins.Text = "Reset ALL characters to default";
             this.toolTip1.SetToolTip(this.btnResetSkins, "This will give all characters their default skins.");
@@ -454,9 +487,10 @@
             // 
             this.picCharacter.BackColor = System.Drawing.Color.WhiteSmoke;
             this.picCharacter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picCharacter.Location = new System.Drawing.Point(461, 70);
+            this.picCharacter.Location = new System.Drawing.Point(692, 108);
+            this.picCharacter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.picCharacter.Name = "picCharacter";
-            this.picCharacter.Size = new System.Drawing.Size(100, 100);
+            this.picCharacter.Size = new System.Drawing.Size(149, 153);
             this.picCharacter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.picCharacter.TabIndex = 5;
             this.picCharacter.TabStop = false;
@@ -465,10 +499,11 @@
             // 
             this.lvwCharacters.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lvwCharacters.HideSelection = false;
-            this.lvwCharacters.Location = new System.Drawing.Point(8, 50);
+            this.lvwCharacters.Location = new System.Drawing.Point(12, 77);
+            this.lvwCharacters.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvwCharacters.MultiSelect = false;
             this.lvwCharacters.Name = "lvwCharacters";
-            this.lvwCharacters.Size = new System.Drawing.Size(435, 328);
+            this.lvwCharacters.Size = new System.Drawing.Size(650, 502);
             this.lvwCharacters.TabIndex = 4;
             this.lvwCharacters.TileSize = new System.Drawing.Size(80, 80);
             this.lvwCharacters.UseCompatibleStateImageBehavior = false;
@@ -490,10 +525,11 @@
             this.tabPage3.Controls.Add(this.btnGamePath);
             this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Controls.Add(this.txtGamePath);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Location = new System.Drawing.Point(4, 29);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(665, 387);
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabPage3.Size = new System.Drawing.Size(1002, 602);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Settings";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -501,56 +537,61 @@
             // chkSkinConfigAutosave
             // 
             this.chkSkinConfigAutosave.AutoSize = true;
-            this.chkSkinConfigAutosave.Location = new System.Drawing.Point(13, 187);
+            this.chkSkinConfigAutosave.Location = new System.Drawing.Point(20, 288);
+            this.chkSkinConfigAutosave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkSkinConfigAutosave.Name = "chkSkinConfigAutosave";
-            this.chkSkinConfigAutosave.Size = new System.Drawing.Size(157, 17);
+            this.chkSkinConfigAutosave.Size = new System.Drawing.Size(230, 24);
             this.chkSkinConfigAutosave.TabIndex = 13;
             this.chkSkinConfigAutosave.Text = "Autosave skin configuration";
             this.toolTip1.SetToolTip(this.chkSkinConfigAutosave, "Enables saving the current skin configuration when patching or closing patchlunky" +
-                    ".");
+        ".");
             this.chkSkinConfigAutosave.UseVisualStyleBackColor = true;
             this.chkSkinConfigAutosave.CheckedChanged += new System.EventHandler(this.chkSkinConfigAutosave_CheckedChanged);
             // 
             // chkModConfigAutosave
             // 
             this.chkModConfigAutosave.AutoSize = true;
-            this.chkModConfigAutosave.Location = new System.Drawing.Point(13, 164);
+            this.chkModConfigAutosave.Location = new System.Drawing.Point(20, 252);
+            this.chkModConfigAutosave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkModConfigAutosave.Name = "chkModConfigAutosave";
-            this.chkModConfigAutosave.Size = new System.Drawing.Size(158, 17);
+            this.chkModConfigAutosave.Size = new System.Drawing.Size(233, 24);
             this.chkModConfigAutosave.TabIndex = 12;
             this.chkModConfigAutosave.Text = "Autosave mod configuration";
             this.toolTip1.SetToolTip(this.chkModConfigAutosave, "Enables saving the current mod configuration when patching or closing patchlunky." +
-                    "");
+        "");
             this.chkModConfigAutosave.UseVisualStyleBackColor = true;
             this.chkModConfigAutosave.CheckedChanged += new System.EventHandler(this.chkModConfigAutosave_CheckedChanged);
             // 
             // chkModsReplaceSkins
             // 
             this.chkModsReplaceSkins.AutoSize = true;
-            this.chkModsReplaceSkins.Location = new System.Drawing.Point(13, 134);
+            this.chkModsReplaceSkins.Location = new System.Drawing.Point(20, 206);
+            this.chkModsReplaceSkins.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkModsReplaceSkins.Name = "chkModsReplaceSkins";
-            this.chkModsReplaceSkins.Size = new System.Drawing.Size(173, 17);
+            this.chkModsReplaceSkins.Size = new System.Drawing.Size(253, 24);
             this.chkModsReplaceSkins.TabIndex = 11;
             this.chkModsReplaceSkins.Text = "Mods can replace default skins";
             this.toolTip1.SetToolTip(this.chkModsReplaceSkins, "This setting allows mods to replace any character skins that have no custom skins" +
-                    " assigned to them.");
+        " assigned to them.");
             this.chkModsReplaceSkins.UseVisualStyleBackColor = true;
             this.chkModsReplaceSkins.CheckedChanged += new System.EventHandler(this.chkModsReplaceSkins_CheckedChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Miriam", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(112, 242);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(168, 372);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(285, 32);
+            this.label2.Size = new System.Drawing.Size(460, 55);
             this.label2.TabIndex = 10;
             this.label2.Text = "Under construction.";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Patchlunky.Properties.Resources.under_construction;
-            this.pictureBox1.Location = new System.Drawing.Point(27, 229);
+            this.pictureBox1.Location = new System.Drawing.Point(40, 352);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(64, 64);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -559,33 +600,36 @@
             // 
             // btnExtractArchives
             // 
-            this.btnExtractArchives.Location = new System.Drawing.Point(572, 16);
+            this.btnExtractArchives.Location = new System.Drawing.Point(858, 25);
+            this.btnExtractArchives.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnExtractArchives.Name = "btnExtractArchives";
-            this.btnExtractArchives.Size = new System.Drawing.Size(83, 59);
+            this.btnExtractArchives.Size = new System.Drawing.Size(124, 91);
             this.btnExtractArchives.TabIndex = 8;
             this.btnExtractArchives.Text = "MOD-UTIL: Extract default archives";
             this.toolTip1.SetToolTip(this.btnExtractArchives, "This extracts alltex.wad and allsounds.wad contents to Patchlunky_Temp/. Mod auth" +
-                    "ors may find this useful.");
+        "ors may find this useful.");
             this.btnExtractArchives.UseVisualStyleBackColor = true;
             this.btnExtractArchives.Click += new System.EventHandler(this.btnExtractArchives_Click);
             // 
             // btnRestore
             // 
-            this.btnRestore.Location = new System.Drawing.Point(291, 16);
+            this.btnRestore.Location = new System.Drawing.Point(436, 25);
+            this.btnRestore.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRestore.Name = "btnRestore";
-            this.btnRestore.Size = new System.Drawing.Size(94, 60);
+            this.btnRestore.Size = new System.Drawing.Size(141, 92);
             this.btnRestore.TabIndex = 7;
             this.btnRestore.Text = "Restore default game files";
             this.toolTip1.SetToolTip(this.btnRestore, "This will replace the game files with the backups that were created with the Patc" +
-                    "hlunky setup wizard.");
+        "hlunky setup wizard.");
             this.btnRestore.UseVisualStyleBackColor = true;
             this.btnRestore.Click += new System.EventHandler(this.btnRestore_Click);
             // 
             // btnSetup
             // 
-            this.btnSetup.Location = new System.Drawing.Point(186, 16);
+            this.btnSetup.Location = new System.Drawing.Point(279, 25);
+            this.btnSetup.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSetup.Name = "btnSetup";
-            this.btnSetup.Size = new System.Drawing.Size(99, 60);
+            this.btnSetup.Size = new System.Drawing.Size(148, 92);
             this.btnSetup.TabIndex = 6;
             this.btnSetup.Text = "Setup Patchlunky";
             this.toolTip1.SetToolTip(this.btnSetup, "You can press this button to force the Patchlunky Setup wizard to run again.");
@@ -596,9 +640,11 @@
             // 
             this.groupBox1.Controls.Add(this.lblStatusBackup);
             this.groupBox1.Controls.Add(this.lblStatusGamePath);
-            this.groupBox1.Location = new System.Drawing.Point(8, 11);
+            this.groupBox1.Location = new System.Drawing.Point(12, 17);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(162, 65);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBox1.Size = new System.Drawing.Size(243, 100);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Patchlunky Status";
@@ -606,26 +652,29 @@
             // lblStatusBackup
             // 
             this.lblStatusBackup.AutoSize = true;
-            this.lblStatusBackup.Location = new System.Drawing.Point(6, 35);
+            this.lblStatusBackup.Location = new System.Drawing.Point(9, 54);
+            this.lblStatusBackup.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatusBackup.Name = "lblStatusBackup";
-            this.lblStatusBackup.Size = new System.Drawing.Size(108, 13);
+            this.lblStatusBackup.Size = new System.Drawing.Size(155, 20);
             this.lblStatusBackup.TabIndex = 2;
             this.lblStatusBackup.Text = "Game backups : N/A";
             // 
             // lblStatusGamePath
             // 
             this.lblStatusGamePath.AutoSize = true;
-            this.lblStatusGamePath.Location = new System.Drawing.Point(6, 18);
+            this.lblStatusGamePath.Location = new System.Drawing.Point(9, 28);
+            this.lblStatusGamePath.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatusGamePath.Name = "lblStatusGamePath";
-            this.lblStatusGamePath.Size = new System.Drawing.Size(85, 13);
+            this.lblStatusGamePath.Size = new System.Drawing.Size(123, 20);
             this.lblStatusGamePath.TabIndex = 1;
             this.lblStatusGamePath.Text = "Game path: N/A";
             // 
             // btnGamePath
             // 
-            this.btnGamePath.Location = new System.Drawing.Point(578, 98);
+            this.btnGamePath.Location = new System.Drawing.Point(867, 151);
+            this.btnGamePath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnGamePath.Name = "btnGamePath";
-            this.btnGamePath.Size = new System.Drawing.Size(77, 22);
+            this.btnGamePath.Size = new System.Drawing.Size(116, 34);
             this.btnGamePath.TabIndex = 2;
             this.btnGamePath.Text = "Browse";
             this.toolTip1.SetToolTip(this.btnGamePath, "Manually set the Spelunky path by browsing to the directory.");
@@ -635,56 +684,62 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 83);
+            this.label1.Location = new System.Drawing.Point(15, 128);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.Size = new System.Drawing.Size(133, 20);
             this.label1.TabIndex = 1;
             this.label1.Text = "Path to Spelunky:";
             // 
             // txtGamePath
             // 
             this.txtGamePath.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.txtGamePath.Location = new System.Drawing.Point(13, 99);
+            this.txtGamePath.Location = new System.Drawing.Point(20, 152);
+            this.txtGamePath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtGamePath.Name = "txtGamePath";
-            this.txtGamePath.Size = new System.Drawing.Size(559, 20);
+            this.txtGamePath.Size = new System.Drawing.Size(836, 26);
             this.txtGamePath.TabIndex = 0;
             this.txtGamePath.Leave += new System.EventHandler(this.txtGamePath_Leave);
             // 
             // prgPatchGame
             // 
-            this.prgPatchGame.Location = new System.Drawing.Point(95, 423);
+            this.prgPatchGame.Location = new System.Drawing.Point(138, 672);
+            this.prgPatchGame.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.prgPatchGame.Name = "prgPatchGame";
-            this.prgPatchGame.Size = new System.Drawing.Size(466, 23);
+            this.prgPatchGame.Size = new System.Drawing.Size(709, 21);
             this.prgPatchGame.TabIndex = 23;
             // 
             // btnPatch
             // 
-            this.btnPatch.Location = new System.Drawing.Point(4, 416);
+            this.btnPatch.Location = new System.Drawing.Point(6, 640);
+            this.btnPatch.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnPatch.Name = "btnPatch";
-            this.btnPatch.Size = new System.Drawing.Size(83, 35);
+            this.btnPatch.Size = new System.Drawing.Size(124, 54);
             this.btnPatch.TabIndex = 8;
             this.btnPatch.Text = "Patch Game";
             this.toolTip1.SetToolTip(this.btnPatch, "Patch the currently checked Mods and Skins to the game.\r\n(Make sure that you don\'" +
-                    "t have Spelunky opened when pressing this)");
+        "t have Spelunky opened when pressing this)");
             this.btnPatch.UseVisualStyleBackColor = true;
             this.btnPatch.Click += new System.EventHandler(this.btnPatch_Click);
             // 
             // txtLog
             // 
-            this.txtLog.Location = new System.Drawing.Point(4, 457);
+            this.txtLog.Location = new System.Drawing.Point(6, 703);
+            this.txtLog.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(662, 102);
+            this.txtLog.Size = new System.Drawing.Size(991, 155);
             this.txtLog.TabIndex = 4;
             this.txtLog.WordWrap = false;
             // 
             // btnRunGame
             // 
-            this.btnRunGame.Location = new System.Drawing.Point(570, 419);
+            this.btnRunGame.Location = new System.Drawing.Point(855, 640);
+            this.btnRunGame.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRunGame.Name = "btnRunGame";
-            this.btnRunGame.Size = new System.Drawing.Size(96, 32);
+            this.btnRunGame.Size = new System.Drawing.Size(144, 54);
             this.btnRunGame.TabIndex = 24;
             this.btnRunGame.Text = "Launch Game";
             this.toolTip1.SetToolTip(this.btnRunGame, "Launch Spelunky HD.");
@@ -697,11 +752,20 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // progressBar1
+            // 
+            this.prgCombinePngs.Location = new System.Drawing.Point(138, 641);
+            this.prgCombinePngs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.prgCombinePngs.Name = "progressBar1";
+            this.prgCombinePngs.Size = new System.Drawing.Size(709, 21);
+            this.prgCombinePngs.TabIndex = 25;
+            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(671, 565);
+            this.ClientSize = new System.Drawing.Size(1006, 869);
+            this.Controls.Add(this.prgCombinePngs);
             this.Controls.Add(this.btnRunGame);
             this.Controls.Add(this.prgPatchGame);
             this.Controls.Add(this.tabControl1);
@@ -709,6 +773,7 @@
             this.Controls.Add(this.txtLog);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Patchlunky";
@@ -766,6 +831,7 @@
         private System.Windows.Forms.Label lblModList;
         private System.Windows.Forms.Label lblLoadOrder;
         private System.Windows.Forms.ProgressBar prgPatchGame;
+        private System.Windows.Forms.ProgressBar prgCombinePngs;
         private System.Windows.Forms.Button btnRunGame;
         private System.Windows.Forms.PictureBox picModImage;
         private System.Windows.Forms.Label lblModName;

@@ -530,7 +530,7 @@ namespace Patchlunky
                 // After all groups have been checked, save the archive
                 archive.Save();
 
-                if (count > 0) Msg.Log($"Patched{count} {archivepath} resources for {mod.Name}");
+                if (count > 0) Msg.Log($"Patched {count} resource(s) for {mod.Name}");
             }
         }
 

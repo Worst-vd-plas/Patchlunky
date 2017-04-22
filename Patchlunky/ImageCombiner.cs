@@ -61,7 +61,7 @@ namespace Patchlunky
             for (int i = 0; i < nonMatchingPixels.Count; ++i)
             {
                 if (i % (nonMatchingPixels.Count / 10) == 0)
-                    Msg.Log($"Non matching pixels processed: {(int)((i / (float)nonMatchingPixels.Count) * 100) + 1}% {i}/{nonMatchingPixels.Count}");
+                    Program.mainForm.SetCombineProgress((int)((i / (float)nonMatchingPixels.Count) * 100) + 1);
 
                 for (int j = 0; j < nonMatchingPixels.Count; ++j)
                 {

@@ -79,6 +79,10 @@ namespace SpelunkyWad
             private set;
         }
 
+        /// <summary>
+        /// Returns the Entry's data (byte[]) as a stream.
+        /// </summary>
+        /// <returns></returns>
         public Stream GetDataAsStream()
         {
             // Can't use a using statement as the stream has to be used which doesn't work if the using statement closes it automatically

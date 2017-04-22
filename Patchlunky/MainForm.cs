@@ -124,6 +124,11 @@ namespace Patchlunky
             prgPatchGame.Value = percent;
         }
 
+        public void SetCombineProgress(int percent)
+        {
+            prgCombinePngs.Value = percent;
+        }
+
         //Patch mods to game
         private void btnPatch_Click(object sender, EventArgs e)
         {
