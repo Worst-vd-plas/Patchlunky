@@ -1,16 +1,16 @@
-﻿/* 
+﻿/*
  * Copyright (c) 2016, Worst-vd-plas
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -43,7 +43,7 @@ namespace Patchlunky
         public string Text;
         public System.Drawing.Image Image;
 
-        public ModData(string name, string path, bool iszip=false)
+        public ModData(string name, string path, bool iszip = false)
         {
             this.Name = StripSpecialChars(name);
             this.Path = path;
@@ -70,7 +70,7 @@ namespace Patchlunky
             {
                 string entrypath;
                 ZipFile zip = new ZipFile(this.Path);
-                
+
                 entrypath = "readme.txt";
                 if (zip.ContainsEntry(entrypath))
                 {
@@ -148,7 +148,6 @@ namespace Patchlunky
         {
             string path = Program.mainForm.Setup.AppPath + "Mods/";
 
-            
             LoadMods(path, "/");
             LoadMods(path, "*.zip");
             LoadMods(path, "*.plm");
@@ -158,10 +157,10 @@ namespace Patchlunky
 
         //LoadMods - Loads mods of given type
         private void LoadMods(string path, string type)
-        {            
+        {
             string[] mods;
             if (type.Equals("/")) mods = Directory.GetDirectories(path);
-            else                  mods = Directory.GetFiles(path, type);
+            else mods = Directory.GetFiles(path, type);
 
             foreach (string modpath in mods)
             {
@@ -291,6 +290,5 @@ namespace Patchlunky
 
             Msg.Log("Removed modconfig '" + configname + "'.");
         }
-
     }
 }

@@ -1,16 +1,16 @@
-﻿/* 
+﻿/*
  * Copyright (c) 2016, Worst-vd-plas
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -26,6 +26,8 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
@@ -41,7 +43,7 @@ namespace Patchlunky
         public string FilePath;
         public bool IsModdable;
 
-        public GameFile(string path, bool ismoddable=true)
+        public GameFile(string path, bool ismoddable = true)
         {
             this.Name = Path.GetFileName(path);
             this.FilePath = path;
@@ -52,11 +54,14 @@ namespace Patchlunky
     public class Setup
     {
         public List<GameFile> DefaultFiles;
-        
+
         public string GamePath; //Path to Spelunky
         public string AppPath; //Path to Patchlunky
         public string BackupPath; //Path to Patchlunky backups
         public string TempPath; //Path to Patchlunky temp folder
+
+        // Dictionary to keep the original entries. Used for .png combining.
+        private Dictionary<string, Entry> OriginalEntries = new Dictionary<string, Entry>();
 
         public Setup()
         {
@@ -64,13 +69,13 @@ namespace Patchlunky
 
             this.DefaultFiles = new List<GameFile>();
 
-            this.GamePath = settings.Get("GameDir");                        
+            this.GamePath = settings.Get("GameDir");
             this.AppPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + "/";
-            this.TempPath   = AppPath + "Patchlunky_Temp/";
+            this.TempPath = AppPath + "Patchlunky_Temp/";
             this.BackupPath = AppPath + "Patchlunky_Backup/";
-            
+
             this.CreateSubDirs();
-            this.InitDefaultFiles();            
+            this.InitDefaultFiles();
         }
 
         //Create some needed subdirectories inside patchlunky folder
@@ -95,7 +100,7 @@ namespace Patchlunky
         //Create the list of game files to backup / patch
         private void InitDefaultFiles()
         {
-            string[] musicfiles = { "Music/A01_A.ogg", 
+            string[] musicfiles = { "Music/A01_A.ogg",
                                     "Music/A01_B.ogg",
                                     "Music/A01_C.ogg",
                                     "Music/A01_dark.ogg",
@@ -120,7 +125,7 @@ namespace Patchlunky
                                     "Music/A04_B.ogg",
                                     "Music/A04_C.ogg",
                                     "Music/A04_boss.ogg",
-                                    "Music/A04_dark.ogg", 
+                                    "Music/A04_dark.ogg",
                                     "Music/A04_egg.ogg",
                                     "Music/A04_gold.ogg",
                                     "Music/A05_A.ogg",
@@ -180,14 +185,14 @@ namespace Patchlunky
         }
 
         //Checks if GameDir is valid
-        public bool CheckGameDir() 
+        public bool CheckGameDir()
         {
             if (File.Exists(this.GamePath + "Spelunky.exe")) return true;
             return false;
         }
 
         //Check if backups have been done
-        public bool CheckBackups() 
+        public bool CheckBackups()
         {
             foreach (GameFile gmfile in DefaultFiles)
             {
@@ -195,9 +200,9 @@ namespace Patchlunky
             }
             return true;
         }
-        
+
         //Backups the game files
-        private bool DoBackups() 
+        private bool DoBackups()
         {
             string message;
 
@@ -212,7 +217,7 @@ namespace Patchlunky
 
             foreach (GameFile gmfile in DefaultFiles)
             {
-                if (File.Exists(this.BackupPath + gmfile.FilePath) == true)
+                if (File.Exists(this.BackupPath + gmfile.FilePath))
                     continue; //This file has already been backed up.
 
                 try
@@ -227,7 +232,7 @@ namespace Patchlunky
                     return false; //Stop doing backups
                 }
             }
- 
+
             return true;
         }
 
@@ -237,7 +242,7 @@ namespace Patchlunky
             Settings settings = Program.mainForm.Settings;
             ModManager modMan = Program.mainForm.ModMan;
             SkinManager skinMan = Program.mainForm.SkinMan;
-            
+
             string message;
 
             if (CheckGameDir() == false)
@@ -305,11 +310,11 @@ namespace Patchlunky
 
                 int i = archive.Groups.FindIndex(o => o.Name.Equals("PLAYERS", StringComparison.OrdinalIgnoreCase));
                 if (i == -1)
-                    return false; //Missing "PLAYERS" group in archive, stop patching                
+                    return false; //Missing "PLAYERS" group in archive, stop patching
 
                 int count = 0;
 
-                foreach(KeyValuePair<string, string> kvp in skinMan.SkinConfig)
+                foreach (KeyValuePair<string, string> kvp in skinMan.SkinConfig)
                 {
                     SkinData oldSkin = skinMan.GetSkin(kvp.Key);
                     SkinData newSkin = skinMan.GetSkin(kvp.Value);
@@ -348,6 +353,7 @@ namespace Patchlunky
                 {
                     string srcfile = this.TempPath + gmfile.FilePath;
                     string dstfile = this.GamePath + "Data/" + gmfile.FilePath;
+
                     File.Copy(srcfile, dstfile, true);
                 }
                 catch (Exception ex)
@@ -365,10 +371,10 @@ namespace Patchlunky
         // Patch game files in the temp folder with files of a mod.
         public bool PatchFiles(ModData mod)
         {
-            if (mod.IsZip == true)
+            if (mod.IsZip)
                 return PatchZipFiles(mod);
-            else
-                return PatchDirFiles(mod);
+
+            return PatchDirFiles(mod);
         }
 
         public bool PatchZipFiles(ModData mod)
@@ -410,8 +416,8 @@ namespace Patchlunky
             {
                 // The full alltex.wad and allsounds.wad files are intentionally disabled from
                 // being used in mods, as including the entire files works against the idea of
-                // being able to combine multiple mods that change different resources inside 
-                // the wad files. Not to mention that it makes the mods unnecessarily big in  
+                // being able to combine multiple mods that change different resources inside
+                // the wad files. Not to mention that it makes the mods unnecessarily big in
                 // filesize. (although maybe this could be made to work anyways with some kind
                 // of hash comparison with the entries of the wad files..)
                 //NOTE: Commented this out, so old mods can work.
@@ -443,7 +449,7 @@ namespace Patchlunky
         // Patches an archive wad file in the temp folder with resources of a mod.
         public void PatchArchive(ModData mod, string archivepath)
         {
-            if (mod.IsZip == true)
+            if (mod.IsZip)
                 PatchZipArchive(mod, archivepath);
             else
                 PatchDirArchive(mod, archivepath);
@@ -486,9 +492,34 @@ namespace Patchlunky
                                 zip[entrypath].Extract(stream);
 
                                 Byte[] data = stream.GetBuffer();
-                                var new_entry = new Entry(entry.Name, data);
+                                Entry new_entry = new Entry(entry.Name, data);
 
-                                //Replace entry in the archive.wad with file in mod archive folder.
+                                // Check if the mod is a png. If it is, combine the images instead of just replacing them.
+                                if (new_entry.Name.EndsWith("png"))
+                                {
+                                    Entry latestModdedPng = archive.Groups[i].Entries[j];
+                                    if (!OriginalEntries.ContainsKey(new_entry.Name))
+                                    {
+                                        // If the entry was not yet in the original entries, this means that it has not been modded yet, so add it to the originalEntries
+                                        // Nothing else needs to be done, the original file can be overwritten without combining everything
+                                        OriginalEntries.Add(new_entry.Name, archive.Groups[i].Entries[j]);
+                                    }
+                                    else // if it has been modded already, the bitmaps have to be combined.
+                                    {
+                                        using (Bitmap originalBitmap = Image.FromStream(OriginalEntries[new_entry.Name].GetDataAsStream()) as Bitmap)
+                                        using (Bitmap prevModdedBitmap = Image.FromStream(latestModdedPng.GetDataAsStream()) as Bitmap)
+                                        using (Bitmap newModdedBitmap = Image.FromStream(new_entry.GetDataAsStream()) as Bitmap)
+                                        {
+                                            // Merge the images
+                                            Bitmap combinedBitmap = ImageCombiner.MergeImages(originalBitmap, prevModdedBitmap, newModdedBitmap);
+
+                                            // Set the data of the new entry to the freshly combined bitmap
+                                            new_entry.SetDataFromPNG(combinedBitmap);
+                                        }
+                                    }
+                                }
+
+                                // This overwrites the current element with the new one from the mod.
                                 archive.Groups[i].Entries[j] = new_entry;
                                 //Msg.Log("Patching '" + group.Name + "/" + entry.Name + "' from zip " + mod.Name);
                                 count++;
@@ -496,10 +527,11 @@ namespace Patchlunky
                         }
                     }
                 }
+                // After all groups have been checked, save the archive
                 archive.Save();
 
-                if (count > 0) Msg.Log("Patched " + count + " " + archivepath + " resources for " + mod.Name);
-            }            
+                if (count > 0) Msg.Log($"Patched{count} {archivepath} resources for {mod.Name}");
+            }
         }
 
         public void PatchDirArchive(ModData mod, string archivepath)
@@ -552,7 +584,7 @@ namespace Patchlunky
         }
 
         //Displays dialogs for setting the game path and doing backups
-        public void DoSetup(bool forced=false) 
+        public void DoSetup(bool forced = false)
         {
             DialogResult result;
             string message;
@@ -578,7 +610,6 @@ namespace Patchlunky
 
                         if (result == DialogResult.Yes)
                             path = BrowseGameDir();
-                        
                     }
                     this.GamePath = path + "/";
                 }
@@ -597,7 +628,7 @@ namespace Patchlunky
                 {
                 }
 
-                if(CheckGameDir() == false)
+                if (CheckGameDir() == false)
                 {
                     message = "The Spelunky directory is not set!" +
                             Environment.NewLine + Environment.NewLine +
@@ -606,7 +637,7 @@ namespace Patchlunky
                     return;
                 }
             }
-            
+
             if ((CheckBackups() == false) || forced)
             {
                 message = "For Patchlunky to work, it needs to backup the original Spelunky data files." +
@@ -670,7 +701,6 @@ namespace Patchlunky
             List<string> SteamDirs = new List<string>();
             string path_steam = null;
 
-
             //Check Registry for GOG install directory
             GOGRegKey = Registry.LocalMachine.OpenSubKey("Software\\GOG.com\\Games\\" + GOGgameID);
             if (GOGRegKey != null)
@@ -682,7 +712,7 @@ namespace Patchlunky
                 }
             }
 
-            //Check Registry for steam install directory            
+            //Check Registry for steam install directory
             SteamRegKey = Registry.LocalMachine.OpenSubKey("Software\\Valve\\Steam");
             if (SteamRegKey != null)
             {
