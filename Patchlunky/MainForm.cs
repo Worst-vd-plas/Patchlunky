@@ -1,16 +1,16 @@
-﻿/* 
+﻿/*
  * Copyright (c) 2016, Worst-vd-plas
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice, this
  *    list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -70,8 +70,8 @@ namespace Patchlunky
             SkinMan = new SkinManager();
 
             //Check if Patchlunky Setup should run
-            if ( (Setup.CheckBackups() == false) || 
-                 (Setup.CheckGameDir() == false) )
+            if ((Setup.CheckBackups() == false) ||
+                 (Setup.CheckGameDir() == false))
                 Setup.DoSetup();
 
             //DebugPrintSettings();
@@ -79,12 +79,12 @@ namespace Patchlunky
             ModMan.LoadAllMods();
             SkinMan.LoadAllSkins();
 
-            ModMan.LoadConfigList();            
+            ModMan.LoadConfigList();
             SkinMan.LoadConfigList();
             //ModMan.LoadConfig("Default");
             //SkinMan.LoadConfig("Default");
 
-            UpdateModList();            
+            UpdateModList();
             UpdateModConfigList();
 
             UpdateCharacterList();
@@ -102,13 +102,13 @@ namespace Patchlunky
             if (Settings.Check("ModConfigAutosave", "True"))
                 ModMan.SaveConfig(ModMan.CurrentConfig);
 
-            if (Settings.Check("SkinConfigAutosave", "True"))            
+            if (Settings.Check("SkinConfigAutosave", "True"))
                 SkinMan.SaveConfig(SkinMan.CurrentConfig);
-            
+
             ModMan.SaveConfigList();
             SkinMan.SaveConfigList();
 
-            Settings.Set("GameDir", Setup.GamePath);            
+            Settings.Set("GameDir", Setup.GamePath);
             Settings.Save();
         }
 
@@ -124,6 +124,11 @@ namespace Patchlunky
             prgPatchGame.Value = percent;
         }
 
+        public void SetCombineProgress(int percent)
+        {
+            prgCombinePngs.Value = percent;
+        }
+
         //Patch mods to game
         private void btnPatch_Click(object sender, EventArgs e)
         {
@@ -131,7 +136,7 @@ namespace Patchlunky
             UpdateSkinConfiguration();
 
             if (Settings.Check("ModConfigAutosave", "True"))
-                ModMan.SaveConfig(ModMan.CurrentConfig);            
+                ModMan.SaveConfig(ModMan.CurrentConfig);
 
             if (Settings.Check("SkinConfigAutosave", "True"))
                 SkinMan.SaveConfig(SkinMan.CurrentConfig);
@@ -139,13 +144,13 @@ namespace Patchlunky
             //Debug
             //foreach (var mod in ModMan.Mods)
             //    Msg.Log("mod '" + mod.Name + "' enabled: " + mod.Enabled + ", index: "+ mod.SortValue);
-            
+
             prgPatchGame.Value = 100; //Test
 
             bool patch_ok;
-            patch_ok = Setup.PatchGame(reset_only:false);
-            
-            Msg.Log(patch_ok ? "Game files successfully patched." :"Patching the game files failed.");
+            patch_ok = Setup.PatchGame(reset_only: false);
+
+            Msg.Log(patch_ok ? "Game files successfully patched." : "Patching the game files failed.");
         }
 
         // Run the game
@@ -267,7 +272,6 @@ namespace Patchlunky
             }
             Msg.Log("Extracted alltex.wad to ./Patchlunky_Temp/alltex/");
 
-
             Archive allsounds = new Archive(Setup.BackupPath + "Sounds/allsounds.wad");
             allsounds.Load();
 
@@ -288,7 +292,7 @@ namespace Patchlunky
         //ModsReplaceDefaultSkins
         private void chkModsReplaceSkins_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Set("ModsReplaceDefaultSkins", chkModsReplaceSkins.Checked ? "True" : "False");            
+            Settings.Set("ModsReplaceDefaultSkins", chkModsReplaceSkins.Checked ? "True" : "False");
         }
 
         //ModConfigAutosave
@@ -343,7 +347,7 @@ namespace Patchlunky
         private void btnModUp_Click(object sender, EventArgs e)
         {
             int index = chklstMods.SelectedIndex;
-            MoveModItem(index, index - 1);            
+            MoveModItem(index, index - 1);
         }
 
         // Move mod with focus down
@@ -459,7 +463,7 @@ namespace Patchlunky
         private void btnDeleteModConfig_Click(object sender, EventArgs e)
         {
             string modconfig = cboModConfig.Text;
-            
+
             if (modconfig.Equals("Default")) return;
 
             if (ModMan.ConfigExists(modconfig))
@@ -542,7 +546,7 @@ namespace Patchlunky
         {
             lvwCharacters.Clear();
             lvwCharacters.LargeImageList = SkinMan.SkinImageList;
-            
+
             //Fill character list
             foreach (var skin in SkinMan.Skins)
             {
@@ -557,7 +561,7 @@ namespace Patchlunky
             {
                 string oldSkin = kvp.Key;
                 string newSkin = kvp.Value;
-                
+
                 foreach (ListViewItem item in lvwCharacters.Items)
                 {
                     if (item.Name.Equals(oldSkin, StringComparison.OrdinalIgnoreCase))
@@ -592,7 +596,7 @@ namespace Patchlunky
             if (CharItem != null)
             {
                 SwitchSkinView(characters: false);
-            }            
+            }
             UpdateSkinTab();
         }
 
@@ -646,7 +650,7 @@ namespace Patchlunky
             {
                 lvwCharacters.SelectedItems[0].ImageKey = lvwCharacters.SelectedItems[0].Name;
                 UpdateSkinTab();
-            } 
+            }
         }
 
         //Resets all skins back to default
@@ -674,7 +678,7 @@ namespace Patchlunky
 
         //Skin configuration list index changed
         private void cboSkinConfig_SelectedIndexChanged(object sender, EventArgs e)
-        {                    
+        {
             string config = cboSkinConfig.Text;
             if (SkinMan.ConfigExists(config))
             {
@@ -715,6 +719,5 @@ namespace Patchlunky
                 cboSkinConfig.SelectedItem = "Default";
             }
         }
-
     }
 }
