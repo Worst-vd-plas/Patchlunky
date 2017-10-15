@@ -51,6 +51,8 @@
             this.btnModDown = new System.Windows.Forms.Button();
             this.btnModUp = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lblSkinFiller = new System.Windows.Forms.Label();
+            this.lnkSkinEmail = new System.Windows.Forms.LinkLabel();
             this.lnkSkinWebUrl = new System.Windows.Forms.LinkLabel();
             this.lblSkinList = new System.Windows.Forms.Label();
             this.txtSkinInfo = new System.Windows.Forms.TextBox();
@@ -88,8 +90,7 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lnkSkinEmail = new System.Windows.Forms.LinkLabel();
-            this.lblSkinFiller = new System.Windows.Forms.Label();
+            this.lblSkinVersion = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picModImage)).BeginInit();
@@ -318,6 +319,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.lblSkinVersion);
             this.tabPage2.Controls.Add(this.lblSkinFiller);
             this.tabPage2.Controls.Add(this.lnkSkinEmail);
             this.tabPage2.Controls.Add(this.lnkSkinWebUrl);
@@ -344,6 +346,26 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Characters";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // lblSkinFiller
+            // 
+            this.lblSkinFiller.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblSkinFiller.Location = new System.Drawing.Point(521, 190);
+            this.lblSkinFiller.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.lblSkinFiller.Name = "lblSkinFiller";
+            this.lblSkinFiller.Size = new System.Drawing.Size(138, 27);
+            this.lblSkinFiller.TabIndex = 30;
+            // 
+            // lnkSkinEmail
+            // 
+            this.lnkSkinEmail.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lnkSkinEmail.Location = new System.Drawing.Point(477, 190);
+            this.lnkSkinEmail.Margin = new System.Windows.Forms.Padding(0);
+            this.lnkSkinEmail.Name = "lnkSkinEmail";
+            this.lnkSkinEmail.Size = new System.Drawing.Size(44, 27);
+            this.lnkSkinEmail.TabIndex = 29;
+            this.lnkSkinEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lnkSkinEmail.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSkinEmail_LinkClicked);
             // 
             // lnkSkinWebUrl
             // 
@@ -432,7 +454,7 @@
             this.lblSkinInfo.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblSkinInfo.Location = new System.Drawing.Point(436, 110);
             this.lblSkinInfo.Name = "lblSkinInfo";
-            this.lblSkinInfo.Size = new System.Drawing.Size(223, 80);
+            this.lblSkinInfo.Size = new System.Drawing.Size(223, 58);
             this.lblSkinInfo.TabIndex = 24;
             // 
             // btnDeleteSkinConfig
@@ -749,25 +771,13 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // lnkSkinEmail
+            // lblSkinVersion
             // 
-            this.lnkSkinEmail.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lnkSkinEmail.Location = new System.Drawing.Point(477, 190);
-            this.lnkSkinEmail.Margin = new System.Windows.Forms.Padding(0);
-            this.lnkSkinEmail.Name = "lnkSkinEmail";
-            this.lnkSkinEmail.Size = new System.Drawing.Size(44, 27);
-            this.lnkSkinEmail.TabIndex = 29;
-            this.lnkSkinEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lnkSkinEmail.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSkinEmail_LinkClicked);
-            // 
-            // lblSkinFiller
-            // 
-            this.lblSkinFiller.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblSkinFiller.Location = new System.Drawing.Point(521, 190);
-            this.lblSkinFiller.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.lblSkinFiller.Name = "lblSkinFiller";
-            this.lblSkinFiller.Size = new System.Drawing.Size(138, 27);
-            this.lblSkinFiller.TabIndex = 30;
+            this.lblSkinVersion.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblSkinVersion.Location = new System.Drawing.Point(436, 168);
+            this.lblSkinVersion.Name = "lblSkinVersion";
+            this.lblSkinVersion.Size = new System.Drawing.Size(223, 22);
+            this.lblSkinVersion.TabIndex = 31;
             // 
             // MainForm
             // 
@@ -866,6 +876,7 @@
         private System.Windows.Forms.LinkLabel lnkSkinWebUrl;
         private System.Windows.Forms.LinkLabel lnkSkinEmail;
         private System.Windows.Forms.Label lblSkinFiller;
+        private System.Windows.Forms.Label lblSkinVersion;
     }
 }
 

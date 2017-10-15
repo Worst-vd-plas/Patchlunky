@@ -43,6 +43,8 @@ namespace Patchlunky
 {
     public partial class MainForm : Form
     {
+        public string PatchlunkyVersion;
+
         public Settings Settings;
         public Setup Setup;
         public ModManager ModMan;
@@ -57,7 +59,8 @@ namespace Patchlunky
 
             //Title bar
             System.Reflection.Assembly ass = System.Reflection.Assembly.GetExecutingAssembly();
-            this.Text = "Patchlunky " + System.Diagnostics.FileVersionInfo.GetVersionInfo(ass.Location).ProductVersion.ToString() + " Beta";
+            PatchlunkyVersion = FileVersionInfo.GetVersionInfo(ass.Location).ProductVersion;
+            this.Text = "Patchlunky " + PatchlunkyVersion + " Beta";
 
             //Characters tab
             CharItem = null;
@@ -632,6 +635,7 @@ namespace Patchlunky
             picSkin.Image = null;
 
             lblSkinInfo.Text = ""; //Main fields
+            lblSkinVersion.Text = ""; //Supported version
 
             lnkSkinWebUrl.Text = ""; //WebUrl link
             lnkSkinWebUrl.Links.Clear();
@@ -668,8 +672,31 @@ namespace Patchlunky
                 lblSkinInfo.Text += "Author: " + (skin.Author ?? "-") + Environment.NewLine;
                 lblSkinInfo.Text += "Date: " + (skin.Date.HasValue ? skin.Date.Value.ToShortDateString() : "-") + Environment.NewLine;
                 lblSkinInfo.Text += "Version: " + (skin.Version ?? "-") + Environment.NewLine;
-                lblSkinInfo.Text += Environment.NewLine;
-                lblSkinInfo.Text += "Supported Patchlunky version: " + (skin.PatchlunkyVersion ?? "-");
+
+                //Display supported version for this skin
+                if (skin.PatchlunkyVersion != null)
+                {
+                    try
+                    {
+                        Version verPatchlunky = new Version(this.PatchlunkyVersion);
+                        Version verSkinNeeds = new Version(skin.PatchlunkyVersion);
+
+                        if (verSkinNeeds > verPatchlunky)
+                        {
+                            lblSkinVersion.ForeColor = Color.Red;
+                            lblSkinVersion.Text += "Patchlunky version needed: " + skin.PatchlunkyVersion;
+                        }
+                        else
+                        {
+                            lblSkinVersion.ForeColor = Color.Green;
+                            lblSkinVersion.Text += "Patchlunky version: " + skin.PatchlunkyVersion;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Msg.Log("Error comparing versions: " + ex.Message);
+                    }
+                }
 
                 if (skin.WebUrl != null)
                 {
