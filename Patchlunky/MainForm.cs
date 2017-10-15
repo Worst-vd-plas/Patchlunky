@@ -35,6 +35,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Configuration;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 using SpelunkyWad;
 
@@ -48,16 +49,20 @@ namespace Patchlunky
         public SkinManager SkinMan;
         private ListViewItem CharItem;
         private ListViewItem SkinItem;
+        private bool SkinBrowserActive;
 
         public MainForm()
         {
             InitializeComponent();
 
+            //Title bar
             System.Reflection.Assembly ass = System.Reflection.Assembly.GetExecutingAssembly();
             this.Text = "Patchlunky " + System.Diagnostics.FileVersionInfo.GetVersionInfo(ass.Location).ProductVersion.ToString() + " Beta";
 
+            //Characters tab
             CharItem = null;
             SkinItem = null;
+            SkinBrowserActive = false;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -534,7 +539,9 @@ namespace Patchlunky
 
             //Fill skin list
             foreach (var skin in SkinMan.Skins)
-                lvwSkins.Items.Add(skin.Name, skin.Name);
+                lvwSkins.Items.Add(skin.Id, "", skin.Id);
+
+            ListView_SetIconSpacing(lvwSkins, 80, 80);
         }
 
         //Clears and Recreates the listview of characters
@@ -548,7 +555,7 @@ namespace Patchlunky
             {
                 if (skin.IsDefault == true)
                 {
-                    lvwCharacters.Items.Add(skin.Name, skin.Name, skin.Name);
+                    lvwCharacters.Items.Add(skin.Id, "", skin.Id);
                 }
             }
 
@@ -567,6 +574,8 @@ namespace Patchlunky
                     }
                 }
             }
+
+            ListView_SetIconSpacing(lvwCharacters, 80, 80);
         }
 
         //Switches beetween Character/Skin browsing in the character skin tab
@@ -591,7 +600,9 @@ namespace Patchlunky
 
             if (CharItem != null)
             {
+                //Switch the view
                 SwitchSkinView(characters: false);
+                SkinBrowserActive = true;
             }            
             UpdateSkinTab();
         }
@@ -603,36 +614,98 @@ namespace Patchlunky
 
             if (SkinItem != null)
             {
+                //Set the new skin for the character
                 CharItem.ImageKey = SkinItem.ImageKey;
+
+                //Switch the view
                 SwitchSkinView(characters: true);
+                SkinBrowserActive = false;
             }
             UpdateSkinTab();
         }
 
-        //TODO: Remove this
+        //Updates the character info view
         private void UpdateSkinTab()
         {
+            //Clear previous information
             picCharacter.Image = null;
             picSkin.Image = null;
 
+            lblSkinInfo.Text = ""; //Main fields
+
+            lnkSkinWebUrl.Text = ""; //WebUrl link
+            lnkSkinWebUrl.Links.Clear();
+            toolTip1.SetToolTip(lnkSkinWebUrl, "");
+
+            lnkSkinEmail.Text = ""; //Email link
+            lnkSkinEmail.Links.Clear();
+            toolTip1.SetToolTip(lnkSkinEmail, "");
+
+            txtSkinInfo.Text = ""; //Description
+
+
+            //Display the original character for the current item
             if (CharItem != null)
             {
                 picCharacter.Image = CharItem.ImageList.Images[CharItem.Name];
-                picSkin.Image = CharItem.ImageList.Images[CharItem.ImageKey];
             }
 
-            //if (SkinItem != null)
-            //    picSkin.Image = SkinItem.ImageList.Images[SkinItem.ImageKey];
+            string skinName = null;
+
+            if (SkinBrowserActive) //If browsing custom characters
+            {
+                if (SkinItem != null) skinName = SkinItem.ImageKey;
+            }
+            else
+            {
+                if (CharItem != null) skinName = CharItem.ImageKey;
+            }
+
+            SkinData skin = SkinMan.GetSkin(skinName);
+            if (skin != null)
+            {
+                lblSkinInfo.Text += "Name: " + (skin.Name ?? "-") + Environment.NewLine;
+                lblSkinInfo.Text += "Author: " + (skin.Author ?? "-") + Environment.NewLine;
+                lblSkinInfo.Text += "Date: " + (skin.Date.HasValue ? skin.Date.Value.ToShortDateString() : "-") + Environment.NewLine;
+                lblSkinInfo.Text += "Version: " + (skin.Version ?? "-") + Environment.NewLine;
+                lblSkinInfo.Text += Environment.NewLine;
+                lblSkinInfo.Text += "Supported Patchlunky version: " + (skin.PatchlunkyVersion ?? "-");
+
+                if (skin.WebUrl != null)
+                {
+                    lnkSkinWebUrl.Text = "Link";
+                    lnkSkinWebUrl.Links.Add(0, 4, skin.WebUrl);
+                    toolTip1.SetToolTip(lnkSkinWebUrl, skin.WebUrl);
+                }
+
+                if (skin.Email != null)
+                {
+                    lnkSkinEmail.Text = "Email";
+                    lnkSkinEmail.Links.Add(0, 5, skin.Email);
+                    toolTip1.SetToolTip(lnkSkinEmail, skin.Email);
+                }
+
+                txtSkinInfo.Text = skin.Description;
+
+                //Display the new character for the current item
+                picSkin.Image = CharItem.ImageList.Images[skinName];
+            }
+            else if(skinName != null) //Unknown skin
+            {
+                lblSkinInfo.Text += "Unknown character: " + skinName + Environment.NewLine;
+                lblSkinInfo.Text += Environment.NewLine;
+                lblSkinInfo.Text += "This character will not be patched, because the files are missing!" + Environment.NewLine;
+            }
         }
 
-        //Change selection in character listview. TODO: Remove
+        //Change selection in character listview.
         private void lvwCharacters_SelectedIndexChanged(object sender, EventArgs e)
         {
             CharItem = (lvwCharacters.SelectedItems.Count > 0) ? lvwCharacters.SelectedItems[0] : null;
             UpdateSkinTab();
         }
 
-        //Change selection in skin listview. TODO: Remove
+        //Change selection in skin listview.
         private void lvwSkins_SelectedIndexChanged(object sender, EventArgs e)
         {
             SkinItem = (lvwSkins.SelectedItems.Count > 0) ? lvwSkins.SelectedItems[0] : null;
@@ -642,11 +715,11 @@ namespace Patchlunky
         //Resets selected skin back to default
         private void btnRestoreSkin_Click(object sender, EventArgs e)
         {
-            if (lvwCharacters.SelectedItems.Count > 0)
+            if (CharItem != null)
             {
-                lvwCharacters.SelectedItems[0].ImageKey = lvwCharacters.SelectedItems[0].Name;
+                CharItem.ImageKey = CharItem.Name;
                 UpdateSkinTab();
-            } 
+            }
         }
 
         //Resets all skins back to default
@@ -716,5 +789,57 @@ namespace Patchlunky
             }
         }
 
+        //Click on a skin weburl link
+        private void lnkSkinWebUrl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if(e.Link.LinkData != null)
+                OpenWebLink(e.Link.LinkData.ToString());
+        }
+
+        //Click on a skin email link
+        private void lnkSkinEmail_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (e.Link.LinkData != null)
+                OpenWebLink(e.Link.LinkData.ToString());
+        }
+
+        //----------------------------------------------//
+        // MISC                                         //
+        //----------------------------------------------//
+
+        //For visiting a link
+        private void OpenWebLink(string target)
+        {
+            if (target == null)
+                return;
+
+            //Check wether the url is valid
+            Uri result;
+            bool valid = Uri.TryCreate(target, UriKind.Absolute, out result) &&
+                          (result.Scheme == Uri.UriSchemeHttp ||
+                           result.Scheme == Uri.UriSchemeHttps ||
+                           result.Scheme == Uri.UriSchemeMailto);
+
+            if (valid)
+                Process.Start(target);
+        }
+
+        //Import the SendMessage function from user32.dll
+        [DllImport("user32.dll")]
+        //private static extern IntPtr SendMessage(HandleRef hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam);
+        private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam);
+
+        //ListView_SetIconSpacing, see: https://msdn.microsoft.com/en-us/library/windows/desktop/bb761176%28v=vs.85%29.aspx
+        private void ListView_SetIconSpacing(ListView listView, int cx, int cy)
+        {
+            const Int32 LVM_FIRST = 0x1000;
+            const Int32 LVM_SETICONSPACING = (LVM_FIRST + 53);
+
+            IntPtr lParam = (IntPtr)((UInt16)cx | ((UInt16)cy << 16));
+            //HandleRef hr = new HandleRef(listView, listView.Handle);
+
+            SendMessage(listView.Handle, LVM_SETICONSPACING, IntPtr.Zero, lParam);
+            //SendMessage(hr, LVM_SETICONSPACING, IntPtr.Zero, lParam);
+        }
     }
 }

@@ -314,17 +314,55 @@ namespace Patchlunky
                     SkinData oldSkin = skinMan.GetSkin(kvp.Key);
                     SkinData newSkin = skinMan.GetSkin(kvp.Value);
 
+                    if (oldSkin == null)
+                        continue; //Skip unknown entry (this shouldn't happen)
+
+                    if (newSkin == null)
+                        continue; //Skip unknown skin (this may happen)
+
                     bool skinsMatch = kvp.Key.Equals(kvp.Value);
 
                     if (skinsMatch && settings.Check("ModsReplaceDefaultSkins", "True"))
                         continue; //Skip default skins
 
-                    int j = archive.Groups[i].Entries.FindIndex(o => o.Name.Equals(oldSkin.Name + ".png", StringComparison.OrdinalIgnoreCase));
+                    int j = archive.Groups[i].Entries.FindIndex(o => o.Name.Equals(oldSkin.Id + ".png", StringComparison.OrdinalIgnoreCase));
                     if (j == -1)
                         continue; //Skip missing character entry
 
-                    Byte[] data = File.ReadAllBytes(newSkin.Path);
-                    var new_entry = new Entry(oldSkin.Name + ".png", data);
+                    //Read the new skin file
+                    Byte[] data = null;
+
+                    if ((newSkin.Type == SkinType.Png) || (newSkin.Type == SkinType.Dir))
+                    {
+                        string filepath = newSkin.ModPath + "/" + newSkin.CharacterImgPath;
+
+                        if (File.Exists(filepath) == false)
+                        {
+                            Msg.Log("Character '" + newSkin.Name + "' cannot be patched, file not found!");
+                            continue; //Skip missing skin file
+                        }
+
+                        data = File.ReadAllBytes(filepath);
+                    }
+                    else if (newSkin.Type == SkinType.Zip)
+                    {
+                        ZipFile zip = new ZipFile(newSkin.ModPath);
+
+                        if (zip.ContainsEntry(newSkin.CharacterImgPath) == false)
+                        {
+                            zip.Dispose();
+                            Msg.Log("Character '" + newSkin.Name + "' cannot be patched, file not found!");
+                            continue; //Skip missing skin file
+                        }
+
+                        MemoryStream stream = new MemoryStream();
+                        zip[newSkin.CharacterImgPath].Extract(stream);
+                        data = stream.GetBuffer();
+
+                        zip.Dispose();
+                    }
+
+                    var new_entry = new Entry(oldSkin.Id + ".png", data);
 
                     //Replace entry in the archive.wad
                     archive.Groups[i].Entries[j] = new_entry;
