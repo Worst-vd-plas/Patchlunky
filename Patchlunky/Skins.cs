@@ -214,8 +214,8 @@ namespace Patchlunky
             ExtractDefaultSkins();
             
 
-            LoadSkins(setup.BackupPath + "Characters/", true); //Original skins
-            LoadSkins(setup.AppPath + "Skins/", false); //Custom skins
+            LoadDirectorySkin(setup.BackupPath + "Characters", true); //Original skins
+            LoadSkins(setup.AppPath + "Skins", false); //Custom skins
 
             Msg.Log("Loaded " + Skins.Count + " character skins.");
 
@@ -232,152 +232,140 @@ namespace Patchlunky
         //LoadSkins - Loads skins from path
         private void LoadSkins(string path, bool isdefault)
         {
-            LoadImageSkins(path, isdefault);
-            LoadDirectorySkins(path, isdefault);
-            LoadZipSkins(path, isdefault);
+            if (Directory.Exists(path) == false)
+            {
+                Msg.Log("Failed to load characters from: " + path);
+                return;
+            }
+
+            string[] filepaths;
+
+            //Get all the *.png files
+            filepaths = Directory.GetFiles(path, "*.png");
+            foreach (string filepath in filepaths)
+                LoadImageSkin(filepath, isdefault);
+
+            //Get all the subdirectories
+            filepaths = Directory.GetDirectories(path);
+            foreach (string filepath in filepaths)
+                LoadDirectorySkin(filepath, isdefault);
+
+            //Get all the *.plc files
+            filepaths = Directory.GetFiles(path, "*.plc");
+            foreach (string filepath in filepaths)
+                LoadZipSkin(filepath, isdefault);
         }
 
         //Load characters that are plain .png files
-        private void LoadImageSkins(string path, bool isdefault)
+        private void LoadImageSkin(string filepath, bool isdefault)
         {
-            if (Directory.Exists(path) == false)
+            if (File.Exists(filepath) == false)
+                return;
+
+            //Get some information
+            string id = Path.GetFileNameWithoutExtension(filepath);
+            Image skinImg = Image.FromFile(filepath);
+            int width = skinImg.Width;
+            int height = skinImg.Height;
+            skinImg.Dispose();
+
+            //Make sure it is a valid character
+            if ((width < 80) || (height < 80))
             {
-                Msg.Log("Failed to load characters from: " + path);
+                Msg.Log("Character '" + id + "' has invalid dimensions!");
+                return; //Skip invalid character
+            }
+
+            //Make sure this id isn't already in use.
+            if (Program.mainForm.SkinMan.GetSkin(id) != null)
+            {
+                Msg.Log("Duplicate character '" + id +"' in: " + Path.GetDirectoryName(filepath));
                 return;
             }
 
-            //Get all the *.png files
-            string[] skins = Directory.GetFiles(path, "*.png");
+            //Add the character
+            SkinData skin = new SkinData(SkinType.Png, Path.GetDirectoryName(filepath), isdefault);
 
-            foreach (string skinpath in skins)
-            {
-                if (File.Exists(skinpath))
-                {
-                    string id = Path.GetFileNameWithoutExtension(skinpath);
-                    Image skinImg = Image.FromFile(skinpath);
-                    int width = skinImg.Width;
-                    int height = skinImg.Height;
-                    skinImg.Dispose();
+            skin.Name = id;
+            skin.Id = id;
+            skin.CharacterImgPath = Path.GetFileName(filepath);
 
-                    //Make sure it is a valid character
-                    if ((width < 80) || (height < 80))
-                    {
-                        Msg.Log("Character '" + skinpath + "' has invalid dimensions!");
-                        continue; //Skip invalid character
-                    }
+            if (isdefault == true)
+                skin.Author = "Mossmouth";
 
-                    //Make sure this id isn't already in use.
-                    if (Program.mainForm.SkinMan.GetSkin(id) != null)
-                    {
-                        Msg.Log("Duplicate character '" + id +"' in: " + skinpath);
-                        continue;
-                    }
+            skin.LoadPreview(); //Load the preview image
 
-                    //Add the character
-                    SkinData skin = new SkinData(SkinType.Png, path, isdefault);
-
-                    skin.Name = id;
-                    skin.Id = id;
-                    skin.CharacterImgPath = Path.GetFileName(skinpath);
-
-                    if (isdefault == true)
-                        skin.Author = "Mossmouth";
-
-                    skin.LoadPreview(); //Load the preview image
-
-                    this.Skins.Add(skin);
-                    //Msg.Log("Added character: " + skin.Name + ", " + skin.CharacterImgPath);
-                }
-            }
+            this.Skins.Add(skin);
+            //Msg.Log("Added character: " + skin.Name + ", " + skin.CharacterImgPath);
         }
 
         //Load characters stored in subdirectories (with XML files)
-        private void LoadDirectorySkins(string path, bool isdefault)
+        private void LoadDirectorySkin(string dirpath, bool isdefault)
         {
-            if (Directory.Exists(path) == false)
-            {
-                Msg.Log("Failed to load characters from: " + path);
+            if (Directory.Exists(dirpath) == false)
                 return;
-            }
 
-            //Get all the subdirectories
-            string[] skins = Directory.GetDirectories(path);
+            //Check for the xml file
+            string xmlpath = dirpath + "/character.xml";
 
-            foreach (string skinpath in skins)
+            if (File.Exists(xmlpath) == false)
             {
-                //Check for the xml file
-                string xmlpath = skinpath + "/character.xml";
-
-                if (File.Exists(xmlpath) == false)
-                {
-                    Msg.Log("No characters found inside: " + skinpath);
-                    continue; //Invalid skin folder
-                }
-
-                //Load the xml file
-                XmlDocument doc = new XmlDocument();
-                try
-                {
-                    doc.Load(xmlpath);
-                }
-                catch (Exception ex)
-                {
-                    Msg.Log("Error loading xml: " + ex.Message);
-                    continue; //Skip invalid character mod
-                }
-
-                ReadXmlSkins(doc, SkinType.Dir, skinpath, isdefault);
+                Msg.Log("No characters found inside: " + dirpath);
+                return; //Invalid skin folder
             }
+
+            //Load the xml file
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(xmlpath);
+            }
+            catch (Exception ex)
+            {
+                Msg.Log("Error loading xml: " + ex.Message);
+                return; //Skip invalid character mod
+            }
+
+            ReadXmlSkins(doc, SkinType.Dir, dirpath, isdefault);
         }
 
         //Load characters stored in zip files (as .plc files)
-        private void LoadZipSkins(string path, bool isdefault)
+        private void LoadZipSkin(string filepath, bool isdefault)
         {
-            if (Directory.Exists(path) == false)
-            {
-                Msg.Log("Failed to load characters from: " + path);
+            if (File.Exists(filepath) == false)
                 return;
-            }
 
-            //Get all the *.plc files
-            string[] skins = Directory.GetFiles(path, "*.plc");
+            //Check for the xml file
+            string xmlpath = "character.xml";
 
-            foreach (string skinpath in skins)
+            ZipFile zip = new ZipFile(filepath);
+
+            if (zip.ContainsEntry(xmlpath) == false)
             {
-                if (File.Exists(skinpath))
-                {
-                    //Check for the xml file
-                    string xmlpath = "character.xml";
-
-                    ZipFile zip = new ZipFile(skinpath);
-
-                    if (zip.ContainsEntry(xmlpath) == false)
-                    {
-                        zip.Dispose();
-                        Msg.Log("No characters found inside: " + skinpath);
-                        continue; //Invalid skin file
-                    }
-
-                    MemoryStream stream = new MemoryStream();
-                    zip[xmlpath].Extract(stream);
-                    zip.Dispose();
-                    stream.Position = 0;
-
-                    //Load the xml file
-                    XmlDocument doc = new XmlDocument();
-                    try
-                    {
-                        doc.Load(stream);
-                    }
-                    catch (Exception ex)
-                    {
-                        Msg.Log("Error loading xml: " + ex.Message);
-                        continue; //Skip invalid character mod
-                    }
-
-                    ReadXmlSkins(doc, SkinType.Zip, skinpath, isdefault);
-                }
+                zip.Dispose();
+                Msg.Log("No characters found inside: " + filepath);
+                return; //Invalid skin file
             }
+
+            //Extract the xml file
+            MemoryStream stream = new MemoryStream();
+            zip[xmlpath].Extract(stream);
+            zip.Dispose();
+            stream.Position = 0;
+
+            //Load the xml file
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                doc.Load(stream);
+            }
+            catch (Exception ex)
+            {
+                Msg.Log("Error loading xml: " + ex.Message);
+                return; //Skip invalid character mod
+            }
+
+            ReadXmlSkins(doc, SkinType.Zip, filepath, isdefault);
         }
 
         //Read Character data from an XML document
@@ -437,12 +425,12 @@ namespace Patchlunky
 
                 //Ensure that the paths are valid
                 // CharacterImgPath is checked earlier.
-                if (PathIsValid(skin.PreviewImgPath) == false)
+                if ((skin.PreviewImgPath != null) && (PathIsValid(skin.PreviewImgPath) == false))
                 {
                     skin.PreviewImgPath = null;
                     Msg.Log("Invalid PreviewImage path for '" + skin.Id + "'!");
                 }
-                if (PathIsValid(skin.LeaderImgPath) == false)
+                if ((skin.LeaderImgPath != null) && (PathIsValid(skin.LeaderImgPath) == false))
                 {
                     skin.LeaderImgPath = null;
                     Msg.Log("Invalid LeaderboardImage path for '" + skin.Id + "'!");
