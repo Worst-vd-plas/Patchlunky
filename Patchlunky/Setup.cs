@@ -27,6 +27,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 
@@ -337,6 +338,12 @@ namespace Patchlunky
                     archive.Groups[i].Entries[j] = new_entry;
                     //Msg.Log("Patching skin '" + oldSkin.Name + " to '" + newSkin.Name + "'.");
 
+                    //Patch leaderboards image if included
+                    if (newSkin.LeaderImgPath != null)
+                    {
+                        PatchLeaderpic(archive, oldSkin.Id, newSkin.Id);
+                    }
+
                     if (skinsMatch == false)
                         count++;
                 }
@@ -557,6 +564,126 @@ namespace Patchlunky
                 if (count > 0) Msg.Log("Patched " + count + " " + archivepath + " resources for " + mod.Name);
             }
         }
+
+        public void PatchLeaderpic(Archive archive, string oldId, string newId)
+        {
+            //oldId has to match one in the list (Hardcoded as currently new characters cannot be added to the game)
+            string[] originalIds = { "char_orange", "char_red",   "char_green",  "char_blue",
+                                     "char_white",  "char_pink",  "char_yellow", "char_brown",
+                                     "char_purple", "char_black", "char_cyan",   "char_lime",
+                                     "char_dlc1",   "char_dlc2",  "char_dlc3",   "char_dlc4",
+                                     "char_dlc5",   "char_dlc6",  "char_dlc7",   "char_dlc8" };
+
+            int char_index = Array.IndexOf(originalIds, oldId);
+            if (char_index == -1)
+                return; //Invalid character
+
+            SkinData skin = Program.mainForm.SkinMan.GetSkin(newId);
+            if (skin == null)
+                return; //Unknown skin
+
+            //Need to find TU_leaderpics.png in the wad archive
+            int grp = archive.Groups.FindIndex(o => o.Name.Equals("LEADERBOARD", StringComparison.OrdinalIgnoreCase));
+            if (grp == -1)
+                return; //Missing "LEADERBOARD" group in archive.
+
+            int ent = archive.Groups[grp].Entries.FindIndex(o => o.Name.Equals("TU_leaderpics.png", StringComparison.OrdinalIgnoreCase));
+            if (ent == -1)
+                return; //Missing the leaderboard image file
+
+            //Get the Leaderboards image
+            Entry entry = archive.Groups[grp].Entries[ent];
+            MemoryStream stream = new MemoryStream(entry.Data);
+            Bitmap sourceBMP = (Bitmap)Image.FromStream(stream);
+
+            //Need a valid leaderboard picture from the new skin
+            Bitmap patchBMP = Resource.LoadBitmap(skin, skin.LeaderImgPath);
+            Bitmap resultBMP;
+
+            //Patch the image
+            if (patchBMP != null)
+            {
+                int x = (char_index % 4) * 128;
+                int y = (char_index / 4) * 48;
+
+                resultBMP = BitmapReplaceRegion(sourceBMP, patchBMP, x, y, 128, 48);
+
+                patchBMP.Dispose();
+            }
+            else resultBMP = sourceBMP;
+
+            //Replace entry in the archive.wad
+            Byte[] new_data = null;
+            MemoryStream ms = new MemoryStream();
+            resultBMP.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            new_data = ms.ToArray();
+
+            Entry new_entry = new Entry(entry.Name, new_data);
+            archive.Groups[grp].Entries[ent] = new_entry;
+
+            File.WriteAllBytes(TempPath + "TU_leaderpics.png", new_data); //DEBUG
+
+            ms.Dispose();
+            resultBMP.Dispose();
+            sourceBMP.Dispose();
+            stream.Dispose();
+        }
+
+        //Replace a bitmap region with the region of another
+        public Bitmap BitmapReplaceRegion(Bitmap sourceBMP, Bitmap patchBMP, int x1, int y1, int width, int height)
+        {
+            //This is a bit of a hack, because System.Drawing.Graphics doesn't support drawing
+            //transparent regions with much flexibility. The point is to have the transparent
+            //regions in patchBMP still be transparent when the two images are combined, so
+            //sourceBMP will not be visible through the transparent areas in patchBMP.
+            Bitmap resultBMP = new Bitmap(sourceBMP);
+
+            int x2 = x1 + width;
+            int y2 = y1 + height;
+
+            Rectangle rect_U = new Rectangle( 0,   0, sourceBMP.Width     ,                    y1); //Up
+            Rectangle rect_L = new Rectangle( 0,  y1,                   x1,                height); //Left
+            Rectangle rect_R = new Rectangle(x2,  y1, sourceBMP.Width - x2,                height); //Right
+            Rectangle rect_D = new Rectangle( 0,  y2, sourceBMP.Width     , sourceBMP.Height - y2); //Down
+            Rectangle rect_P = new Rectangle(x1,  y1,                width,                height); //Patch
+
+            using (Graphics g = Graphics.FromImage(resultBMP))
+            {
+                g.PageUnit = GraphicsUnit.Pixel;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+                g.Clear(Color.Transparent);
+
+                g.DrawImage(sourceBMP, rect_U, rect_U.Left, rect_U.Top, rect_U.Width, rect_U.Height, GraphicsUnit.Pixel);
+                g.DrawImage(sourceBMP, rect_L, rect_L.Left, rect_L.Top, rect_L.Width, rect_L.Height, GraphicsUnit.Pixel);
+                g.DrawImage(sourceBMP, rect_R, rect_R.Left, rect_R.Top, rect_R.Width, rect_R.Height, GraphicsUnit.Pixel);
+                g.DrawImage(sourceBMP, rect_D, rect_D.Left, rect_D.Top, rect_D.Width, rect_D.Height, GraphicsUnit.Pixel);
+                g.DrawImage(patchBMP , rect_P,           0,          0,        width,        height, GraphicsUnit.Pixel);
+            }
+
+            return resultBMP;
+        }
+
+        //Draw on top of a bitmap region with the region of another
+        public Bitmap BitmapOverlayRegion(Bitmap sourceBMP, Bitmap patchBMP, int x, int y, int width, int height)
+        {
+            Bitmap resultBMP = new Bitmap(sourceBMP);
+
+            Rectangle rect_P = new Rectangle(x, y, width, height);
+
+            using (Graphics g = Graphics.FromImage(resultBMP))
+            {
+                g.PageUnit = GraphicsUnit.Pixel;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+
+                g.DrawImage(patchBMP, rect_P, 0, 0, width, height, GraphicsUnit.Pixel);
+            }
+
+            return resultBMP;
+        }
+
+        //-----------------------------------------------------------//
+        // Setup wizard
+        //-----------------------------------------------------------//
 
         //Displays dialogs for setting the game path and doing backups
         public void DoSetup(bool forced=false) 
