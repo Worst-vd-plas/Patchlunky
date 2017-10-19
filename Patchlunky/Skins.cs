@@ -95,55 +95,14 @@ namespace Patchlunky
 
         public void LoadPreview()
         {
-            string imgfile;
-            Image sourceImg;
+            string imgfile = this.PreviewImgPath ?? this.CharacterImgPath;
 
-            if (this.Type == SkinType.Zip)
-            {
-                if (this.PreviewImgPath != null)
-                    imgfile = this.PreviewImgPath;
-                else
-                    imgfile = this.CharacterImgPath;
-                
-                ZipFile zip = new ZipFile(this.ModPath);
-
-                if (zip.ContainsEntry(imgfile) == false)
-                {
-                    zip.Dispose();
-                    Msg.Log("Preview image missing for '" + this.Id + "'!");
-                    return;
-                }
-
-                MemoryStream stream = new MemoryStream();
-                zip[imgfile].Extract(stream);
-                zip.Dispose();
-                stream.Position = 0;
-
-                sourceImg = Image.FromStream(stream);
-            }
-            else //image file or directory
-            {
-                if (this.PreviewImgPath != null)
-                    imgfile = this.ModPath + "/" + this.PreviewImgPath;
-                else
-                    imgfile = this.ModPath + "/" + this.CharacterImgPath;
-
-                if (File.Exists(imgfile) == false)
-                {
-                    Msg.Log("Preview image missing for '" + this.Id + "'!");
-                    return;
-                }
-
-                sourceImg = Image.FromFile(imgfile);
-            }
-
-            Bitmap sourceBMP = new Bitmap(sourceImg);
+            Bitmap sourceBMP = Resource.LoadBitmap(this, imgfile);
             Rectangle previewRect = new Rectangle(0, 0, 80, 80);
 
             //TODO: Add error handling here
             this.PreviewImage = sourceBMP.Clone(previewRect, sourceBMP.PixelFormat);
 
-            sourceImg.Dispose();
             sourceBMP.Dispose();
         }
     }

@@ -330,39 +330,8 @@ namespace Patchlunky
                         continue; //Skip missing character entry
 
                     //Read the new skin file
-                    Byte[] data = null;
-
-                    if ((newSkin.Type == SkinType.Png) || (newSkin.Type == SkinType.Dir))
-                    {
-                        string filepath = newSkin.ModPath + "/" + newSkin.CharacterImgPath;
-
-                        if (File.Exists(filepath) == false)
-                        {
-                            Msg.Log("Character '" + newSkin.Name + "' cannot be patched, file not found!");
-                            continue; //Skip missing skin file
-                        }
-
-                        data = File.ReadAllBytes(filepath);
-                    }
-                    else if (newSkin.Type == SkinType.Zip)
-                    {
-                        ZipFile zip = new ZipFile(newSkin.ModPath);
-
-                        if (zip.ContainsEntry(newSkin.CharacterImgPath) == false)
-                        {
-                            zip.Dispose();
-                            Msg.Log("Character '" + newSkin.Name + "' cannot be patched, file not found!");
-                            continue; //Skip missing skin file
-                        }
-
-                        MemoryStream stream = new MemoryStream();
-                        zip[newSkin.CharacterImgPath].Extract(stream);
-                        data = stream.GetBuffer();
-
-                        zip.Dispose();
-                    }
-
-                    var new_entry = new Entry(oldSkin.Id + ".png", data);
+                    Byte[] new_data = Resource.LoadBytes(newSkin, newSkin.CharacterImgPath);
+                    Entry new_entry = new Entry(oldSkin.Id + ".png", new_data);
 
                     //Replace entry in the archive.wad
                     archive.Groups[i].Entries[j] = new_entry;
