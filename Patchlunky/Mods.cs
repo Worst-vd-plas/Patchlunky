@@ -27,96 +27,173 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Xml;
+using System.Drawing;
+using System.Linq;
 
 using Ionic.Zip;
 
 namespace Patchlunky
 {
+    [Flags]
+    public enum ModType
+    {
+        Dir = 1,
+        Zip = 2, //.zip or .plm
+        Xml = 4, //contains a mod.xml that describes the contents
+    };
+
     public class ModData
     {
-        public string Name;
-        public string Path;
-        public bool IsZip;
+        public ModType Type;
         public bool Enabled;
         public int SortValue; //Used for sorting mods in the ModManager
 
-        public string Text;
-        public System.Drawing.Image Image;
+        //Paths
+        public string ModPath; //Path to directory or zip file
+        public string PreviewImgPath;
+        public string TextFilePath;
 
-        public ModData(string name, string path, bool iszip=false)
+        //Mod information
+        public string Name;
+        public string Id;
+        public string Version;
+        public DateTime? Date;
+        public string Author;
+        public string Email;
+        public string WebUrl;
+        public string Description;
+        public string PatchlunkyVersion;
+
+        public Image PreviewImage;
+
+        public ModData(ModType type, string modpath)
         {
-            this.Name = StripSpecialChars(name);
-            this.Path = path;
-            this.IsZip = iszip;
+            this.Type = type;
+            this.ModPath = modpath;
             this.Enabled = false;
-            this.SortValue = 9999; //New mods are sorted at bottom of list
+            this.SortValue = 9999;
 
-            this.Text = "";
-            this.Image = null;
+            //Init values
+            this.PreviewImgPath = null;
+            this.TextFilePath = null;
 
-            LoadModInfo();
+            this.Name = null;
+            this.Id = null;
+            this.Version = null;
+            this.Date = null;
+            this.Author = null;
+            this.Email = null;
+            this.WebUrl = null;
+            this.Description = null;
+            this.PatchlunkyVersion = null;
+
+            this.PreviewImage = null;
         }
 
-        private static string StripSpecialChars(string str)
+        public void LoadInfo()
         {
-            return Regex.Replace(str, "[|¤]+", "", RegexOptions.Compiled);
-            //return Regex.Replace(str, "[^0-9A-Za-z *^~!?&#%€£$@<>[]()/\\;,:._+-]+", "", RegexOptions.Compiled);
-        }
+            //Simple mod in zip
+            if (Type.HasFlag(ModType.Zip) && !Type.HasFlag(ModType.Xml))
+            {
+                ZipFile zip = new ZipFile(this.ModPath);
 
-        //TODO: Clean this up
-        private void LoadModInfo()
-        {
-            if (this.IsZip == true)
-            {
-                string entrypath;
-                ZipFile zip = new ZipFile(this.Path);
-                
-                entrypath = "readme.txt";
-                if (zip.ContainsEntry(entrypath))
+                string filename;
+
+                //Look for a mod description
+                filename = "readme.txt";
+                if (zip.ContainsEntry(filename))
                 {
-                    MemoryStream stream = new MemoryStream();
-                    zip[entrypath].Extract(stream);
-                    stream.Position = 0;
-                    var sr = new StreamReader(stream);
-                    this.Text = sr.ReadToEnd();
+                    this.TextFilePath = filename;
                 }
-                entrypath = "picture.png";
-                if (zip.ContainsEntry(entrypath))
-                {
-                    MemoryStream stream = new MemoryStream();
-                    zip[entrypath].Extract(stream);
-                    //stream.Position = 0;
-                    this.Image = System.Drawing.Image.FromStream(stream);
-                }
-            }
-            else
-            {
-                string filepath;
-                //Look for mod description
-                filepath = this.Path + "readme.txt";
-                if (File.Exists(filepath))
-                {
-                    this.Text = File.ReadAllText(filepath);
-                }
+                //Otherwise look for any .txt
                 else
                 {
-                    string[] files = Directory.GetFiles(this.Path, "*.txt");
-                    foreach (string fpath in files)
+                    var zip_entries = zip.SelectEntries("*.txt", "");
+                    ZipEntry ze = zip_entries.FirstOrDefault();
+                    if (ze != null)
+                        this.TextFilePath = ze.FileName;
+                }
+
+                //Look for a mod image
+                filename = "picture.png";
+                if (zip.ContainsEntry(filename))
+                {
+                    this.PreviewImgPath = filename;
+                }
+                //Otherwise look for any .png or .jpg
+                else
+                {
+                    var zip_entries = zip.SelectEntries("*.png", "");
+                    ZipEntry ze = zip_entries.FirstOrDefault();
+                    if (ze != null)
                     {
-                        if (File.Exists(fpath))
-                        {
-                            this.Text = File.ReadAllText(fpath);
-                            break;
-                        }
+                        this.PreviewImgPath = ze.FileName;
+                    }
+                    else
+                    {
+                        zip_entries = zip.SelectEntries("*.jpg", "");
+                        ze = zip_entries.FirstOrDefault();
+                        if (ze != null)
+                            this.PreviewImgPath = ze.FileName;
                     }
                 }
-                //Look for mod picture
-                //TODO: Look for .jpg and also any picture if 'picture.png' is not found.
-                filepath = this.Path + "picture.png";
-                if (File.Exists(filepath))
+                zip.Dispose();
+            }
+            //Simple mod in directory
+            else if(Type.HasFlag(ModType.Dir) && !Type.HasFlag(ModType.Xml))
+            {
+                string filename;
+
+                //Look for a mod description
+                filename = "readme.txt";
+                if (File.Exists(this.ModPath + filename))
                 {
-                    this.Image = System.Drawing.Image.FromFile(filepath);
+                    this.TextFilePath = filename;
                 }
+                //Otherwise look for any .txt
+                else
+                {
+                    string[] files = Directory.GetFiles(this.ModPath, "*.txt");
+                    string file = files.FirstOrDefault();
+                    if (file != null)
+                        this.TextFilePath = Path.GetFileName(file);
+                }
+
+                //Look for a mod image
+                filename = "picture.png";
+                if (File.Exists(this.ModPath + filename))
+                {
+                    this.PreviewImgPath = filename;
+                }
+                //Otherwise look for any .png or .jpg
+                else
+                {
+                    string[] files = Directory.GetFiles(this.ModPath, "*.png");
+                    string file = files.FirstOrDefault();
+                    if (file != null)
+                    {
+                        this.PreviewImgPath = Path.GetFileName(file);
+                    }
+                    else
+                    {
+                        files = Directory.GetFiles(this.ModPath, "*.jpg");
+                        file = files.FirstOrDefault();
+                        if (file != null)
+                            this.PreviewImgPath = Path.GetFileName(file);
+                    }
+                }
+            }
+
+            //Load the text file, if supplied
+            if (this.TextFilePath != null)
+            {
+                this.Description = Resource.LoadText(this, this.TextFilePath);
+            }
+            //Load the preview image, if supplied
+            if (this.PreviewImgPath != null)
+            {
+                this.PreviewImage = Resource.LoadBitmap(this, this.PreviewImgPath);
             }
         }
     }
@@ -134,9 +211,9 @@ namespace Patchlunky
         }
 
         //GetMod - Finds a mod by name
-        public ModData GetMod(string modname)
+        public ModData GetMod(string modid)
         {
-            ModData mod = Mods.Find(o => o.Name.Equals(modname, StringComparison.OrdinalIgnoreCase));
+            ModData mod = Mods.Find(o => o.Id.Equals(modid, StringComparison.OrdinalIgnoreCase));
             if (mod != null && mod.Equals(default(ModData)))
                 return null; //no mod with modname.
 
@@ -147,40 +224,235 @@ namespace Patchlunky
         public void LoadAllMods()
         {
             string path = Program.mainForm.Setup.AppPath + "Mods/";
-
             
-            LoadMods(path, "/");
-            LoadMods(path, "*.zip");
-            LoadMods(path, "*.plm");
+            LoadMods(path);
 
             Msg.Log("Loaded " + Mods.Count + " mods.");
         }
 
         //LoadMods - Loads mods of given type
-        private void LoadMods(string path, string type)
-        {            
-            string[] mods;
-            if (type.Equals("/")) mods = Directory.GetDirectories(path);
-            else                  mods = Directory.GetFiles(path, type);
-
-            foreach (string modpath in mods)
+        private void LoadMods(string path)
+        {
+            if (Directory.Exists(path) == false)
             {
-                ModData mod;
-                string name;
-                if (type.Equals("/")) //Mods as directories
+                Msg.Log("Failed to load mods from: " + path);
+                return;
+            }
+
+            string[] filepaths;
+
+            //Get all the subdirectories
+            filepaths = Directory.GetDirectories(path);
+            foreach (string filepath in filepaths)
+                LoadDirectoryMod(filepath + "/");
+
+            //Get all the *.zip files
+            filepaths = Directory.GetFiles(path, "*.zip");
+            foreach (string filepath in filepaths)
+                LoadZipMod(filepath);
+
+            //Get all the *.plm files
+            filepaths = Directory.GetFiles(path, "*.plm");
+            foreach (string filepath in filepaths)
+                LoadZipMod(filepath);
+        }
+
+        //Load mod stored in subdirectory
+        private void LoadDirectoryMod(string dirpath)
+        {
+            if (Directory.Exists(dirpath) == false)
+                return;
+
+            //Check if this an xml-based mod
+            string xmlpath = dirpath + "mod.xml";
+
+            if (File.Exists(xmlpath) == true)
+            {
+                //Load the xml file
+                XmlDocument doc = new XmlDocument();
+                try
                 {
-                    name = new DirectoryInfo(modpath).Name;
-                    mod = new ModData(name, modpath + "/", false);
+                    doc.Load(xmlpath);
                 }
-                else //Zip files
+                catch (Exception ex)
                 {
-                    name = Path.GetFileNameWithoutExtension(modpath);
-                    mod = new ModData(name, modpath, true);
+                    Msg.Log("Error loading xml: " + ex.Message);
+                    return; //Skip invalid mod
                 }
+
+                ReadXmlMod(doc, ModType.Dir|ModType.Xml, dirpath);
+                return;
+            }
+            else //else it is a simple mod
+            {
+                string name = new DirectoryInfo(dirpath).Name;
+                string id = Xmf.StripSpecialChars(name);
+
+                //Make sure the mod has a valid id
+                if ((id == null) || (id.Length == 0))
+                {
+                    Msg.Log("Mod '" + dirpath + "' has an invalid name!");
+                    return; //Skip invalid mod
+                }
+
+                //Make sure this id isn't already in use.
+                if (this.GetMod(id) != null)
+                {
+                    Msg.Log("Duplicate mod '" + id +"' skipped in: " + dirpath);
+                    return; //Skip duplicate mod
+                }
+
+                //Add the mod
+                ModData mod = new ModData(ModType.Dir, dirpath);
+                //ModData mod = new ModData(ModType.Dir, dirpath + "/");
+
+                mod.Name = name;
+                mod.Id = id;
+
+                mod.LoadInfo(); //Load more details
 
                 this.Mods.Add(mod);
+                //Msg.Log("Added mod: " + mod.Name + ", " + dirpath);
+            }
+        }
 
-                //Msg.Log("Added mod: " + name + ", " + modpath);
+        //Load mod stored in zip file (as .zip or .plm)
+        private void LoadZipMod(string filepath)
+        {
+            if (File.Exists(filepath) == false)
+                return;
+
+            //Check if this an xml-based mod
+            string xmlpath = "mod.xml";
+
+            ZipFile zip = new ZipFile(filepath);
+
+            if (zip.ContainsEntry(xmlpath) == true)
+            {
+                //Extract the xml file
+                MemoryStream stream = new MemoryStream();
+                zip[xmlpath].Extract(stream);
+                zip.Dispose();
+                stream.Position = 0;
+
+                //Load the xml file
+                XmlDocument doc = new XmlDocument();
+                try
+                {
+                    doc.Load(stream);
+                }
+                catch (Exception ex)
+                {
+                    Msg.Log("Error loading xml: " + ex.Message);
+                    stream.Dispose();
+                    return; //Skip invalid mod
+                }
+
+                ReadXmlMod(doc, ModType.Zip|ModType.Xml, filepath);
+                stream.Dispose();
+                return;
+            }
+            else //else it is a simple mod
+            {
+                zip.Dispose();
+                string name = Path.GetFileNameWithoutExtension(filepath);
+                string id = Xmf.StripSpecialChars(name);
+
+                //Make sure the mod has a valid id
+                if ((id == null) || (id.Length == 0))
+                {
+                    Msg.Log("Mod '" + filepath + "' has an invalid name!");
+                    return; //Skip invalid mod
+                }
+
+                //Make sure this id isn't already in use.
+                if (this.GetMod(id) != null)
+                {
+                    Msg.Log("Duplicate mod '" + id +"' skipped in: " + filepath);
+                    return; //Skip duplicate mod
+                }
+
+                //Add the mod
+                ModData mod = new ModData(ModType.Zip, filepath);
+
+                mod.Name = name;
+                mod.Id = id;
+
+                mod.LoadInfo(); //Load more details
+
+                this.Mods.Add(mod);
+                //Msg.Log("Added mod: " + mod.Name + ", " + filepath);
+            }
+        }
+
+        //Read Mod data from an XML Document
+        private void ReadXmlMod(XmlDocument doc, ModType modtype, string modpath)
+        {
+            //Get list of mod nodes
+            XmlNodeList nodes = doc.SelectNodes("/Mods/Mod");
+
+            if (nodes == null) return; //Skip invalid mod
+
+            foreach (XmlNode node in nodes)
+            {
+                //Read required data from mod XML
+                string id   = Xmf.StripSpecialChars(Xmf.GetXMLString(node, "./Id"));
+                string name = Xmf.GetXMLString(node, "./Name");
+
+                //Make sure it is a valid mod
+                if ((id == null) || (name == null))
+                {
+                    Msg.Log("Invalid mod skipped in: " + modpath);
+                    continue; //Skip invalid mod
+                }
+
+                //Make sure the mod id is not already in use.
+                if (this.GetMod(id) != null)
+                {
+                    Msg.Log("Duplicate mod '" + id +"' skipped in: " + modpath);
+                    continue; //Skip duplicate mod
+                }
+
+                //Add the mod
+                ModData mod = new ModData(modtype, modpath);
+
+                //Set the values
+                mod.Name = name;
+                mod.Id = id;
+                mod.Version = Xmf.GetXMLString(node, "./Version");
+                DateTime date;
+                if (DateTime.TryParse(Xmf.GetXMLString(node, "./Date"), out date))
+                    mod.Date = date;
+                mod.Author            = Xmf.GetXMLString(node, "./Author");
+                mod.Email             = Xmf.GetXMLString(node, "./Email");
+                mod.WebUrl            = Xmf.GetXMLString(node, "./WebUrl");
+                mod.Description       = Xmf.GetXMLString(node, "./Description");
+                mod.PatchlunkyVersion = Xmf.GetXMLString(node, "./PatchlunkyVersion");
+                mod.PreviewImgPath    = Xmf.GetXMLString(node, "./PreviewImage");
+
+                //Ensure that the paths are valid format
+                if ((mod.PreviewImgPath != null) && (Xmf.PathIsValid(mod.PreviewImgPath) == false))
+                {
+                    mod.PreviewImgPath = null;
+                    Msg.Log("Invalid PreviewImage path for '" + mod.Id + "'!");
+                }
+
+                //If the URLs don't include a protocol, add one.
+                if (mod.WebUrl != null)
+                {
+                    if (mod.WebUrl.Contains("://") == false)
+                        mod.WebUrl = "http://" + mod.WebUrl;
+                }
+                if (mod.Email != null)
+                {
+                    if (mod.Email.StartsWith("mailto:", StringComparison.OrdinalIgnoreCase) == false)
+                        mod.Email = "mailto:" + mod.Email;
+                }
+
+                mod.LoadInfo(); //Load more details
+
+                this.Mods.Add(mod);
+                //Msg.Log("Added mod: " + mod.Name + ", " + modpath);
             }
         }
 

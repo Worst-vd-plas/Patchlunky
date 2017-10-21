@@ -29,6 +29,8 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.IO;
+using System.Xml;
+using System.Text.RegularExpressions;
 
 using Ionic.Zip;
 using SpelunkyWad;
@@ -117,6 +119,91 @@ namespace Patchlunky
             return result;
         }
 
+        //Load a bitmap copy of a mod resource
+        public static Bitmap LoadBitmap(ModData mod, string path)
+        {
+            Bitmap result = null;
+
+            if (mod.Type.HasFlag(ModType.Dir))
+            {
+                string filepath = mod.ModPath + "/" + path;
+
+                if (File.Exists(filepath) == false)
+                {
+                    Msg.Log("ResourceLoadBitmap: '" + filepath + "' not found!");
+                    return null;
+                }
+
+                result = new Bitmap((Bitmap)Image.FromFile(filepath));
+            }
+            else if (mod.Type.HasFlag(ModType.Zip))
+            {
+                ZipFile zip = new ZipFile(mod.ModPath);
+
+                if (zip.ContainsEntry(path) == false)
+                {
+                    zip.Dispose();
+                    Msg.Log("ResourceLoadBitmap: '" + path + "' not found!");
+                    return null;
+                }
+
+                MemoryStream stream = new MemoryStream();
+                zip[path].Extract(stream);
+                zip.Dispose();
+                //stream.Position = 0;
+
+                result = new Bitmap((Bitmap)Image.FromStream(stream));
+                stream.Dispose();
+            }
+
+            return result;
+        }
+
+        //Load text from a mod resource
+        public static string LoadText(ModData mod, string path)
+        {
+            string result = null;
+
+            if (mod.Type.HasFlag(ModType.Dir))
+            {
+                string filepath = mod.ModPath + "/" + path;
+
+                if (File.Exists(filepath) == false)
+                {
+                    Msg.Log("ResourceLoadText: '" + filepath + "' not found!");
+                    return null;
+                }
+
+                result = File.ReadAllText(filepath);
+            }
+            else if (mod.Type.HasFlag(ModType.Zip))
+            {
+                ZipFile zip = new ZipFile(mod.ModPath);
+
+                if (zip.ContainsEntry(path) == false)
+                {
+                    zip.Dispose();
+                    Msg.Log("ResourceLoadText: '" + path + "' not found!");
+                    return null;
+                }
+
+                //Extract the resource to a memorystream
+                MemoryStream stream = new MemoryStream();
+                zip[path].Extract(stream);
+                zip.Dispose();
+
+                //Read the text from the memorystream
+                stream.Position = 0;
+                StreamReader sr = new StreamReader(stream);
+                result = sr.ReadToEnd();
+
+                sr.Dispose();
+                stream.Dispose();
+            }
+
+            return result;
+        }
+
         //Load a bitmap copy of an archive resource
         public static Bitmap LoadBitmap(Archive archive, string path)
         {
@@ -193,6 +280,58 @@ namespace Patchlunky
             archive.Groups[grp_index].Entries[ent_index] = new_entry;
 
             return true;
+        }
+    }
+
+    // XML mod functions
+    public static class Xmf
+    {
+        //GetXMLString - Return an XML text value from a child node
+        public static string GetXMLString(XmlNode node, string xpath)
+        {
+            XmlNode strnode = node.SelectSingleNode(xpath + "/text()");
+            if (strnode == null) return null;
+
+            return strnode.Value.Trim();
+        }
+
+        //Get rid of bad characters in the mod id
+        public static string StripSpecialChars(string str)
+        {
+            if (str == null)
+                return null;
+
+            return Regex.Replace(str, "[|¤]+", "", RegexOptions.Compiled);
+            //return Regex.Replace(str, "[^0-9A-Za-z *^~!?&#%€£$@<>[]()/\\;,:._+-]+", "", RegexOptions.Compiled);
+        }
+
+        //PathIsValid - Enforce some rules to (hopefully) avoid path traversal attacks
+        public static bool PathIsValid(string path)
+        {
+            //Blacklisting
+            if (path == null) return false; //No null strings
+            if (path.Length == 0) return false; //No empty strings
+            if (path.Contains("..")) return false; //No double dots
+            if (path.Contains("//") || path.Contains("\\\\")) return false; //No double slashes
+            if (path.Contains("/\\") || path.Contains("\\/")) return false; //No double slashes
+            if (path.Contains("/.") || path.Contains("\\.")) return false; //No slashes followed by a dot
+            if (path.Contains("./") || path.Contains(".\\")) return false; //No dots followed by a slash
+            if (path.Contains(":")) return false; //No colons (Windows root)
+            if (path.StartsWith("/") || path.StartsWith("\\")) return false; //No beginning slash
+            if (path.Contains("%")) return false; //No URL encoding
+
+            //Whitelisting
+            foreach (char symbol in path)
+            {
+                if (char.IsLetterOrDigit(symbol)) continue; //Allow letters and digits
+                else if (symbol == '.') continue; //Allow dots
+                else if ((symbol == '-') || (symbol == '_')) continue; //Allow dashes and underscores
+                else if ((symbol == '/') || (symbol == '\\')) continue; //Allow slashes
+                else if (symbol == ' ') continue; //Allow spaces
+                else return false; //Invalid character in path
+            }
+
+            return true; //if we get this far, the path is OK.
         }
     }
 }

@@ -290,7 +290,10 @@ namespace Patchlunky
 
                     //Patch game files in the mod.
                     if (PatchFiles(mod) == false)
+                    {
+                        Msg.Log("Patching files failed for mod: " + mod.Name + "!");
                         return false; //Stop patching
+                    }
 
                     //Patch wad resources in the mod.
                     PatchArchive(mod, "Textures/alltex");
@@ -379,7 +382,9 @@ namespace Patchlunky
         // Patch game files in the temp folder with files of a mod.
         public bool PatchFiles(ModData mod)
         {
-            if (mod.IsZip == true)
+            if (mod.Type.HasFlag(ModType.Xml))
+                return false; //TODO!
+            else if (mod.Type.HasFlag(ModType.Zip))
                 return PatchZipFiles(mod);
             else
                 return PatchDirFiles(mod);
@@ -387,7 +392,7 @@ namespace Patchlunky
 
         public bool PatchZipFiles(ModData mod)
         {
-            ZipFile zip = new ZipFile(mod.Path);
+            ZipFile zip = new ZipFile(mod.ModPath);
 
             int count = 0;
 
@@ -432,12 +437,12 @@ namespace Patchlunky
                 //if (gmfile.IsModdable == false)
                 //    continue;
 
-                if (File.Exists(mod.Path + gmfile.FilePath) == true)
+                if (File.Exists(mod.ModPath + gmfile.FilePath) == true)
                 {
                     //Try copying over modded file
                     try
                     {
-                        string srcfile = mod.Path + gmfile.FilePath;
+                        string srcfile = mod.ModPath + gmfile.FilePath;
                         string dstfile = this.TempPath + gmfile.FilePath;
                         File.Copy(srcfile, dstfile, true);
                         //Msg.Log("Patching file '" + gmfile.FilePath + "' from " + mod.Name);
@@ -457,7 +462,9 @@ namespace Patchlunky
         // Patches an archive wad file in the temp folder with resources of a mod.
         public void PatchArchive(ModData mod, string archivepath)
         {
-            if (mod.IsZip == true)
+            if (mod.Type.HasFlag(ModType.Xml))
+                return; //TODO!
+            else if (mod.Type.HasFlag(ModType.Zip))
                 PatchZipArchive(mod, archivepath);
             else
                 PatchDirArchive(mod, archivepath);
@@ -465,7 +472,7 @@ namespace Patchlunky
 
         public void PatchZipArchive(ModData mod, string archivepath)
         {
-            ZipFile zip = new ZipFile(mod.Path);
+            ZipFile zip = new ZipFile(mod.ModPath);
 
             // Check if the mod has a directory for wad resources
             if (zip.ContainsEntry(archivepath + "/"))
@@ -518,7 +525,7 @@ namespace Patchlunky
 
         public void PatchDirArchive(ModData mod, string archivepath)
         {
-            string archive_dir = mod.Path + archivepath;
+            string archive_dir = mod.ModPath + archivepath;
 
             // Check if the mod has a directory for wad resources
             if (Directory.Exists(archive_dir))
@@ -605,7 +612,7 @@ namespace Patchlunky
             //Replace entry in the archive.wad
             Resource.ReplaceBytes(archive, "LEADERBOARD/TU_leaderpics.png", new_data);
 
-            File.WriteAllBytes(TempPath + "TU_leaderpics.png", new_data); //DEBUG
+            //File.WriteAllBytes(TempPath + "TU_leaderpics.png", new_data); //DEBUG
 
             ms.Dispose();
             resultBMP.Dispose();

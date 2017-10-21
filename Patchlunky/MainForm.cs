@@ -321,10 +321,11 @@ namespace Patchlunky
             //Loop through checkedlistbox and enable/disable mods and set their order
             for (int i = 0; i < chklstMods.Items.Count; i++)
             {
-                string modname = (string)chklstMods.Items[i];
+                var kvp = (KeyValuePair<string, string>)chklstMods.Items[i];
+                string modid = kvp.Key;
                 bool check = chklstMods.GetItemChecked(i);
 
-                ModData mod = ModMan.GetMod(modname);
+                ModData mod = ModMan.GetMod(modid);
                 if (mod != null)
                 {
                     mod.Enabled = check;
@@ -343,8 +344,11 @@ namespace Patchlunky
 
             foreach (var mod in ModMan.Mods)
             {
-                chklstMods.Items.Add(mod.Name, mod.Enabled);
+                var kvp = new KeyValuePair<string, string>(mod.Id, mod.Name);
+                chklstMods.Items.Add(kvp, mod.Enabled);
             }
+
+            chklstMods.DisplayMember = "Value";
         }
 
         // Move mod with focus up
@@ -487,16 +491,17 @@ namespace Patchlunky
             int index = chklstMods.SelectedIndex;
             if ((index < 0) || (index > chklstMods.Items.Count)) return;
 
-            string modname = (string)chklstMods.Items[index];
+            var kvp = (KeyValuePair<string, string>)chklstMods.Items[index];
+            string modid = kvp.Key;
 
-            ModData mod = ModMan.GetMod(modname);
+            ModData mod = ModMan.GetMod(modid);
             if (mod != null)
             {
                 lblModName.Text = mod.Name;
-                txtModInfo.Text = mod.Text;
-                if (mod.Image != null)
+                txtModInfo.Text = mod.Description;
+                if (mod.PreviewImage != null)
                 {
-                    picModImage.Image = mod.Image;
+                    picModImage.Image = mod.PreviewImage;
                     picModImage.Height = 144;
                     txtModInfo.Top = picModImage.Bottom + 4;
                 }

@@ -222,11 +222,20 @@ namespace Patchlunky
                 return;
 
             //Get some information
-            string id = Path.GetFileNameWithoutExtension(filepath);
+            string name = Path.GetFileNameWithoutExtension(filepath);
+            string id = Xmf.StripSpecialChars(name);
+
             Image skinImg = Image.FromFile(filepath);
             int width = skinImg.Width;
             int height = skinImg.Height;
             skinImg.Dispose();
+
+            //Make sure the skin has a valid id
+            if ((id == null) || (id.Length == 0))
+            {
+                Msg.Log("Character '" + filepath + "' has an invalid name!");
+                return; //Skip invalid character
+            }
 
             //Make sure it is a valid character
             if ((width < 80) || (height < 80))
@@ -236,7 +245,7 @@ namespace Patchlunky
             }
 
             //Make sure this id isn't already in use.
-            if (Program.mainForm.SkinMan.GetSkin(id) != null)
+            if (this.GetSkin(id) != null)
             {
                 Msg.Log("Duplicate character '" + id +"' in: " + Path.GetDirectoryName(filepath));
                 return;
@@ -245,7 +254,7 @@ namespace Patchlunky
             //Add the character
             SkinData skin = new SkinData(SkinType.Png, Path.GetDirectoryName(filepath), isdefault);
 
-            skin.Name = id;
+            skin.Name = name;
             skin.Id = id;
             skin.CharacterImgPath = Path.GetFileName(filepath);
 
@@ -325,6 +334,7 @@ namespace Patchlunky
             }
 
             ReadXmlSkins(doc, SkinType.Zip, filepath, isdefault);
+            stream.Dispose();
         }
 
         //Read Character data from an XML document
@@ -338,12 +348,12 @@ namespace Patchlunky
             foreach (XmlNode node in nodes)
             {
                 //Read required data from character XML
-                string id   = GetXMLString(node, "./Id");
-                string name = GetXMLString(node, "./Name");
-                string charimgpath = GetXMLString(node, "./CharacterImage");
+                string id   = Xmf.StripSpecialChars(Xmf.GetXMLString(node, "./Id"));
+                string name = Xmf.GetXMLString(node, "./Name");
+                string charimgpath = Xmf.GetXMLString(node, "./CharacterImage");
 
                 //Ensure that the path is valid
-                if ((charimgpath != null) && (PathIsValid(charimgpath) == false))
+                if ((charimgpath != null) && (Xmf.PathIsValid(charimgpath) == false))
                 {
                     charimgpath = null;
                     Msg.Log("Invalid CharacterImage path in: " + modpath);
@@ -369,27 +379,27 @@ namespace Patchlunky
                 //Set the values
                 skin.Name = name;
                 skin.Id = id;
-                skin.Version = GetXMLString(node, "./Version");
+                skin.Version = Xmf.GetXMLString(node, "./Version");
                 DateTime date;
-                if (DateTime.TryParse(GetXMLString(node, "./Date"), out date))
+                if (DateTime.TryParse(Xmf.GetXMLString(node, "./Date"), out date))
                     skin.Date = date;
-                skin.Author  = GetXMLString(node, "./Author");
-                skin.Email = GetXMLString(node, "./Email");
-                skin.WebUrl     = GetXMLString(node, "./WebUrl");
-                skin.Description    = GetXMLString(node, "./Description");
-                skin.PatchlunkyVersion = GetXMLString(node, "./PatchlunkyVersion");
-                skin.CharacterImgPath = charimgpath;
-                skin.PreviewImgPath   = GetXMLString(node, "./PreviewImage");
-                skin.LeaderImgPath    = GetXMLString(node, "./LeaderboardImage");
+                skin.Author            = Xmf.GetXMLString(node, "./Author");
+                skin.Email             = Xmf.GetXMLString(node, "./Email");
+                skin.WebUrl            = Xmf.GetXMLString(node, "./WebUrl");
+                skin.Description       = Xmf.GetXMLString(node, "./Description");
+                skin.PatchlunkyVersion = Xmf.GetXMLString(node, "./PatchlunkyVersion");
+                skin.CharacterImgPath  = charimgpath;
+                skin.PreviewImgPath    = Xmf.GetXMLString(node, "./PreviewImage");
+                skin.LeaderImgPath     = Xmf.GetXMLString(node, "./LeaderboardImage");
 
-                //Ensure that the paths are valid
+                //Ensure that the paths are valid format
                 // CharacterImgPath is checked earlier.
-                if ((skin.PreviewImgPath != null) && (PathIsValid(skin.PreviewImgPath) == false))
+                if ((skin.PreviewImgPath != null) && (Xmf.PathIsValid(skin.PreviewImgPath) == false))
                 {
                     skin.PreviewImgPath = null;
                     Msg.Log("Invalid PreviewImage path for '" + skin.Id + "'!");
                 }
-                if ((skin.LeaderImgPath != null) && (PathIsValid(skin.LeaderImgPath) == false))
+                if ((skin.LeaderImgPath != null) && (Xmf.PathIsValid(skin.LeaderImgPath) == false))
                 {
                     skin.LeaderImgPath = null;
                     Msg.Log("Invalid LeaderboardImage path for '" + skin.Id + "'!");
@@ -412,45 +422,6 @@ namespace Patchlunky
                 this.Skins.Add(skin);
                 //Msg.Log("Added character: " + skin.Name + ", " + skin.CharacterImgPath);
             }
-        }
-
-        //PathIsValid - Enforce some rules to (hopefully) avoid path traversal attacks
-        private bool PathIsValid(string path)
-        {
-            //Blacklisting
-            if (path == null) return false; //No null strings
-            if (path.Length == 0) return false; //No empty strings
-            if (path.Contains("..")) return false; //No double dots
-            if (path.Contains("//") || path.Contains("\\\\")) return false; //No double slashes
-            if (path.Contains("/\\") || path.Contains("\\/")) return false; //No double slashes
-            if (path.Contains("/.") || path.Contains("\\.")) return false; //No slashes followed by a dot
-            if (path.Contains("./") || path.Contains(".\\")) return false; //No dots followed by a slash
-            if (path.Contains(":")) return false; //No colons (Windows root)
-            if (path.StartsWith("/") || path.StartsWith("\\")) return false; //No beginning slash
-            if (path.Contains("%")) return false; //No URL encoding
-
-            //Whitelisting
-            foreach (char symbol in path)
-            {
-                if (char.IsLetterOrDigit(symbol)) continue; //Allow letters and digits
-                else if (symbol == '.') continue; //Allow dots
-                else if ((symbol == '-') || (symbol == '_')) continue; //Allow dashes and underscores
-                else if ((symbol == '/') || (symbol == '\\')) continue; //Allow slashes
-                else if (symbol == ' ') continue; //Allow spaces
-                else return false; //Invalid character in path
-            }
-
-            return true; //if we get this far, the path is OK.
-        }
-
-        //GetXMLString - Return an XML text value from a child node
-        private string GetXMLString(XmlNode node, string xpath)
-        {
-            XmlNode strnode = node.SelectSingleNode(xpath + "/text()");
-
-            if (strnode == null) return null;
-
-            return strnode.Value.Trim();
         }
 
         //LoadConfigs - Loads the skin configuration list
