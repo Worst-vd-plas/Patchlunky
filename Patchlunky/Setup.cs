@@ -582,51 +582,35 @@ namespace Patchlunky
             if (skin == null)
                 return; //Unknown skin
 
-            //Need to find TU_leaderpics.png in the wad archive
-            int grp = archive.Groups.FindIndex(o => o.Name.Equals("LEADERBOARD", StringComparison.OrdinalIgnoreCase));
-            if (grp == -1)
-                return; //Missing "LEADERBOARD" group in archive.
-
-            int ent = archive.Groups[grp].Entries.FindIndex(o => o.Name.Equals("TU_leaderpics.png", StringComparison.OrdinalIgnoreCase));
-            if (ent == -1)
-                return; //Missing the leaderboard image file
-
             //Get the Leaderboards image
-            Entry entry = archive.Groups[grp].Entries[ent];
-            MemoryStream stream = new MemoryStream(entry.Data);
-            Bitmap sourceBMP = (Bitmap)Image.FromStream(stream);
+            Bitmap sourceBMP = Resource.LoadBitmap(archive, "LEADERBOARD/TU_leaderpics.png");
+            if (sourceBMP == null)
+                return; //Leaderboards image is missing
 
             //Need a valid leaderboard picture from the new skin
             Bitmap patchBMP = Resource.LoadBitmap(skin, skin.LeaderImgPath);
-            Bitmap resultBMP;
+            if (patchBMP == null)
+                return; //No image to patch
 
             //Patch the image
-            if (patchBMP != null)
-            {
-                int x = (char_index % 4) * 128;
-                int y = (char_index / 4) * 48;
+            int x = (char_index % 4) * 128;
+            int y = (char_index / 4) * 48;
+            Bitmap resultBMP = BitmapReplaceRegion(sourceBMP, patchBMP, x, y, 128, 48);
 
-                resultBMP = BitmapReplaceRegion(sourceBMP, patchBMP, x, y, 128, 48);
-
-                patchBMP.Dispose();
-            }
-            else resultBMP = sourceBMP;
-
-            //Replace entry in the archive.wad
-            Byte[] new_data = null;
+            //Convert bmp to PNG
             MemoryStream ms = new MemoryStream();
             resultBMP.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-            new_data = ms.ToArray();
+            Byte[] new_data = ms.ToArray();
 
-            Entry new_entry = new Entry(entry.Name, new_data);
-            archive.Groups[grp].Entries[ent] = new_entry;
+            //Replace entry in the archive.wad
+            Resource.ReplaceBytes(archive, "LEADERBOARD/TU_leaderpics.png", new_data);
 
             File.WriteAllBytes(TempPath + "TU_leaderpics.png", new_data); //DEBUG
 
             ms.Dispose();
             resultBMP.Dispose();
+            patchBMP.Dispose();
             sourceBMP.Dispose();
-            stream.Dispose();
         }
 
         //Replace a bitmap region with the region of another

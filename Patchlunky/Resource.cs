@@ -31,6 +31,7 @@ using System.Drawing;
 using System.IO;
 
 using Ionic.Zip;
+using SpelunkyWad;
 
 namespace Patchlunky
 {
@@ -114,6 +115,84 @@ namespace Patchlunky
             }
 
             return result;
+        }
+
+        //Load a bitmap copy of an archive resource
+        public static Bitmap LoadBitmap(Archive archive, string path)
+        {
+            Bitmap result = null;
+
+            //Path needs to have a single slash separating the group and file
+            if ((path.Contains('/') || path.Contains('\\')) == false)
+            {
+                Msg.Log("ResourceLoadBitmap: path '" + path + "' is invalid!");
+                return null;
+            }
+
+            //Split the path to group and file
+            int split = path.IndexOfAny(new char[] {'/', '\\'});
+            string group = path.Substring(0, split);
+            string file = path.Substring(split+1);
+
+            //Msg.Log("Group: " + group);
+            //Msg.Log("File: " + file);
+
+            int grp_index = archive.Groups.FindIndex(o => o.Name.Equals(group, StringComparison.OrdinalIgnoreCase));
+            if (grp_index == -1)
+            {
+                Msg.Log("ResourceLoadBitmap: Group '" + group + "' not found!");
+                return null;
+            }
+
+            int ent_index = archive.Groups[grp_index].Entries.FindIndex(o => o.Name.Equals(file, StringComparison.OrdinalIgnoreCase));
+            if (ent_index == -1)
+            {
+                Msg.Log("ResourceLoadBitmap: Entry '" + file + "' not found!");
+                return null;
+            }
+
+            //Get the entry
+            MemoryStream stream = new MemoryStream(archive.Groups[grp_index].Entries[ent_index].Data);
+            result = new Bitmap((Bitmap)Image.FromStream(stream));
+            stream.Dispose();
+
+            return result;
+        }
+
+        //Replace an archive resource - returns true if the entry was replaced.
+        public static bool ReplaceBytes(Archive archive, string path, Byte[] bytes)
+        {
+            //Path needs to have a single slash separating the group and file
+            if ((path.Contains('/') || path.Contains('\\')) == false)
+            {
+                Msg.Log("ResourceSaveBytes: path '" + path + "' is invalid!");
+                return false;
+            }
+
+            //Split the path to group and file
+            int split = path.IndexOfAny(new char[] { '/', '\\' });
+            string group = path.Substring(0, split);
+            string file = path.Substring(split+1);
+
+            int grp_index = archive.Groups.FindIndex(o => o.Name.Equals(group, StringComparison.OrdinalIgnoreCase));
+            if (grp_index == -1)
+            {
+                Msg.Log("ResourceSaveBytes: Group '" + group + "' not found!");
+                return false;
+            }
+
+            int ent_index = archive.Groups[grp_index].Entries.FindIndex(o => o.Name.Equals(file, StringComparison.OrdinalIgnoreCase));
+            if (ent_index == -1)
+            {
+                Msg.Log("ResourceSaveBytes: Entry '" + file + "' not found!");
+                return false;
+            }
+
+            //Save the entry
+            Entry new_entry = new Entry(archive.Groups[grp_index].Entries[ent_index].Name, bytes);
+            archive.Groups[grp_index].Entries[ent_index] = new_entry;
+
+            return true;
         }
     }
 }
