@@ -621,22 +621,22 @@ namespace Patchlunky
         }
 
         //Replace a bitmap region with the region of another
-        public Bitmap BitmapReplaceRegion(Bitmap sourceBMP, Bitmap patchBMP, int x1, int y1, int width, int height)
+        public Bitmap BitmapReplaceRegion(Bitmap destBMP, Bitmap srcBMP, int x1, int y1, int width, int height)
         {
             //This is a bit of a hack, because System.Drawing.Graphics doesn't support drawing
             //transparent regions with much flexibility. The point is to have the transparent
             //regions in patchBMP still be transparent when the two images are combined, so
             //sourceBMP will not be visible through the transparent areas in patchBMP.
-            Bitmap resultBMP = new Bitmap(sourceBMP);
+            Bitmap resultBMP = new Bitmap(destBMP);
 
             int x2 = x1 + width;
             int y2 = y1 + height;
 
-            Rectangle rect_U = new Rectangle( 0,   0, sourceBMP.Width     ,                    y1); //Up
-            Rectangle rect_L = new Rectangle( 0,  y1,                   x1,                height); //Left
-            Rectangle rect_R = new Rectangle(x2,  y1, sourceBMP.Width - x2,                height); //Right
-            Rectangle rect_D = new Rectangle( 0,  y2, sourceBMP.Width     , sourceBMP.Height - y2); //Down
-            Rectangle rect_P = new Rectangle(x1,  y1,                width,                height); //Patch
+            Rectangle rect_U = new Rectangle( 0,   0, destBMP.Width     ,                  y1); //Up
+            Rectangle rect_L = new Rectangle( 0,  y1,                 x1,              height); //Left
+            Rectangle rect_R = new Rectangle(x2,  y1, destBMP.Width - x2,              height); //Right
+            Rectangle rect_D = new Rectangle( 0,  y2, destBMP.Width     , destBMP.Height - y2); //Down
+            Rectangle rect_P = new Rectangle(x1,  y1,              width,              height); //Patch
 
             using (Graphics g = Graphics.FromImage(resultBMP))
             {
@@ -644,20 +644,20 @@ namespace Patchlunky
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
                 g.Clear(Color.Transparent);
 
-                g.DrawImage(sourceBMP, rect_U, rect_U.Left, rect_U.Top, rect_U.Width, rect_U.Height, GraphicsUnit.Pixel);
-                g.DrawImage(sourceBMP, rect_L, rect_L.Left, rect_L.Top, rect_L.Width, rect_L.Height, GraphicsUnit.Pixel);
-                g.DrawImage(sourceBMP, rect_R, rect_R.Left, rect_R.Top, rect_R.Width, rect_R.Height, GraphicsUnit.Pixel);
-                g.DrawImage(sourceBMP, rect_D, rect_D.Left, rect_D.Top, rect_D.Width, rect_D.Height, GraphicsUnit.Pixel);
-                g.DrawImage(patchBMP , rect_P,           0,          0,        width,        height, GraphicsUnit.Pixel);
+                g.DrawImage(destBMP, rect_U, rect_U.Left, rect_U.Top, rect_U.Width, rect_U.Height, GraphicsUnit.Pixel);
+                g.DrawImage(destBMP, rect_L, rect_L.Left, rect_L.Top, rect_L.Width, rect_L.Height, GraphicsUnit.Pixel);
+                g.DrawImage(destBMP, rect_R, rect_R.Left, rect_R.Top, rect_R.Width, rect_R.Height, GraphicsUnit.Pixel);
+                g.DrawImage(destBMP, rect_D, rect_D.Left, rect_D.Top, rect_D.Width, rect_D.Height, GraphicsUnit.Pixel);
+                g.DrawImage(srcBMP , rect_P,           0,          0,        width,        height, GraphicsUnit.Pixel);
             }
 
             return resultBMP;
         }
 
         //Draw on top of a bitmap region with the region of another
-        public Bitmap BitmapOverlayRegion(Bitmap sourceBMP, Bitmap patchBMP, int x, int y, int width, int height)
+        public Bitmap BitmapOverlayRegion(Bitmap destBMP, Bitmap srcBMP, int x, int y, int width, int height)
         {
-            Bitmap resultBMP = new Bitmap(sourceBMP);
+            Bitmap resultBMP = new Bitmap(destBMP);
 
             Rectangle rect_P = new Rectangle(x, y, width, height);
 
@@ -666,7 +666,7 @@ namespace Patchlunky
                 g.PageUnit = GraphicsUnit.Pixel;
                 g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 
-                g.DrawImage(patchBMP, rect_P, 0, 0, width, height, GraphicsUnit.Pixel);
+                g.DrawImage(srcBMP, rect_P, 0, 0, width, height, GraphicsUnit.Pixel);
             }
 
             return resultBMP;
