@@ -65,6 +65,8 @@ namespace Patchlunky
         public string Description;
         public string PatchlunkyVersion;
 
+        public bool PatchDefaultFiles;
+
         public Image PreviewImage;
 
         public ModData(ModType type, string modpath)
@@ -87,6 +89,8 @@ namespace Patchlunky
             this.WebUrl = null;
             this.Description = null;
             this.PatchlunkyVersion = null;
+
+            this.PatchDefaultFiles = false;
 
             this.PreviewImage = null;
         }
@@ -308,6 +312,7 @@ namespace Patchlunky
 
                 mod.Name = name;
                 mod.Id = id;
+                mod.PatchDefaultFiles = true;
 
                 mod.LoadInfo(); //Load more details
 
@@ -377,6 +382,7 @@ namespace Patchlunky
 
                 mod.Name = name;
                 mod.Id = id;
+                mod.PatchDefaultFiles = true;
 
                 mod.LoadInfo(); //Load more details
 
@@ -429,6 +435,8 @@ namespace Patchlunky
                 mod.Description       = Xmf.GetXMLString(node, "./Description");
                 mod.PatchlunkyVersion = Xmf.GetXMLString(node, "./PatchlunkyVersion");
                 mod.PreviewImgPath    = Xmf.GetXMLString(node, "./PreviewImage");
+                string patchdf        = Xmf.GetXMLString(node, "./PatchDefaultFiles");
+                mod.PatchDefaultFiles = (patchdf ?? "false").Equals(Boolean.TrueString,StringComparison.OrdinalIgnoreCase);
 
                 //Ensure that the paths are valid format
                 if ((mod.PreviewImgPath != null) && (Xmf.PathIsValid(mod.PreviewImgPath) == false))

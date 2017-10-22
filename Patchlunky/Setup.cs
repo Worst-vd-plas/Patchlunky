@@ -298,6 +298,12 @@ namespace Patchlunky
                     //Patch wad resources in the mod.
                     PatchArchive(mod, "Textures/alltex");
                     PatchArchive(mod, "Sounds/allsounds");
+
+                    //Patch using patchlists provided by the mod
+                    if (mod.Type.HasFlag(ModType.Xml))
+                    {
+                        //TODO!
+                    }
                 }
             }
 
@@ -382,12 +388,14 @@ namespace Patchlunky
         // Patch game files in the temp folder with files of a mod.
         public bool PatchFiles(ModData mod)
         {
-            if (mod.Type.HasFlag(ModType.Xml))
-                return false; //TODO!
-            else if (mod.Type.HasFlag(ModType.Zip))
-                return PatchZipFiles(mod);
-            else
-                return PatchDirFiles(mod);
+            if(mod.PatchDefaultFiles)
+            {
+                if (mod.Type.HasFlag(ModType.Zip))
+                    return PatchZipFiles(mod);
+                else
+                    return PatchDirFiles(mod);
+            }
+            return true;
         }
 
         public bool PatchZipFiles(ModData mod)
@@ -462,12 +470,13 @@ namespace Patchlunky
         // Patches an archive wad file in the temp folder with resources of a mod.
         public void PatchArchive(ModData mod, string archivepath)
         {
-            if (mod.Type.HasFlag(ModType.Xml))
-                return; //TODO!
-            else if (mod.Type.HasFlag(ModType.Zip))
-                PatchZipArchive(mod, archivepath);
-            else
-                PatchDirArchive(mod, archivepath);
+            if (mod.PatchDefaultFiles)
+            {
+                if (mod.Type.HasFlag(ModType.Zip))
+                    PatchZipArchive(mod, archivepath);
+                else
+                    PatchDirArchive(mod, archivepath);
+            }
         }
 
         public void PatchZipArchive(ModData mod, string archivepath)
