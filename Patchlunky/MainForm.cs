@@ -351,6 +351,102 @@ namespace Patchlunky
             chklstMods.DisplayMember = "Value";
         }
 
+        //Displays information about the currently selected mod
+        private void UpdateModInfo()
+        {
+            //Reset the information
+            rtfModInfo.Text = "";
+
+            picModImage.Visible = false;
+            picModImage.Image = null;
+
+            lnkModWebUrl.Visible = false;
+            lnkModWebUrl.Links.Clear();
+            toolTip1.SetToolTip(lnkModWebUrl, "");
+
+            lnkModEmail.Visible = false;
+            lnkModEmail.Links.Clear();
+            toolTip1.SetToolTip(lnkModEmail, "");
+
+            //Get the selected mod
+            int index = chklstMods.SelectedIndex;
+            if ((index < 0) || (index > chklstMods.Items.Count)) return;
+
+            var kvp = (KeyValuePair<string, string>)chklstMods.Items[index];
+            string modid = kvp.Key;
+
+            ModData mod = ModMan.GetMod(modid);
+            if (mod == null)
+                return;
+
+            //Display basic information
+            rtfModInfo.AppendText("Name: " + (mod.Name ?? "-") + Environment.NewLine);
+            rtfModInfo.AppendText("Author: " + (mod.Author ?? "-") + Environment.NewLine);
+            rtfModInfo.AppendText("Date: " + (mod.Date.HasValue ? mod.Date.Value.ToShortDateString() : "-") + Environment.NewLine);
+            rtfModInfo.AppendText("Version: " + (mod.Version ?? "-") + Environment.NewLine);
+
+            //Display supported version for this mod
+            if (mod.PatchlunkyVersion != null)
+            {
+                rtfModInfo.AppendText(Environment.NewLine);
+                rtfModInfo.SelectionStart = rtfModInfo.TextLength;
+                rtfModInfo.SelectionLength = 0;
+
+                if (VersionIsSupported(mod.PatchlunkyVersion))
+                {
+                    rtfModInfo.SelectionColor = Color.Green;
+                    rtfModInfo.AppendText("Patchlunky version: " + mod.PatchlunkyVersion);
+                }
+                else
+                {
+                    rtfModInfo.SelectionColor = Color.Red;
+                    rtfModInfo.AppendText("Patchlunky version needed: " + mod.PatchlunkyVersion);
+                }
+                rtfModInfo.SelectionColor = rtfModInfo.ForeColor;
+                rtfModInfo.AppendText(Environment.NewLine);
+            }
+
+            //Display description
+            if (mod.Description != null)
+            {
+                rtfModInfo.AppendText(Environment.NewLine);
+                rtfModInfo.AppendText(mod.Description);
+                rtfModInfo.AppendText(Environment.NewLine);
+            }
+
+            //Display WebUrl
+            if (mod.WebUrl != null)
+            {
+                lnkModWebUrl.Visible = true;
+                lnkModWebUrl.Links.Add(0, lnkModWebUrl.Text.Length, mod.WebUrl);
+                toolTip1.SetToolTip(lnkModWebUrl, mod.WebUrl);
+            }
+
+            //Display Email
+            if (mod.Email != null)
+            {
+                lnkModEmail.Visible = true;
+                lnkModEmail.Links.Add(0, lnkModEmail.Text.Length, mod.Email);
+                toolTip1.SetToolTip(lnkModEmail, mod.Email);
+            }
+
+            //Display preview image
+            if (mod.PreviewImage != null)
+            {
+                picModImage.Visible = true;
+                picModImage.Image = mod.PreviewImage;
+            }
+
+            //Adjust information panel size
+            if (mod.PreviewImage != null) pnlModInfo.Top = picModImage.Bottom + 4;
+            else                          pnlModInfo.Top = picModImage.Top;
+
+            if ((mod.WebUrl != null) || (mod.Email != null))
+                pnlModInfo.Height = lnkModWebUrl.Top - pnlModInfo.Top - 4;
+            else
+                pnlModInfo.Height = chklstMods.Bottom - pnlModInfo.Top;
+        }
+
         // Move mod with focus up
         private void btnModUp_Click(object sender, EventArgs e)
         {
@@ -488,37 +584,27 @@ namespace Patchlunky
         //When a mod in the checkedlistbox is selected
         private void chklstMods_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int index = chklstMods.SelectedIndex;
-            if ((index < 0) || (index > chklstMods.Items.Count)) return;
+            UpdateModInfo();
+        }
 
-            var kvp = (KeyValuePair<string, string>)chklstMods.Items[index];
-            string modid = kvp.Key;
+        //Clink on a mod weburl link
+        private void lnkModWebUrl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (e.Link.LinkData != null)
+                OpenWebLink(e.Link.LinkData.ToString());
+        }
 
-            ModData mod = ModMan.GetMod(modid);
-            if (mod != null)
-            {
-                lblModName.Text = mod.Name;
-                txtModInfo.Text = mod.Description;
-                if (mod.PreviewImage != null)
-                {
-                    picModImage.Image = mod.PreviewImage;
-                    picModImage.Height = 144;
-                    txtModInfo.Top = picModImage.Bottom + 4;
-                }
-                else
-                {
-                    picModImage.Height = 0;
-                    txtModInfo.Top = picModImage.Bottom;
-                }
+        //Click on a mod email link
+        private void lnkModEmail_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (e.Link.LinkData != null)
+                OpenWebLink(e.Link.LinkData.ToString());
+        }
 
-                txtModInfo.Height = chklstMods.Bottom - txtModInfo.Top;
-            }
-            else
-            {
-                lblModName.Text = "";
-                txtModInfo.Text = "";
-                picModImage.Image = null;
-            }
+        //Click a link found in the description
+        private void rtfModInfo_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            OpenWebLink(e.LinkText);
         }
 
         //----------------------------------------------//
@@ -681,25 +767,15 @@ namespace Patchlunky
                 //Display supported version for this skin
                 if (skin.PatchlunkyVersion != null)
                 {
-                    try
+                    if (VersionIsSupported(skin.PatchlunkyVersion))
                     {
-                        Version verPatchlunky = new Version(this.PatchlunkyVersion);
-                        Version verSkinNeeds = new Version(skin.PatchlunkyVersion);
-
-                        if (verSkinNeeds > verPatchlunky)
-                        {
-                            lblSkinVersion.ForeColor = Color.Red;
-                            lblSkinVersion.Text += "Patchlunky version needed: " + skin.PatchlunkyVersion;
-                        }
-                        else
-                        {
-                            lblSkinVersion.ForeColor = Color.Green;
-                            lblSkinVersion.Text += "Patchlunky version: " + skin.PatchlunkyVersion;
-                        }
+                        lblSkinVersion.ForeColor = Color.Green;
+                        lblSkinVersion.Text += "Patchlunky version: " + skin.PatchlunkyVersion;
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Msg.Log("Error comparing versions: " + ex.Message);
+                        lblSkinVersion.ForeColor = Color.Red;
+                        lblSkinVersion.Text += "Patchlunky version needed: " + skin.PatchlunkyVersion;
                     }
                 }
 
@@ -838,6 +914,24 @@ namespace Patchlunky
         //----------------------------------------------//
         // MISC                                         //
         //----------------------------------------------//
+
+        //Check if a version is supported in the current Patchlunky version
+        private bool VersionIsSupported(string version)
+        {
+            try
+            {
+                Version verPatchlunky = new Version(this.PatchlunkyVersion);
+                Version verTarget = new Version(version);
+
+                if (verPatchlunky < verTarget) return false;
+            }
+            catch (Exception ex)
+            {
+                Msg.Log("Error comparing versions: " + ex.Message);
+                return false;
+            }
+            return true;
+        }
 
         //For visiting a link
         private void OpenWebLink(string target)

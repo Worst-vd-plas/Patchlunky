@@ -32,15 +32,17 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.lblModName = new System.Windows.Forms.Label();
+            this.pnlModInfo = new System.Windows.Forms.Panel();
+            this.rtfModInfo = new System.Windows.Forms.RichTextBox();
+            this.lnkModWebUrl = new System.Windows.Forms.LinkLabel();
+            this.lnkModEmail = new System.Windows.Forms.LinkLabel();
             this.picModImage = new System.Windows.Forms.PictureBox();
             this.btnDeleteModConfig = new System.Windows.Forms.Button();
             this.btnSaveModConfig = new System.Windows.Forms.Button();
             this.cboModConfig = new System.Windows.Forms.ComboBox();
             this.lblModText = new System.Windows.Forms.Label();
-            this.lblModList = new System.Windows.Forms.Label();
+            this.lblModSelect = new System.Windows.Forms.Label();
             this.lblLoadOrder = new System.Windows.Forms.Label();
-            this.txtModInfo = new System.Windows.Forms.TextBox();
             this.lblSelect = new System.Windows.Forms.Label();
             this.lblMove = new System.Windows.Forms.Label();
             this.btnBottom = new System.Windows.Forms.Button();
@@ -51,6 +53,7 @@
             this.btnModDown = new System.Windows.Forms.Button();
             this.btnModUp = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lblSkinVersion = new System.Windows.Forms.Label();
             this.lblSkinFiller = new System.Windows.Forms.Label();
             this.lnkSkinEmail = new System.Windows.Forms.LinkLabel();
             this.lnkSkinWebUrl = new System.Windows.Forms.LinkLabel();
@@ -90,9 +93,10 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lblSkinVersion = new System.Windows.Forms.Label();
+            this.lblModList = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.pnlModInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picModImage)).BeginInit();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCharacter)).BeginInit();
@@ -115,15 +119,17 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.lblModName);
+            this.tabPage1.Controls.Add(this.lnkModEmail);
+            this.tabPage1.Controls.Add(this.lnkModWebUrl);
+            this.tabPage1.Controls.Add(this.lblModList);
+            this.tabPage1.Controls.Add(this.pnlModInfo);
             this.tabPage1.Controls.Add(this.picModImage);
             this.tabPage1.Controls.Add(this.btnDeleteModConfig);
             this.tabPage1.Controls.Add(this.btnSaveModConfig);
             this.tabPage1.Controls.Add(this.cboModConfig);
             this.tabPage1.Controls.Add(this.lblModText);
-            this.tabPage1.Controls.Add(this.lblModList);
+            this.tabPage1.Controls.Add(this.lblModSelect);
             this.tabPage1.Controls.Add(this.lblLoadOrder);
-            this.tabPage1.Controls.Add(this.txtModInfo);
             this.tabPage1.Controls.Add(this.lblSelect);
             this.tabPage1.Controls.Add(this.lblMove);
             this.tabPage1.Controls.Add(this.btnBottom);
@@ -141,28 +147,77 @@
             this.tabPage1.Text = "Mods";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // lblModName
+            // pnlModInfo
             // 
-            this.lblModName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblModName.Location = new System.Drawing.Point(401, 22);
-            this.lblModName.Name = "lblModName";
-            this.lblModName.Size = new System.Drawing.Size(256, 19);
-            this.lblModName.TabIndex = 24;
+            this.pnlModInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlModInfo.Controls.Add(this.rtfModInfo);
+            this.pnlModInfo.Location = new System.Drawing.Point(401, 172);
+            this.pnlModInfo.Margin = new System.Windows.Forms.Padding(4);
+            this.pnlModInfo.Name = "pnlModInfo";
+            this.pnlModInfo.Size = new System.Drawing.Size(256, 238);
+            this.pnlModInfo.TabIndex = 32;
+            // 
+            // rtfModInfo
+            // 
+            this.rtfModInfo.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.rtfModInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtfModInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtfModInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rtfModInfo.Location = new System.Drawing.Point(0, 0);
+            this.rtfModInfo.Margin = new System.Windows.Forms.Padding(0);
+            this.rtfModInfo.Name = "rtfModInfo";
+            this.rtfModInfo.ReadOnly = true;
+            this.rtfModInfo.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.rtfModInfo.Size = new System.Drawing.Size(254, 236);
+            this.rtfModInfo.TabIndex = 25;
+            this.rtfModInfo.Text = "";
+            this.rtfModInfo.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtfModInfo_LinkClicked);
+            // 
+            // lnkModWebUrl
+            // 
+            this.lnkModWebUrl.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lnkModWebUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lnkModWebUrl.Location = new System.Drawing.Point(401, 385);
+            this.lnkModWebUrl.Margin = new System.Windows.Forms.Padding(0);
+            this.lnkModWebUrl.Name = "lnkModWebUrl";
+            this.lnkModWebUrl.Size = new System.Drawing.Size(50, 25);
+            this.lnkModWebUrl.TabIndex = 31;
+            this.lnkModWebUrl.TabStop = true;
+            this.lnkModWebUrl.Text = "Link";
+            this.lnkModWebUrl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lnkModWebUrl.Visible = false;
+            this.lnkModWebUrl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkModWebUrl_LinkClicked);
+            // 
+            // lnkModEmail
+            // 
+            this.lnkModEmail.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lnkModEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lnkModEmail.Location = new System.Drawing.Point(454, 385);
+            this.lnkModEmail.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.lnkModEmail.Name = "lnkModEmail";
+            this.lnkModEmail.Size = new System.Drawing.Size(50, 25);
+            this.lnkModEmail.TabIndex = 30;
+            this.lnkModEmail.TabStop = true;
+            this.lnkModEmail.Text = "Email";
+            this.lnkModEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lnkModEmail.Visible = false;
+            this.lnkModEmail.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkModEmail_LinkClicked);
             // 
             // picModImage
             // 
             this.picModImage.BackColor = System.Drawing.Color.Black;
             this.picModImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picModImage.Location = new System.Drawing.Point(401, 46);
+            this.picModImage.Location = new System.Drawing.Point(400, 22);
+            this.picModImage.Margin = new System.Windows.Forms.Padding(0);
             this.picModImage.Name = "picModImage";
-            this.picModImage.Size = new System.Drawing.Size(256, 144);
+            this.picModImage.Size = new System.Drawing.Size(258, 146);
             this.picModImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.picModImage.TabIndex = 23;
             this.picModImage.TabStop = false;
             // 
             // btnDeleteModConfig
             // 
-            this.btnDeleteModConfig.Location = new System.Drawing.Point(288, 7);
+            this.btnDeleteModConfig.Location = new System.Drawing.Point(342, 7);
             this.btnDeleteModConfig.Name = "btnDeleteModConfig";
             this.btnDeleteModConfig.Size = new System.Drawing.Size(49, 21);
             this.btnDeleteModConfig.TabIndex = 22;
@@ -173,7 +228,7 @@
             // 
             // btnSaveModConfig
             // 
-            this.btnSaveModConfig.Location = new System.Drawing.Point(238, 7);
+            this.btnSaveModConfig.Location = new System.Drawing.Point(292, 7);
             this.btnSaveModConfig.Name = "btnSaveModConfig";
             this.btnSaveModConfig.Size = new System.Drawing.Size(44, 21);
             this.btnSaveModConfig.TabIndex = 21;
@@ -185,9 +240,9 @@
             // cboModConfig
             // 
             this.cboModConfig.FormattingEnabled = true;
-            this.cboModConfig.Location = new System.Drawing.Point(8, 7);
+            this.cboModConfig.Location = new System.Drawing.Point(57, 7);
             this.cboModConfig.Name = "cboModConfig";
-            this.cboModConfig.Size = new System.Drawing.Size(224, 21);
+            this.cboModConfig.Size = new System.Drawing.Size(229, 21);
             this.cboModConfig.TabIndex = 19;
             this.cboModConfig.Text = "Default";
             this.cboModConfig.SelectedIndexChanged += new System.EventHandler(this.cboModConfig_SelectedIndexChanged);
@@ -195,20 +250,20 @@
             // lblModText
             // 
             this.lblModText.AutoSize = true;
-            this.lblModText.Location = new System.Drawing.Point(398, 7);
+            this.lblModText.Location = new System.Drawing.Point(398, 5);
             this.lblModText.Name = "lblModText";
             this.lblModText.Size = new System.Drawing.Size(75, 13);
             this.lblModText.TabIndex = 18;
             this.lblModText.Text = "Selected mod:";
             // 
-            // lblModList
+            // lblModSelect
             // 
-            this.lblModList.AutoSize = true;
-            this.lblModList.Location = new System.Drawing.Point(5, 31);
-            this.lblModList.Name = "lblModList";
-            this.lblModList.Size = new System.Drawing.Size(169, 13);
-            this.lblModList.TabIndex = 17;
-            this.lblModList.Text = "Select mods to patch to the game:";
+            this.lblModSelect.AutoSize = true;
+            this.lblModSelect.Location = new System.Drawing.Point(5, 31);
+            this.lblModSelect.Name = "lblModSelect";
+            this.lblModSelect.Size = new System.Drawing.Size(169, 13);
+            this.lblModSelect.TabIndex = 17;
+            this.lblModSelect.Text = "Select mods to patch to the game:";
             // 
             // lblLoadOrder
             // 
@@ -218,16 +273,6 @@
             this.lblLoadOrder.Size = new System.Drawing.Size(238, 13);
             this.lblLoadOrder.TabIndex = 16;
             this.lblLoadOrder.Text = "Mods higher in the list override mods below them.";
-            // 
-            // txtModInfo
-            // 
-            this.txtModInfo.Location = new System.Drawing.Point(401, 196);
-            this.txtModInfo.Multiline = true;
-            this.txtModInfo.Name = "txtModInfo";
-            this.txtModInfo.ReadOnly = true;
-            this.txtModInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtModInfo.Size = new System.Drawing.Size(256, 214);
-            this.txtModInfo.TabIndex = 15;
             // 
             // lblSelect
             // 
@@ -346,6 +391,14 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Characters";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // lblSkinVersion
+            // 
+            this.lblSkinVersion.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lblSkinVersion.Location = new System.Drawing.Point(436, 168);
+            this.lblSkinVersion.Name = "lblSkinVersion";
+            this.lblSkinVersion.Size = new System.Drawing.Size(223, 22);
+            this.lblSkinVersion.TabIndex = 31;
             // 
             // lblSkinFiller
             // 
@@ -492,10 +545,10 @@
             // lblCharSelect
             // 
             this.lblCharSelect.AutoSize = true;
-            this.lblCharSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCharSelect.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCharSelect.Location = new System.Drawing.Point(6, 405);
             this.lblCharSelect.Name = "lblCharSelect";
-            this.lblCharSelect.Size = new System.Drawing.Size(223, 13);
+            this.lblCharSelect.Size = new System.Drawing.Size(198, 13);
             this.lblCharSelect.TabIndex = 10;
             this.lblCharSelect.Text = "Double-click a character to change it.";
             // 
@@ -542,10 +595,10 @@
             // lblSkinSelect
             // 
             this.lblSkinSelect.AutoSize = true;
-            this.lblSkinSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSkinSelect.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSkinSelect.Location = new System.Drawing.Point(6, 405);
             this.lblSkinSelect.Name = "lblSkinSelect";
-            this.lblSkinSelect.Size = new System.Drawing.Size(222, 13);
+            this.lblSkinSelect.Size = new System.Drawing.Size(197, 13);
             this.lblSkinSelect.TabIndex = 11;
             this.lblSkinSelect.Text = "Double-click a character to choose it.";
             this.lblSkinSelect.Visible = false;
@@ -771,13 +824,14 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // lblSkinVersion
+            // lblModList
             // 
-            this.lblSkinVersion.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblSkinVersion.Location = new System.Drawing.Point(436, 168);
-            this.lblSkinVersion.Name = "lblSkinVersion";
-            this.lblSkinVersion.Size = new System.Drawing.Size(223, 22);
-            this.lblSkinVersion.TabIndex = 31;
+            this.lblModList.AutoSize = true;
+            this.lblModList.Location = new System.Drawing.Point(1, 10);
+            this.lblModList.Name = "lblModList";
+            this.lblModList.Size = new System.Drawing.Size(56, 13);
+            this.lblModList.TabIndex = 33;
+            this.lblModList.Text = "Saved list:";
             // 
             // MainForm
             // 
@@ -799,6 +853,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.pnlModInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picModImage)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
@@ -834,7 +889,6 @@
         private System.Windows.Forms.Button btnPatch;
         private System.Windows.Forms.Button btnRestore;
         private System.Windows.Forms.Button btnExtractArchives;
-        private System.Windows.Forms.TextBox txtModInfo;
         private System.Windows.Forms.Label lblSelect;
         private System.Windows.Forms.Label lblMove;
         private System.Windows.Forms.Button btnBottom;
@@ -845,12 +899,11 @@
         private System.Windows.Forms.Button btnSaveModConfig;
         private System.Windows.Forms.ComboBox cboModConfig;
         private System.Windows.Forms.Label lblModText;
-        private System.Windows.Forms.Label lblModList;
+        private System.Windows.Forms.Label lblModSelect;
         private System.Windows.Forms.Label lblLoadOrder;
         private System.Windows.Forms.ProgressBar prgPatchGame;
         private System.Windows.Forms.Button btnRunGame;
         private System.Windows.Forms.PictureBox picModImage;
-        private System.Windows.Forms.Label lblModName;
         private System.Windows.Forms.ListView lvwCharacters;
         private System.Windows.Forms.Button btnResetSkins;
         private System.Windows.Forms.ListView lvwSkins;
@@ -877,6 +930,11 @@
         private System.Windows.Forms.LinkLabel lnkSkinEmail;
         private System.Windows.Forms.Label lblSkinFiller;
         private System.Windows.Forms.Label lblSkinVersion;
+        private System.Windows.Forms.RichTextBox rtfModInfo;
+        private System.Windows.Forms.LinkLabel lnkModWebUrl;
+        private System.Windows.Forms.LinkLabel lnkModEmail;
+        private System.Windows.Forms.Panel pnlModInfo;
+        private System.Windows.Forms.Label lblModList;
     }
 }
 
