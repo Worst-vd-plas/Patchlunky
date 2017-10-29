@@ -725,19 +725,15 @@ namespace Patchlunky
             picCharacter.Image = null;
             picSkin.Image = null;
 
-            lblSkinInfo.Text = ""; //Main fields
-            lblSkinVersion.Text = ""; //Supported version
+            rtfSkinInfo.Text = "";
 
-            lnkSkinWebUrl.Text = ""; //WebUrl link
+            lnkSkinWebUrl.Visible = false;
             lnkSkinWebUrl.Links.Clear();
             toolTip1.SetToolTip(lnkSkinWebUrl, "");
 
-            lnkSkinEmail.Text = ""; //Email link
+            lnkSkinEmail.Visible = false;
             lnkSkinEmail.Links.Clear();
             toolTip1.SetToolTip(lnkSkinEmail, "");
-
-            txtSkinInfo.Text = ""; //Description
-
 
             //Display the original character for the current item
             if (CharItem != null)
@@ -745,8 +741,8 @@ namespace Patchlunky
                 picCharacter.Image = CharItem.ImageList.Images[CharItem.Name];
             }
 
+            //Get the selected character
             string skinName = null;
-
             if (SkinBrowserActive) //If browsing custom characters
             {
                 if (SkinItem != null) skinName = SkinItem.ImageKey;
@@ -757,53 +753,76 @@ namespace Patchlunky
             }
 
             SkinData skin = SkinMan.GetSkin(skinName);
-            if (skin != null)
+            if (skin == null)
             {
-                lblSkinInfo.Text += "Name: " + (skin.Name ?? "-") + Environment.NewLine;
-                lblSkinInfo.Text += "Author: " + (skin.Author ?? "-") + Environment.NewLine;
-                lblSkinInfo.Text += "Date: " + (skin.Date.HasValue ? skin.Date.Value.ToShortDateString() : "-") + Environment.NewLine;
-                lblSkinInfo.Text += "Version: " + (skin.Version ?? "-") + Environment.NewLine;
-
-                //Display supported version for this skin
-                if (skin.PatchlunkyVersion != null)
+                if (skinName != null) //Unknown skin
                 {
-                    if (VersionIsSupported(skin.PatchlunkyVersion))
-                    {
-                        lblSkinVersion.ForeColor = Color.Green;
-                        lblSkinVersion.Text += "Patchlunky version: " + skin.PatchlunkyVersion;
-                    }
-                    else
-                    {
-                        lblSkinVersion.ForeColor = Color.Red;
-                        lblSkinVersion.Text += "Patchlunky version needed: " + skin.PatchlunkyVersion;
-                    }
+                    rtfSkinInfo.AppendText("Unknown character: " + skinName + Environment.NewLine);
+                    rtfSkinInfo.AppendText(Environment.NewLine);
+                    rtfSkinInfo.AppendText("This character will not be patched, because the files are missing!" + Environment.NewLine);
                 }
-
-                if (skin.WebUrl != null)
-                {
-                    lnkSkinWebUrl.Text = "Link";
-                    lnkSkinWebUrl.Links.Add(0, 4, skin.WebUrl);
-                    toolTip1.SetToolTip(lnkSkinWebUrl, skin.WebUrl);
-                }
-
-                if (skin.Email != null)
-                {
-                    lnkSkinEmail.Text = "Email";
-                    lnkSkinEmail.Links.Add(0, 5, skin.Email);
-                    toolTip1.SetToolTip(lnkSkinEmail, skin.Email);
-                }
-
-                txtSkinInfo.Text = skin.Description;
-
-                //Display the new character for the current item
-                picSkin.Image = CharItem.ImageList.Images[skinName];
+                return;
             }
-            else if(skinName != null) //Unknown skin
+
+            //Display basic information
+            rtfSkinInfo.AppendText("Name: " + (skin.Name ?? "-") + Environment.NewLine);
+            rtfSkinInfo.AppendText("Author: " + (skin.Author ?? "-") + Environment.NewLine);
+            rtfSkinInfo.AppendText("Date: " + (skin.Date.HasValue ? skin.Date.Value.ToShortDateString() : "-") + Environment.NewLine);
+            rtfSkinInfo.AppendText("Version: " + (skin.Version ?? "-") + Environment.NewLine);
+
+            //Display supported version for this skin
+            if (skin.PatchlunkyVersion != null)
             {
-                lblSkinInfo.Text += "Unknown character: " + skinName + Environment.NewLine;
-                lblSkinInfo.Text += Environment.NewLine;
-                lblSkinInfo.Text += "This character will not be patched, because the files are missing!" + Environment.NewLine;
+                rtfSkinInfo.AppendText(Environment.NewLine);
+                rtfSkinInfo.SelectionStart = rtfSkinInfo.TextLength;
+                rtfSkinInfo.SelectionLength = 0;
+
+                if (VersionIsSupported(skin.PatchlunkyVersion))
+                {
+                    rtfSkinInfo.SelectionColor = Color.Green;
+                    rtfSkinInfo.AppendText("Patchlunky version: " + skin.PatchlunkyVersion);
+                }
+                else
+                {
+                    rtfSkinInfo.SelectionColor = Color.Red;
+                    rtfSkinInfo.AppendText("Patchlunky version needed: " + skin.PatchlunkyVersion);
+                }
+                rtfSkinInfo.SelectionColor = rtfSkinInfo.ForeColor;
+                rtfSkinInfo.AppendText(Environment.NewLine);
             }
+
+            //Display description
+            if (skin.Description != null)
+            {
+                rtfSkinInfo.AppendText(Environment.NewLine);
+                rtfSkinInfo.AppendText(skin.Description);
+                rtfSkinInfo.AppendText(Environment.NewLine);
+            }
+
+            //Display WebUrl
+            if (skin.WebUrl != null)
+            {
+                lnkSkinWebUrl.Visible = true;
+                lnkSkinWebUrl.Links.Add(0, lnkSkinWebUrl.Text.Length, skin.WebUrl);
+                toolTip1.SetToolTip(lnkSkinWebUrl, skin.WebUrl);
+            }
+
+            //Display Email
+            if (skin.Email != null)
+            {
+                lnkSkinEmail.Visible = true;
+                lnkSkinEmail.Links.Add(0, lnkSkinEmail.Text.Length, skin.Email);
+                toolTip1.SetToolTip(lnkSkinEmail, skin.Email);
+            }
+
+            //Display the new character for the current item
+            picSkin.Image = CharItem.ImageList.Images[skinName];
+
+            //Adjust information panel size
+            if ((skin.WebUrl != null) || (skin.Email != null))
+                pnlSkinInfo.Height = lnkSkinWebUrl.Top - pnlSkinInfo.Top - 4;
+            else
+                pnlSkinInfo.Height = lnkSkinWebUrl.Bottom - pnlSkinInfo.Top;
         }
 
         //Change selection in character listview.

@@ -32,10 +32,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.lnkModEmail = new System.Windows.Forms.LinkLabel();
+            this.lnkModWebUrl = new System.Windows.Forms.LinkLabel();
+            this.lblModList = new System.Windows.Forms.Label();
             this.pnlModInfo = new System.Windows.Forms.Panel();
             this.rtfModInfo = new System.Windows.Forms.RichTextBox();
-            this.lnkModWebUrl = new System.Windows.Forms.LinkLabel();
-            this.lnkModEmail = new System.Windows.Forms.LinkLabel();
             this.picModImage = new System.Windows.Forms.PictureBox();
             this.btnDeleteModConfig = new System.Windows.Forms.Button();
             this.btnSaveModConfig = new System.Windows.Forms.Button();
@@ -53,18 +54,14 @@
             this.btnModDown = new System.Windows.Forms.Button();
             this.btnModUp = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.lblSkinVersion = new System.Windows.Forms.Label();
-            this.lblSkinFiller = new System.Windows.Forms.Label();
             this.lnkSkinEmail = new System.Windows.Forms.LinkLabel();
             this.lnkSkinWebUrl = new System.Windows.Forms.LinkLabel();
             this.lblSkinList = new System.Windows.Forms.Label();
-            this.txtSkinInfo = new System.Windows.Forms.TextBox();
             this.lblSkinText = new System.Windows.Forms.Label();
             this.btnRestoreSkin = new System.Windows.Forms.Button();
             this.picCharacter = new System.Windows.Forms.PictureBox();
             this.picSkin = new System.Windows.Forms.PictureBox();
             this.lblCharacter = new System.Windows.Forms.Label();
-            this.lblSkinInfo = new System.Windows.Forms.Label();
             this.btnDeleteSkinConfig = new System.Windows.Forms.Button();
             this.btnSaveSkinConfig = new System.Windows.Forms.Button();
             this.cboSkinConfig = new System.Windows.Forms.ComboBox();
@@ -93,7 +90,8 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lblModList = new System.Windows.Forms.Label();
+            this.pnlSkinInfo = new System.Windows.Forms.Panel();
+            this.rtfSkinInfo = new System.Windows.Forms.RichTextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.pnlModInfo.SuspendLayout();
@@ -104,6 +102,7 @@
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.pnlSkinInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -147,6 +146,45 @@
             this.tabPage1.Text = "Mods";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // lnkModEmail
+            // 
+            this.lnkModEmail.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lnkModEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lnkModEmail.Location = new System.Drawing.Point(454, 385);
+            this.lnkModEmail.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.lnkModEmail.Name = "lnkModEmail";
+            this.lnkModEmail.Size = new System.Drawing.Size(50, 25);
+            this.lnkModEmail.TabIndex = 30;
+            this.lnkModEmail.TabStop = true;
+            this.lnkModEmail.Text = "Email";
+            this.lnkModEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lnkModEmail.Visible = false;
+            this.lnkModEmail.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkModEmail_LinkClicked);
+            // 
+            // lnkModWebUrl
+            // 
+            this.lnkModWebUrl.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.lnkModWebUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lnkModWebUrl.Location = new System.Drawing.Point(401, 385);
+            this.lnkModWebUrl.Margin = new System.Windows.Forms.Padding(0);
+            this.lnkModWebUrl.Name = "lnkModWebUrl";
+            this.lnkModWebUrl.Size = new System.Drawing.Size(50, 25);
+            this.lnkModWebUrl.TabIndex = 31;
+            this.lnkModWebUrl.TabStop = true;
+            this.lnkModWebUrl.Text = "Link";
+            this.lnkModWebUrl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lnkModWebUrl.Visible = false;
+            this.lnkModWebUrl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkModWebUrl_LinkClicked);
+            // 
+            // lblModList
+            // 
+            this.lblModList.AutoSize = true;
+            this.lblModList.Location = new System.Drawing.Point(1, 10);
+            this.lblModList.Name = "lblModList";
+            this.lblModList.Size = new System.Drawing.Size(56, 13);
+            this.lblModList.TabIndex = 33;
+            this.lblModList.Text = "Saved list:";
+            // 
             // pnlModInfo
             // 
             this.pnlModInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -172,36 +210,6 @@
             this.rtfModInfo.TabIndex = 25;
             this.rtfModInfo.Text = "";
             this.rtfModInfo.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtfModInfo_LinkClicked);
-            // 
-            // lnkModWebUrl
-            // 
-            this.lnkModWebUrl.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lnkModWebUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lnkModWebUrl.Location = new System.Drawing.Point(401, 385);
-            this.lnkModWebUrl.Margin = new System.Windows.Forms.Padding(0);
-            this.lnkModWebUrl.Name = "lnkModWebUrl";
-            this.lnkModWebUrl.Size = new System.Drawing.Size(50, 25);
-            this.lnkModWebUrl.TabIndex = 31;
-            this.lnkModWebUrl.TabStop = true;
-            this.lnkModWebUrl.Text = "Link";
-            this.lnkModWebUrl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lnkModWebUrl.Visible = false;
-            this.lnkModWebUrl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkModWebUrl_LinkClicked);
-            // 
-            // lnkModEmail
-            // 
-            this.lnkModEmail.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lnkModEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lnkModEmail.Location = new System.Drawing.Point(454, 385);
-            this.lnkModEmail.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.lnkModEmail.Name = "lnkModEmail";
-            this.lnkModEmail.Size = new System.Drawing.Size(50, 25);
-            this.lnkModEmail.TabIndex = 30;
-            this.lnkModEmail.TabStop = true;
-            this.lnkModEmail.Text = "Email";
-            this.lnkModEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.lnkModEmail.Visible = false;
-            this.lnkModEmail.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkModEmail_LinkClicked);
             // 
             // picModImage
             // 
@@ -364,18 +372,15 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.lblSkinVersion);
-            this.tabPage2.Controls.Add(this.lblSkinFiller);
-            this.tabPage2.Controls.Add(this.lnkSkinEmail);
             this.tabPage2.Controls.Add(this.lnkSkinWebUrl);
+            this.tabPage2.Controls.Add(this.lnkSkinEmail);
+            this.tabPage2.Controls.Add(this.pnlSkinInfo);
             this.tabPage2.Controls.Add(this.lblSkinList);
-            this.tabPage2.Controls.Add(this.txtSkinInfo);
             this.tabPage2.Controls.Add(this.lblSkinText);
             this.tabPage2.Controls.Add(this.btnRestoreSkin);
             this.tabPage2.Controls.Add(this.picCharacter);
             this.tabPage2.Controls.Add(this.picSkin);
             this.tabPage2.Controls.Add(this.lblCharacter);
-            this.tabPage2.Controls.Add(this.lblSkinInfo);
             this.tabPage2.Controls.Add(this.btnDeleteSkinConfig);
             this.tabPage2.Controls.Add(this.btnSaveSkinConfig);
             this.tabPage2.Controls.Add(this.cboSkinConfig);
@@ -392,43 +397,34 @@
             this.tabPage2.Text = "Characters";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // lblSkinVersion
-            // 
-            this.lblSkinVersion.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblSkinVersion.Location = new System.Drawing.Point(436, 168);
-            this.lblSkinVersion.Name = "lblSkinVersion";
-            this.lblSkinVersion.Size = new System.Drawing.Size(223, 22);
-            this.lblSkinVersion.TabIndex = 31;
-            // 
-            // lblSkinFiller
-            // 
-            this.lblSkinFiller.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblSkinFiller.Location = new System.Drawing.Point(521, 190);
-            this.lblSkinFiller.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.lblSkinFiller.Name = "lblSkinFiller";
-            this.lblSkinFiller.Size = new System.Drawing.Size(138, 27);
-            this.lblSkinFiller.TabIndex = 30;
-            // 
             // lnkSkinEmail
             // 
             this.lnkSkinEmail.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lnkSkinEmail.Location = new System.Drawing.Point(477, 190);
+            this.lnkSkinEmail.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lnkSkinEmail.Location = new System.Drawing.Point(489, 398);
             this.lnkSkinEmail.Margin = new System.Windows.Forms.Padding(0);
             this.lnkSkinEmail.Name = "lnkSkinEmail";
-            this.lnkSkinEmail.Size = new System.Drawing.Size(44, 27);
+            this.lnkSkinEmail.Size = new System.Drawing.Size(50, 25);
             this.lnkSkinEmail.TabIndex = 29;
+            this.lnkSkinEmail.TabStop = true;
+            this.lnkSkinEmail.Text = "Email";
             this.lnkSkinEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lnkSkinEmail.Visible = false;
             this.lnkSkinEmail.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSkinEmail_LinkClicked);
             // 
             // lnkSkinWebUrl
             // 
             this.lnkSkinWebUrl.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lnkSkinWebUrl.Location = new System.Drawing.Point(436, 190);
+            this.lnkSkinWebUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lnkSkinWebUrl.Location = new System.Drawing.Point(436, 398);
             this.lnkSkinWebUrl.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.lnkSkinWebUrl.Name = "lnkSkinWebUrl";
-            this.lnkSkinWebUrl.Size = new System.Drawing.Size(41, 27);
+            this.lnkSkinWebUrl.Size = new System.Drawing.Size(50, 25);
             this.lnkSkinWebUrl.TabIndex = 28;
+            this.lnkSkinWebUrl.TabStop = true;
+            this.lnkSkinWebUrl.Text = "Link";
             this.lnkSkinWebUrl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lnkSkinWebUrl.Visible = false;
             this.lnkSkinWebUrl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkSkinWebUrl_LinkClicked);
             // 
             // lblSkinList
@@ -439,17 +435,6 @@
             this.lblSkinList.Size = new System.Drawing.Size(56, 13);
             this.lblSkinList.TabIndex = 27;
             this.lblSkinList.Text = "Saved list:";
-            // 
-            // txtSkinInfo
-            // 
-            this.txtSkinInfo.Location = new System.Drawing.Point(436, 223);
-            this.txtSkinInfo.Margin = new System.Windows.Forms.Padding(6);
-            this.txtSkinInfo.Multiline = true;
-            this.txtSkinInfo.Name = "txtSkinInfo";
-            this.txtSkinInfo.ReadOnly = true;
-            this.txtSkinInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtSkinInfo.Size = new System.Drawing.Size(223, 202);
-            this.txtSkinInfo.TabIndex = 26;
             // 
             // lblSkinText
             // 
@@ -501,14 +486,6 @@
             this.lblCharacter.Size = new System.Drawing.Size(45, 13);
             this.lblCharacter.TabIndex = 9;
             this.lblCharacter.Text = "Original:";
-            // 
-            // lblSkinInfo
-            // 
-            this.lblSkinInfo.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.lblSkinInfo.Location = new System.Drawing.Point(436, 110);
-            this.lblSkinInfo.Name = "lblSkinInfo";
-            this.lblSkinInfo.Size = new System.Drawing.Size(223, 58);
-            this.lblSkinInfo.TabIndex = 24;
             // 
             // btnDeleteSkinConfig
             // 
@@ -824,14 +801,25 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // lblModList
+            // pnlSkinInfo
             // 
-            this.lblModList.AutoSize = true;
-            this.lblModList.Location = new System.Drawing.Point(1, 10);
-            this.lblModList.Name = "lblModList";
-            this.lblModList.Size = new System.Drawing.Size(56, 13);
-            this.lblModList.TabIndex = 33;
-            this.lblModList.Text = "Saved list:";
+            this.pnlSkinInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlSkinInfo.Controls.Add(this.rtfSkinInfo);
+            this.pnlSkinInfo.Location = new System.Drawing.Point(436, 109);
+            this.pnlSkinInfo.Name = "pnlSkinInfo";
+            this.pnlSkinInfo.Size = new System.Drawing.Size(223, 314);
+            this.pnlSkinInfo.TabIndex = 32;
+            // 
+            // rtfSkinInfo
+            // 
+            this.rtfSkinInfo.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.rtfSkinInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtfSkinInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtfSkinInfo.Location = new System.Drawing.Point(0, 0);
+            this.rtfSkinInfo.Name = "rtfSkinInfo";
+            this.rtfSkinInfo.Size = new System.Drawing.Size(221, 312);
+            this.rtfSkinInfo.TabIndex = 0;
+            this.rtfSkinInfo.Text = "";
             // 
             // MainForm
             // 
@@ -864,6 +852,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.pnlSkinInfo.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -920,21 +909,19 @@
         private System.Windows.Forms.Button btnDeleteSkinConfig;
         private System.Windows.Forms.Button btnSaveSkinConfig;
         private System.Windows.Forms.CheckBox chkSkinConfigAutosave;
-        private System.Windows.Forms.Label lblSkinInfo;
         private System.Windows.Forms.Button btnRestoreSkin;
         private System.Windows.Forms.PictureBox picCharacter;
         private System.Windows.Forms.Label lblSkinText;
-        private System.Windows.Forms.TextBox txtSkinInfo;
         private System.Windows.Forms.Label lblSkinList;
         private System.Windows.Forms.LinkLabel lnkSkinWebUrl;
         private System.Windows.Forms.LinkLabel lnkSkinEmail;
-        private System.Windows.Forms.Label lblSkinFiller;
-        private System.Windows.Forms.Label lblSkinVersion;
         private System.Windows.Forms.RichTextBox rtfModInfo;
         private System.Windows.Forms.LinkLabel lnkModWebUrl;
         private System.Windows.Forms.LinkLabel lnkModEmail;
         private System.Windows.Forms.Panel pnlModInfo;
         private System.Windows.Forms.Label lblModList;
+        private System.Windows.Forms.Panel pnlSkinInfo;
+        private System.Windows.Forms.RichTextBox rtfSkinInfo;
     }
 }
 
