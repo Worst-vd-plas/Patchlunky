@@ -66,8 +66,8 @@ namespace Patchlunky
 
             this.DefaultFiles = new List<GameFile>();
 
-            this.GamePath = settings.Get("GameDir");                        
-            this.AppPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + "/";
+            this.GamePath = settings.Get("GameDir");
+            this.AppPath = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + "\\";
             this.TempPath   = AppPath + "Patchlunky_Temp/";
             this.BackupPath = AppPath + "Patchlunky_Backup/";
             
@@ -930,8 +930,102 @@ namespace Patchlunky
                 }
             }
 
+            //Ask if the URL protocol should be registered.
+            if (CheckUriScheme() == false)
+            {
+                DoRegisterUriScheme();
+            }
+
             message = "Patchlunky setup finished.";
             Msg.MsgBox(message, "Patchlunky Setup");
+        }
+
+        //Display a dialog for registering the custom URI scheme / custom URL protocol
+        public void DoRegisterUriScheme()
+        {
+            DialogResult result;
+            string message;
+
+            message = "Patchlunky supports a custom URL protocol for downloading mods directly from links. " +
+                      "(for example: patchlunky://download/mod/http://www.website.com/mod.plm)" + Environment.NewLine +
+                      Environment.NewLine + Environment.NewLine +
+                      "Do you want to register Patchlunky to open these links when they are launched from a browser?";
+            result = Msg.MsgBox(message, "Patchlunky Setup", MessageBoxButtons.YesNoCancel);
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    string iconPath = "\"" + this.AppPath + "Patchlunky.exe" + "\",0";
+                    string cmdPath = "\"" + this.AppPath + "Patchlunky.exe" + "\" \"%1\"";
+
+                    RegistryKey key;
+                    key = Registry.CurrentUser.OpenSubKey("Software\\Classes", true);
+
+                    key = key.CreateSubKey("patchlunky");
+
+                    key.SetValue(null, "URL:Patchlunky Protocol", RegistryValueKind.String);
+                    key.SetValue("URL Protocol", "", RegistryValueKind.String);
+
+                    key = key.CreateSubKey("DefaultIcon");
+                    key.SetValue(null, iconPath, RegistryValueKind.String);
+
+                    key = Registry.CurrentUser.OpenSubKey("Software\\Classes\\patchlunky", true);
+
+                    key = key.CreateSubKey("shell\\open\\command");
+                    key.SetValue(null, cmdPath, RegistryValueKind.String);
+
+                    Msg.Log("Patchlunky URL protocol registered.");
+                }
+                catch (Exception ex)
+                {
+                    Msg.MsgBox("Error registering URL protocol: " + ex.Message, "Patchlunky Setup");
+                }
+            }
+        }
+
+        //Checks if the custom URI scheme has been registered
+        public bool CheckUriScheme()
+        {
+            RegistryKey key;
+
+            key = Registry.CurrentUser.OpenSubKey("Software\\Classes\\patchlunky");
+            if (key == null)
+                return false; //No key found
+
+            key = key.OpenSubKey("shell\\open\\command");
+            if (key == null)
+                return false;
+
+            //Get the command path from registry
+            string regPath = (string)key.GetValue(null);
+            if (regPath == null)
+                return false;
+
+            int index = regPath.LastIndexOf("\"%1\"");
+            if (index != -1)
+            {
+                regPath = regPath.Substring(0, index);
+            }
+            else
+            {
+                index = regPath.LastIndexOf("%1");
+                if (index != -1)
+                    regPath = regPath.Substring(0, index);
+            }
+            regPath = regPath.Replace("\"", ""); //Get rid of quotes
+            regPath = regPath.TrimEnd(' '); //Remove trailing whitespace
+            regPath = regPath.TrimStart(' '); //Remove leading whitespace
+
+            string appPath = this.AppPath + "Patchlunky.exe";
+
+            if (String.Equals(
+                Path.GetFullPath(regPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                Path.GetFullPath(appPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                StringComparison.InvariantCultureIgnoreCase))
+                return true; //Registry path matches the current install path
+
+            return false;
         }
 
         //Opens a dialog for browsing for the game directory
