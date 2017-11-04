@@ -25,6 +25,7 @@
 
 using System;
 using System.IO;
+using System.Net;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
@@ -679,6 +680,166 @@ namespace Patchlunky
             }
 
             return resultBMP;
+        }
+
+        //-----------------------------------------------------------//
+        // URL protocol wizard
+        //-----------------------------------------------------------//
+
+        // For handling the URLs passed with the custom URI scheme
+        public void OpenPatchlunkyUrl(string patchlunkyUrl)
+        {
+            if (patchlunkyUrl.StartsWith("patchlunky:", StringComparison.OrdinalIgnoreCase) == false)
+                return; //Invalid URL protocol, this should not happen.
+
+            //Msg.Log("Received Patchlunky URL command: " + patchlunkyUrl);
+
+            string downloadUrl = null;
+            string downloadMod = "patchlunky://download/mod/";
+            string downloadChar = "patchlunky://download/char/";
+            int downloadType = 0;
+
+            // Check for download/mod command
+            if (patchlunkyUrl.StartsWith(downloadMod, StringComparison.OrdinalIgnoreCase) == true)
+            {
+                downloadType = 1;
+                downloadUrl = patchlunkyUrl.Substring(downloadMod.Length);
+            }
+            // Check for download/char command
+            else if (patchlunkyUrl.StartsWith(downloadChar, StringComparison.OrdinalIgnoreCase) == true)
+            {
+                downloadType = 2;
+                downloadUrl = patchlunkyUrl.Substring(downloadChar.Length);
+            }
+            else
+            {
+                Msg.Log("Invalid Patchlunky URL command!: " + patchlunkyUrl);
+                return;
+            }
+
+
+            //Check wether the url is valid
+            Uri resultUri;
+            bool valid = Uri.TryCreate(downloadUrl, UriKind.Absolute, out resultUri) &&
+                          (resultUri.Scheme == Uri.UriSchemeHttp ||
+                           resultUri.Scheme == Uri.UriSchemeHttps);
+
+            if (!valid)
+            {
+                Msg.Log("Invalid download URL!: " + patchlunkyUrl);
+                return;
+            }
+
+            //The URL should be fine if we get this far
+            DialogResult result;
+            string message;
+
+            message = "Do you want to download the " + ((downloadType == 2) ? "character" : "mod") +
+                      " from the internet address below?" + Environment.NewLine + Environment.NewLine +
+                      downloadUrl + Environment.NewLine + Environment.NewLine +
+                      "Warning: Files downloaded from the Internet could potentially harm you or your computer. " +
+                      "You should only download files from sources you trust.";
+            result = Msg.MsgBox(message, "Patchlunky URL protocol", MessageBoxButtons.YesNoCancel);
+
+            if (result != DialogResult.Yes)
+                return; //User chose NO or CANCEL
+
+            using (WebClient client = new WebClient())
+            {
+                // Download the file.
+                // TODO: Show progress, use background thread, etc.
+                Byte[] data;
+
+                try
+                {
+                    data = client.DownloadData(downloadUrl);
+                }
+                catch (Exception ex)
+                {
+                    Msg.MsgBox("Error downloading file:" + ex.Message, "Patchlunky URL protocol");
+                    return;
+                }
+
+                string filepath = null;
+                string filename = null;
+
+                // This is a hacky workaround to get the filename since System.Net.Mime.ContentDisposition
+                // does not appear to be parsing correctly..
+                string contentDisp = client.ResponseHeaders["content-disposition"];
+                string param = "filename=";
+                int start_index = contentDisp.LastIndexOf(param, StringComparison.OrdinalIgnoreCase);
+                int last_index = -1;
+                if (start_index != -1)
+                {
+                    start_index += param.Length;
+                    last_index = contentDisp.IndexOf(';', start_index);
+
+                    if(last_index != -1)
+                        filename = contentDisp.Substring(start_index, last_index-start_index);
+                    else
+                        filename = contentDisp.Substring(start_index);
+
+                    filename = filename.Replace("\"", "");
+                    filename = filename.TrimEnd(';');
+                    //Msg.Log("Filename: '" + filename + "'");
+                }
+
+                //Just give it a generic filename if we couldn't get the filename from the response headers
+                if (filename == null)
+                {
+                    filename = ((downloadType == 2) ? "character" : "mod") +
+                              DateTime.Now.ToString("yyyyyMMddHHmmssffff") +
+                               ((downloadType == 2) ? ".plc" : ".plm");
+                }
+
+                //Make sure the supplied filename is valid for patchlunky
+                if (Xmf.PathIsValid(filename) == false)
+                {
+                    Msg.Log("filename: '" + filename + "' is not valid!");
+                    return;
+                }
+
+                if (downloadType == 1)
+                    filepath = this.AppPath + "Mods/" + filename;
+                else if(downloadType == 2)
+                    filepath = this.AppPath + "Skins/" + filename;
+
+                //Check if the file already exists
+                if (File.Exists(filepath) == true)
+                {
+                    message = "The " + ((downloadType == 2) ? "character" : "mod") + " '" + filename + "' already exists!" +
+                                Environment.NewLine + Environment.NewLine + "Do you want to OVERWRITE it?";
+                    result = Msg.MsgBox(message, "Patchlunky URL protocol", MessageBoxButtons.YesNoCancel);
+
+                    if (result != DialogResult.Yes)
+                        return;
+                }
+
+                //Save the file to disk
+                try
+                {
+                    File.WriteAllBytes(filepath, data);
+                    Msg.Log("Download finished, " + ((downloadType == 2) ? "character" : "mod") + ": " + filename);
+                }
+                catch (Exception ex)
+                {
+                    Msg.MsgBox("Error saving file: " + ex.Message);
+                    return;
+                }
+
+                //Refresh the mods or characters
+                if (downloadType == 1)
+                {
+                    Program.mainForm.ModMan.LoadAllMods();
+                    Program.mainForm.UpdateModList();
+                }
+                else if (downloadType == 2)
+                {
+                    Program.mainForm.SkinMan.LoadAllSkins();
+                    Program.mainForm.UpdateCharacterList();
+                    Program.mainForm.UpdateSkinList();
+                }
+            }
         }
 
         //-----------------------------------------------------------//

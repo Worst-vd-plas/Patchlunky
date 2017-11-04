@@ -146,12 +146,14 @@ namespace Patchlunky
                 return; //Group not found
 
             string dirpath = setup.BackupPath + "Characters/";
-            Directory.CreateDirectory(dirpath);
+            if(Directory.Exists(dirpath) == false)
+                Directory.CreateDirectory(dirpath);
 
             foreach (var entry in group.Entries)
             {
                 string filepath = Path.Combine(dirpath, entry.Name);
-                File.WriteAllBytes(filepath, entry.Data);
+                if(File.Exists(filepath) == false)
+                    File.WriteAllBytes(filepath, entry.Data);
             }
         }
 

@@ -44,6 +44,7 @@ namespace Patchlunky
     public partial class MainForm : Form
     {
         public string PatchlunkyVersion;
+        public string PatchlunkyGuid;
 
         public Settings Settings;
         public Setup Setup;
@@ -53,19 +54,38 @@ namespace Patchlunky
         private ListViewItem SkinItem;
         private bool SkinBrowserActive;
 
-        public MainForm()
+        private string PatchlunkyUrl; //holds a PatchlunkyURL passed as a cmdline argument.
+
+        public MainForm(string windowName, string version, string guid, string patchlunkyUrl)
         {
             InitializeComponent();
 
-            //Title bar
-            System.Reflection.Assembly ass = System.Reflection.Assembly.GetExecutingAssembly();
-            PatchlunkyVersion = FileVersionInfo.GetVersionInfo(ass.Location).ProductVersion;
-            this.Text = "Patchlunky " + PatchlunkyVersion + " Beta";
+            //Store the passed arguments
+            this.Text = windowName; //Window title
+            PatchlunkyVersion = version;
+            PatchlunkyGuid = guid;
+            PatchlunkyUrl = patchlunkyUrl;
 
             //Characters tab
             CharItem = null;
             SkinItem = null;
             SkinBrowserActive = false;
+        }
+
+        //Override WndProc to handle WM_COPYDATA messages
+        protected override void WndProc(ref Message m)
+        {
+            const Int32 WM_COPYDATA = 0x004A;
+
+            if (m.Msg == WM_COPYDATA)
+            {
+                string message = CopyDataMessage.Read(ref m, PatchlunkyGuid);
+
+                if (message != null)
+                    Setup.OpenPatchlunkyUrl(message);
+            }
+
+            base.WndProc(ref m);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -100,6 +120,13 @@ namespace Patchlunky
             UpdateSkinConfigList();
 
             UpdateSettingsTab();
+
+            //If a patchlunky URL was passed in the cmdline, ask to open it.
+            if (PatchlunkyUrl != null)
+            {
+                Setup.OpenPatchlunkyUrl(PatchlunkyUrl);
+                PatchlunkyUrl = null;
+            }
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -338,7 +365,7 @@ namespace Patchlunky
         }
 
         //Clears and Recreates the checkedlist of mods
-        private void UpdateModList()
+        public void UpdateModList()
         {
             chklstMods.Items.Clear();
 
@@ -626,7 +653,7 @@ namespace Patchlunky
         }
 
         //Clears and Recreates the listview of skins
-        private void UpdateSkinList()
+        public void UpdateSkinList()
         {
             lvwSkins.Clear();
             lvwSkins.LargeImageList = SkinMan.SkinImageList;
@@ -639,7 +666,7 @@ namespace Patchlunky
         }
 
         //Clears and Recreates the listview of characters
-        private void UpdateCharacterList()
+        public void UpdateCharacterList()
         {
             lvwCharacters.Clear();
             lvwCharacters.LargeImageList = SkinMan.SkinImageList;
@@ -969,11 +996,6 @@ namespace Patchlunky
                 Process.Start(target);
         }
 
-        //Import the SendMessage function from user32.dll
-        [DllImport("user32.dll")]
-        //private static extern IntPtr SendMessage(HandleRef hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam);
-        private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 msg, IntPtr wParam, IntPtr lParam);
-
         //ListView_SetIconSpacing, see: https://msdn.microsoft.com/en-us/library/windows/desktop/bb761176%28v=vs.85%29.aspx
         private void ListView_SetIconSpacing(ListView listView, int cx, int cy)
         {
@@ -981,10 +1003,8 @@ namespace Patchlunky
             const Int32 LVM_SETICONSPACING = (LVM_FIRST + 53);
 
             IntPtr lParam = (IntPtr)((UInt16)cx | ((UInt16)cy << 16));
-            //HandleRef hr = new HandleRef(listView, listView.Handle);
 
-            SendMessage(listView.Handle, LVM_SETICONSPACING, IntPtr.Zero, lParam);
-            //SendMessage(hr, LVM_SETICONSPACING, IntPtr.Zero, lParam);
+            NativeMethods.SendMessage(listView.Handle, LVM_SETICONSPACING, IntPtr.Zero, lParam);
         }
     }
 }
