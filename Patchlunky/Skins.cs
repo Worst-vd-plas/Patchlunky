@@ -249,7 +249,7 @@ namespace Patchlunky
             //Make sure this id isn't already in use.
             if (this.GetSkin(id) != null)
             {
-                Msg.Log("Duplicate character '" + id +"' in: " + Path.GetDirectoryName(filepath));
+                //Msg.Log("Duplicate character '" + id +"' in: " + Path.GetDirectoryName(filepath));
                 return;
             }
 
@@ -371,7 +371,7 @@ namespace Patchlunky
                 //Make sure the character id is not already in use.
                 if (Program.mainForm.SkinMan.GetSkin(id) != null)
                 {
-                    Msg.Log("Duplicate character '" + id +"' skipped in: " + modpath);
+                    //Msg.Log("Duplicate character '" + id +"' skipped in: " + modpath);
                     continue; //Skip duplicate character
                 }
 

@@ -302,7 +302,7 @@ namespace Patchlunky
                 //Make sure this id isn't already in use.
                 if (this.GetMod(id) != null)
                 {
-                    Msg.Log("Duplicate mod '" + id +"' skipped in: " + dirpath);
+                    //Msg.Log("Duplicate mod '" + id +"' skipped in: " + dirpath);
                     return; //Skip duplicate mod
                 }
 
@@ -373,7 +373,7 @@ namespace Patchlunky
                 //Make sure this id isn't already in use.
                 if (this.GetMod(id) != null)
                 {
-                    Msg.Log("Duplicate mod '" + id +"' skipped in: " + filepath);
+                    //Msg.Log("Duplicate mod '" + id +"' skipped in: " + filepath);
                     return; //Skip duplicate mod
                 }
 
@@ -415,7 +415,7 @@ namespace Patchlunky
                 //Make sure the mod id is not already in use.
                 if (this.GetMod(id) != null)
                 {
-                    Msg.Log("Duplicate mod '" + id +"' skipped in: " + modpath);
+                    //Msg.Log("Duplicate mod '" + id +"' skipped in: " + modpath);
                     continue; //Skip duplicate mod
                 }
 
