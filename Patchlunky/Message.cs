@@ -37,7 +37,9 @@ namespace Patchlunky
             string time = DateTime.Now.ToString("HH:mm:ss");
             string text = time + " - " + msg + Environment.NewLine;
             
-            Program.mainForm.Log(text);
+            if(Program.mainForm != null)
+                Program.mainForm.Log(text);
+
             File.AppendAllText(path + "Patchlunky.log", text);
         }
 
