@@ -55,6 +55,8 @@ namespace Patchlunky
         private bool SkinBrowserActive;
 
         private string PatchlunkyUrl; //holds a PatchlunkyURL passed as a cmdline argument.
+        private Queue<string> PlUrlQueue;
+        private bool PlUrlActive;
 
         public MainForm(string windowName, string version, string guid, string patchlunkyUrl)
         {
@@ -65,6 +67,10 @@ namespace Patchlunky
             PatchlunkyVersion = version;
             PatchlunkyGuid = guid;
             PatchlunkyUrl = patchlunkyUrl;
+
+            //Patchlunky URL protocol
+            PlUrlQueue = new Queue<string>();
+            PlUrlActive = false;
 
             //Characters tab
             CharItem = null;
@@ -82,7 +88,7 @@ namespace Patchlunky
                 string message = CopyDataMessage.Read(ref m, PatchlunkyGuid);
 
                 if (message != null)
-                    Setup.OpenPatchlunkyUrl(message);
+                    OpenPatchlunkyUrl(message);
             }
 
             base.WndProc(ref m);
@@ -124,7 +130,7 @@ namespace Patchlunky
             //If a patchlunky URL was passed in the cmdline, ask to open it.
             if (PatchlunkyUrl != null)
             {
-                Setup.OpenPatchlunkyUrl(PatchlunkyUrl);
+                OpenPatchlunkyUrl(PatchlunkyUrl);
                 PatchlunkyUrl = null;
             }
         }
@@ -145,6 +151,35 @@ namespace Patchlunky
 
             Settings.Set("GameDir", Setup.GamePath);            
             Settings.Save();
+        }
+
+        //Opens or queues Patchlunky URL commands
+        public void OpenPatchlunkyUrl(string url)
+        {
+            if (url == null)
+                return;
+
+            //If we are not processing an URL right now, open it.
+            if (PlUrlActive == false)
+            {
+                PlUrlActive = true;
+                //Msg.Log("Opening URL: "  + url);
+                Setup.OpenPatchlunkyUrl(url);
+
+                //Process any URLs that were added to the queue before the current one finished.
+                while (PlUrlQueue.Count > 0)
+                {
+                    string qUrl = PlUrlQueue.Dequeue();
+                    //Msg.Log("Opening queued URL: "  + qUrl);
+                    Setup.OpenPatchlunkyUrl(qUrl);
+                }
+                PlUrlActive = false;
+            }
+            else //Else store it in the queue.
+            {
+                //Msg.Log("Queueing URL: "  + url);
+                PlUrlQueue.Enqueue(url);
+            }
         }
 
         //Print message to log textbox
