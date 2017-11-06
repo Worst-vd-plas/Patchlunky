@@ -134,7 +134,7 @@ namespace Patchlunky
                 string message = "Patchlunky is missing Spelunky backups!" +
                     Environment.NewLine + Environment.NewLine +
                 "Patchlunky character skins will not work without backups.";
-                Msg.MsgBox(message, "Patchlunky");
+                Msg.MsgBox(message);
                 return; //Backups are missing, can't extract.
             }
 

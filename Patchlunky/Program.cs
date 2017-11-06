@@ -49,7 +49,7 @@ namespace Patchlunky
                     {
                         CopyDataMessage.Send(windowName, appGuid, patchlunkyUrl);
                     }
-                    else MessageBox.Show("Another instance of Patchlunky is already running!", "Patchlunky");
+                    else Msg.MsgBox("Another instance of Patchlunky is already running!");
 
                     return;
                 }

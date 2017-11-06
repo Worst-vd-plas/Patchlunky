@@ -283,7 +283,7 @@ namespace Patchlunky
                 string message = "Patchlunky is missing Spelunky backups!" +
                     Environment.NewLine + Environment.NewLine +
                 "Patchlunky cannot extract the game archives without backups.";
-                Msg.MsgBox(message, "Patchlunky");
+                Msg.MsgBox(message);
                 return; //Backups are missing, can't extract.
             }
 
