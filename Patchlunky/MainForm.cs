@@ -226,6 +226,7 @@ namespace Patchlunky
 
             lblStatusGamePath.Text = "Game path: " + (Setup.CheckGameDir() ? "OK." : "MISSING!");
             lblStatusBackup.Text = "Game backups: " + (Setup.CheckBackups() ? "OK." : "MISSING!");
+            lblStatusUrlProtocol.Text = "URL Protocol: " + (Setup.CheckUriScheme() ? "OK." : "Not registered.");
 
             chkModsReplaceSkins.Checked = Settings.Check("ModsReplaceDefaultSkins", "True");
             chkModConfigAutosave.Checked = Settings.Check("ModConfigAutosave", "True");
