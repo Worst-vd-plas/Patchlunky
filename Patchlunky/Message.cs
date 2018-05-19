@@ -1,5 +1,5 @@
 ﻿/* 
- * Copyright (c) 2016, Worst-vd-plas
+ * Copyright (c) 2018, Worst-vd-plas
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -31,16 +31,23 @@ namespace Patchlunky
 {
     public static class Msg
     {
-        public static void Log(string msg)
+        static object locker = new object();
+
+        public static void Log(string msg, bool logfileonly = false)
         {
             string path = Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + "/";
             string time = DateTime.Now.ToString("HH:mm:ss");
             string text = time + " - " + msg + Environment.NewLine;
-            
-            if(Program.mainForm != null)
-                Program.mainForm.Log(text);
 
-            File.AppendAllText(path + "Patchlunky.log", text);
+            if ((Program.mainForm != null) && (logfileonly == false))
+            {
+                Program.mainForm.BeginInvoke((MethodInvoker)(() => Program.mainForm.Log(text)));
+            }
+
+            lock (locker)
+            {
+                File.AppendAllText(path + "Patchlunky.log", text);
+            }
         }
 
         public static DialogResult MsgBox(string msg, string caption = "Patchlunky", 
@@ -50,6 +57,178 @@ namespace Patchlunky
                 return MessageBox.Show(Program.mainForm, msg, caption, buttons);
             else
                 return MessageBox.Show(msg, caption, buttons);
+        }
+    }
+
+    public enum LocalMsgType
+    {
+        None = 0,
+        Url,
+        DlNewDownload,
+        DlProgress,
+        DlState,
+        DlMoveItem,
+        DlFinished,
+        DlRemove,
+    }
+
+    //Interface for local interprocess messages
+    public interface ILocalMsg
+    {
+        LocalMsgType MsgType { get; }
+        bool HasUserAction { get; }
+    }
+
+    //Message for a PatchlunkyUrl command
+    public struct UrlMsg : ILocalMsg
+    {
+        private LocalMsgType msgtype;
+        public LocalMsgType MsgType { get { return msgtype; } }
+        private bool hasuseraction;
+        public bool HasUserAction { get { return hasuseraction; } }
+
+        public string PatchlunkyUrl;
+
+        public UrlMsg(string url)
+        {
+            this.msgtype = LocalMsgType.Url;
+            this.hasuseraction = true;
+            this.PatchlunkyUrl = url;
+        }
+    }
+
+    //Message for a new download
+    public struct DlNewMsg : ILocalMsg
+    {
+        private LocalMsgType msgtype;
+        public LocalMsgType MsgType { get { return msgtype; } }
+        private bool hasuseraction;
+        public bool HasUserAction { get { return hasuseraction; } }
+
+        public long Id;
+        public DownloadType Type;
+        public DownloadState State;
+        public string DownloadUrl;
+        //public string FileName;
+
+        public DlNewMsg(long id, DownloadType type, DownloadState state, string url)
+        {
+            this.msgtype = LocalMsgType.DlNewDownload;
+            this.hasuseraction = false;
+            this.Id = id;
+            this.Type = type;
+            this.State = state;
+            this.DownloadUrl = url;
+        }
+    }
+
+    //Message for download state change
+    public struct DlStateMsg : ILocalMsg
+    {
+        private LocalMsgType msgtype;
+        public LocalMsgType MsgType { get { return msgtype; } }
+        private bool hasuseraction;
+        public bool HasUserAction { get { return hasuseraction; } }
+
+        public long Id;
+        public DownloadState State;
+        public string Message;
+
+        public DlStateMsg(long id, DownloadState state, string message)
+        {
+            this.msgtype = LocalMsgType.DlState;
+            this.hasuseraction = false;
+            this.Id = id;
+            this.State = state;
+            this.Message = message;
+        }
+    }
+
+    //Message for download progress update
+    public struct DlProgressMsg : ILocalMsg
+    {
+        private LocalMsgType msgtype;
+        public LocalMsgType MsgType { get { return msgtype; } }
+        private bool hasuseraction;
+        public bool HasUserAction { get { return hasuseraction; } }
+
+        public long Id;
+        public string Filename;
+        public int ProgressPercentage;
+        public long BytesReceived;
+        public long TotalBytesToReceive;
+
+        public DlProgressMsg(long id, string filename, int progress, long bytesreceived, long totalbytes)
+        {
+            this.msgtype = LocalMsgType.DlProgress;
+            this.hasuseraction = false;
+            this.Id = id;
+            this.Filename = filename;
+            this.ProgressPercentage = progress;
+            this.BytesReceived = bytesreceived;
+            this.TotalBytesToReceive = totalbytes;
+        }
+    }
+
+    //Message for a finished download
+    public struct DlFinishedMsg : ILocalMsg
+    {
+        private LocalMsgType msgtype;
+        public LocalMsgType MsgType { get { return msgtype; } }
+        private bool hasuseraction;
+        public bool HasUserAction { get { return hasuseraction; } }
+
+        public long Id;
+        public DownloadState State;
+        public string Message;
+        public Byte[] Data;
+
+        public DlFinishedMsg(long id, DownloadState state, string message, Byte[] data)
+        {
+            this.msgtype = LocalMsgType.DlFinished;
+            this.hasuseraction = true;
+            this.Id = id;
+            this.State = state;
+            this.Message = message;
+            this.Data = data;
+        }
+    }
+
+    //Message for removing a download
+    public struct DlRemoveMsg : ILocalMsg
+    {
+        private LocalMsgType msgtype;
+        public LocalMsgType MsgType { get { return msgtype; } }
+        private bool hasuseraction;
+        public bool HasUserAction { get { return hasuseraction; } }
+
+        public long Id;
+
+        public DlRemoveMsg(long id)
+        {
+            this.msgtype = LocalMsgType.DlRemove;
+            this.hasuseraction = false;
+            this.Id = id;
+        }
+    }
+
+    //Message for moving a download in the queue
+    public struct DlMoveMsg : ILocalMsg
+    {
+        private LocalMsgType msgtype;
+        public LocalMsgType MsgType { get { return msgtype; } }
+        private bool hasuseraction;
+        public bool HasUserAction { get { return hasuseraction; } }
+
+        public long Id;
+        public bool Forward;
+
+        public DlMoveMsg(long id, bool forward)
+        {
+            this.msgtype = LocalMsgType.DlMoveItem;
+            this.hasuseraction = false;
+            this.Id = id;
+            this.Forward = forward;
         }
     }
 }

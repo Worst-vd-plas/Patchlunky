@@ -1,5 +1,5 @@
 ﻿/* 
- * Copyright (c) 2016, Worst-vd-plas
+ * Copyright (c) 2018, Worst-vd-plas
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -25,6 +25,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -36,6 +37,7 @@ using System.IO;
 using System.Configuration;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 using SpelunkyWad;
 
@@ -54,9 +56,15 @@ namespace Patchlunky
         private ListViewItem SkinItem;
         private bool SkinBrowserActive;
 
+        public Thread DownloadManagerThread;
+        public CancellationTokenSource DownloadManagerThreadCts;
+        public ConcurrentQueue<ILocalMsg> DownloadMsgQueue; //Downloadmanager thread reads this queue.
+        public int DownloadIdCounter;
+
+        private Queue<ILocalMsg> UILocalMsgQueue; //The Main UI thread reads this queue.
+        private bool UserRoutineActive; //Wether or not the UI thread is in a routine that may require user input
+
         private string PatchlunkyUrl; //holds a PatchlunkyURL passed as a cmdline argument.
-        private Queue<string> PlUrlQueue;
-        private bool PlUrlActive;
 
         public MainForm(string windowName, string version, string guid, string patchlunkyUrl)
         {
@@ -66,16 +74,24 @@ namespace Patchlunky
             this.Text = windowName; //Window title
             PatchlunkyVersion = version;
             PatchlunkyGuid = guid;
-            PatchlunkyUrl = patchlunkyUrl;
 
             //Patchlunky URL protocol
-            PlUrlQueue = new Queue<string>();
-            PlUrlActive = false;
+            PatchlunkyUrl = patchlunkyUrl;
 
             //Characters tab
             CharItem = null;
             SkinItem = null;
             SkinBrowserActive = false;
+
+            //Main UI thread local message queue
+            UILocalMsgQueue = new Queue<ILocalMsg>();
+            UserRoutineActive = false;
+
+            //Downloadmanager thread
+            DownloadMsgQueue = new ConcurrentQueue<ILocalMsg>();
+            DownloadIdCounter = 1;
+            DownloadManagerThreadCts = new CancellationTokenSource();
+            DownloadManagerThread = new Thread(() => DlManagerProcess.StartThread(DownloadManagerThreadCts.Token));
         }
 
         //Override WndProc to handle WM_COPYDATA messages
@@ -88,7 +104,7 @@ namespace Patchlunky
                 string message = CopyDataMessage.Read(ref m, PatchlunkyGuid);
 
                 if (message != null)
-                    OpenPatchlunkyUrl(message);
+                    HandleLocalMsg(new UrlMsg(message));
             }
 
             base.WndProc(ref m);
@@ -97,6 +113,9 @@ namespace Patchlunky
         private void MainForm_Load(object sender, EventArgs e)
         {
             Msg.Log(this.Text + " started.");
+
+            //Start the downloadmanager
+            DownloadManagerThread.Start();
 
             Settings = new Settings();
             Setup = new Setup();
@@ -130,7 +149,7 @@ namespace Patchlunky
             //If a patchlunky URL was passed in the cmdline, ask to open it.
             if (PatchlunkyUrl != null)
             {
-                OpenPatchlunkyUrl(PatchlunkyUrl);
+                HandleLocalMsg(new UrlMsg(PatchlunkyUrl));
                 PatchlunkyUrl = null;
             }
         }
@@ -151,36 +170,120 @@ namespace Patchlunky
 
             Settings.Set("GameDir", Setup.GamePath);            
             Settings.Save();
+
+            //Stop the downloadmanager thread
+            if (DownloadManagerThread != null)
+            {
+                if (DownloadManagerThread.IsAlive)
+                {
+                    //Msg.Log("Stopping the DownloadManager..");
+                    DownloadManagerThreadCts.Cancel();
+                    DownloadManagerThread.Join();
+                }
+            }
+            DownloadManagerThreadCts.Dispose();
+
+            Msg.Log(this.Text + " closing.");
         }
 
-        //Opens or queues Patchlunky URL commands
-        public void OpenPatchlunkyUrl(string url)
+        //----------------------------------------------//
+        // LOCAL MESSAGE QUEUE                          //
+        //----------------------------------------------//
+
+        // This function is only run from the main thread, but it may get executed from
+        // multiple different messagepumps, which may result in it being run recursively.
+        // The boolean 'UserRoutineActive' is for catching the recursive execution and
+        // to prevent opening up dialogs on top of other possibly unrelated dialogs.
+        // TODO: Make all the routines with dialogs execute from here.
+        public void HandleLocalMsg(ILocalMsg newmsg)
         {
-            if (url == null)
+            ILocalMsg localmsg = newmsg;
+
+            if (localmsg.MsgType == LocalMsgType.None)
                 return;
 
-            //If we are not processing an URL right now, open it.
-            if (PlUrlActive == false)
+            //If the message may involve user action
+            if (localmsg.HasUserAction)
             {
-                PlUrlActive = true;
-                //Msg.Log("Opening URL: "  + url);
-                Setup.OpenPatchlunkyUrl(url);
-
-                //Process any URLs that were added to the queue before the current one finished.
-                while (PlUrlQueue.Count > 0)
+                //If we are not currently processing a msg with useraction
+                if (UserRoutineActive == false)
                 {
-                    string qUrl = PlUrlQueue.Dequeue();
-                    //Msg.Log("Opening queued URL: "  + qUrl);
-                    Setup.OpenPatchlunkyUrl(qUrl);
+                    UserRoutineActive = true;
+
+                    HandleLocalMsgType(localmsg);
+
+                    //Process any msgs that were added to the queue before the current one finished.
+                    while (UILocalMsgQueue.Count > 0)
+                    {
+                        localmsg = UILocalMsgQueue.Dequeue();
+
+                        HandleLocalMsgType(localmsg);
+                    }
+                    UserRoutineActive = false;
                 }
-                PlUrlActive = false;
+                else //Else enqueue the msg for later retrieval
+                {
+                    // The only circumstance in which messages are enqueued to this queue is when
+                    // this function is executed recursively. The previous call to this function
+                    // that still hasn't finished will dequeue the messages being enqueued in here.
+                    UILocalMsgQueue.Enqueue(localmsg);
+                }
             }
-            else //Else store it in the queue.
+            else //Else message does not involve user action
             {
-                //Msg.Log("Queueing URL: "  + url);
-                PlUrlQueue.Enqueue(url);
+                HandleLocalMsgType(localmsg);
             }
         }
+
+        //Handles a localmessage based on its type
+        private void HandleLocalMsgType(ILocalMsg localmsg)
+        {
+            if (localmsg.MsgType == LocalMsgType.Url)
+            {
+                var urlmsg = (UrlMsg)localmsg;
+
+                Setup.OpenPatchlunkyUrl(urlmsg.PatchlunkyUrl);
+            }
+            else if (localmsg.MsgType == LocalMsgType.DlNewDownload)
+            {
+                var dlmsg = (DlNewMsg)localmsg;
+
+                lstDownloads_NewDownload(dlmsg);
+            }
+            else if (localmsg.MsgType == LocalMsgType.DlState)
+            {
+                var dlmsg = (DlStateMsg)localmsg;
+
+                lstDownloads_StateChange(dlmsg);
+            }
+            else if (localmsg.MsgType == LocalMsgType.DlProgress)
+            {
+                var dlmsg = (DlProgressMsg)localmsg;
+
+                lstDownloads_ProgressUpdate(dlmsg);
+            }
+            else if (localmsg.MsgType == LocalMsgType.DlFinished)
+            {
+                var dlmsg = (DlFinishedMsg)localmsg;
+
+                lstDownloads_DownloadFinished(dlmsg);
+            }
+            else if (localmsg.MsgType == LocalMsgType.DlRemove)
+            {
+                var dlmsg = (DlRemoveMsg)localmsg;
+
+                lstDownloads_DownloadRemove(dlmsg);
+            }
+            else
+            {
+                Msg.Log("HandleLocalMsgType: Unsupported MsgType '" + localmsg.MsgType +
+                        "' <" + (int)localmsg.MsgType + "> !");
+            }
+        }
+
+        //----------------------------------------------//
+        // MAIN CONTROLS                                //
+        //----------------------------------------------//
 
         //Print message to log textbox
         public void Log(string text)
@@ -991,6 +1094,289 @@ namespace Patchlunky
         {
             if (e.Link.LinkData != null)
                 OpenWebLink(e.Link.LinkData.ToString());
+        }
+
+        //Click a link found in the description
+        private void rtfSkinInfo_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            OpenWebLink(e.LinkText);
+        }
+
+        //----------------------------------------------//
+        // DOWNLOADS                                    //
+        //----------------------------------------------//
+
+        //Returns the list index of the download with the given Id
+        private int lstDownloads_GetIndex(long Id)
+        {
+            for (int i=0; i < lstDownloads.Items.Count; i++)
+            {
+                if (((FileDownload)lstDownloads.Items[i]).Id == Id)
+                    return i;
+            }
+            return -1;
+        }
+
+        //Updates the entire list of downloads - Invoked by DownloadManager
+        public void lstDownloads_UpdateAll(FileDownload[] downloads)
+        {
+            long selected_id = -1;
+            int selected_index = lstDownloads.SelectedIndex;
+            if ((selected_index >= 0) || (selected_index < lstDownloads.Items.Count))
+            {
+                selected_id = ((FileDownload)lstDownloads.Items[selected_index]).Id;
+            }
+
+            lstDownloads.Items.Clear();
+            lstDownloads.Items.AddRange(downloads.Cast<object>().ToArray());
+
+            if (selected_id != -1)
+            {
+                //Set the selected index again, if GetIndex returns -1, no item is selected.
+                lstDownloads.SelectedIndex = lstDownloads_GetIndex(selected_id);
+            }
+        }
+
+        //Adds a new download to the list
+        private void lstDownloads_NewDownload(DlNewMsg dlmsg)
+        {
+            int item_index = lstDownloads_GetIndex(dlmsg.Id);
+
+            if (item_index != -1)
+            {
+                Msg.Log("Error adding Download #" + dlmsg.Id + ", it already exists!");
+                return;
+            }
+
+            FileDownload item = new FileDownload();
+            item.Id = dlmsg.Id;
+            item.Type = dlmsg.Type;
+            item.State = dlmsg.State;
+            item.DownloadUrl = dlmsg.DownloadUrl;
+
+            lstDownloads.Items.Add(item);
+        }
+
+        //Removes a download from the list
+        private void lstDownloads_DownloadRemove(DlRemoveMsg dlmsg)
+        {
+            int item_index = lstDownloads_GetIndex(dlmsg.Id);
+
+            if (item_index == -1)
+            {
+                Msg.Log("Error removing Download #" +  dlmsg.Id + ", it does not exist!");
+                return;
+            }
+
+            lstDownloads.Items.RemoveAt(item_index);
+        }
+
+        //Updates the state of a download
+        private void lstDownloads_StateChange(DlStateMsg dlmsg)
+        {
+            int item_index = lstDownloads_GetIndex(dlmsg.Id);
+
+            if (item_index == -1)
+            {
+                Msg.Log("Error changing download state, Download #" +  dlmsg.Id + " does not exist!");
+                return;
+            }
+
+            FileDownload item = (FileDownload)lstDownloads.Items[item_index];
+            //Only update if the state has changed
+            if (item.State != dlmsg.State)
+            {
+                //Msg.Log("Download #" + dlmsg.Id + ", state changed: " + dlmsg.State);
+                item.State = dlmsg.State;
+                item.Message = dlmsg.Message;
+
+                lstDownloads.SuspendLayout();
+                lstDownloads.Items[item_index] = item; //Update the item in the list
+                lstDownloads.ResumeLayout();
+            }
+        }
+
+        //Updates the progress of a download
+        private void lstDownloads_ProgressUpdate(DlProgressMsg dlmsg)
+        {
+            int item_index = lstDownloads_GetIndex(dlmsg.Id);
+
+            if (item_index == -1)
+            {
+                Msg.Log("Error updating download progress, Download #" +  dlmsg.Id + " does not exist!");
+                return;
+            }
+
+            FileDownload item = (FileDownload)lstDownloads.Items[item_index];
+            //Only update if the progress has changed
+            if (item.ProgressPercentage != dlmsg.ProgressPercentage)
+            {
+                item.ProgressPercentage = dlmsg.ProgressPercentage;
+                item.BytesReceived = dlmsg.BytesReceived;
+                item.TotalBytesToReceive = dlmsg.TotalBytesToReceive;
+                item.Filename = dlmsg.Filename;
+
+                lstDownloads.SuspendLayout();
+                lstDownloads.Items[item_index] = item; //Update the item in the list
+                lstDownloads.ResumeLayout();
+            }
+        }
+
+        //Updates the state of a finished download and saves it to a file
+        private void lstDownloads_DownloadFinished(DlFinishedMsg dlmsg)
+        {
+            int item_index = lstDownloads_GetIndex(dlmsg.Id);
+
+            if (item_index == -1)
+            {
+                Msg.Log("Error finishing Download #" +  dlmsg.Id + ", it does not exist!");
+                return;
+            }
+
+            FileDownload item = (FileDownload)lstDownloads.Items[item_index];
+            item.State = dlmsg.State;
+            item.Message = dlmsg.Message;
+
+            lstDownloads.SuspendLayout();
+            lstDownloads.Items[item_index] = item; //Update the item in the list
+            lstDownloads.ResumeLayout();
+
+            //If the download finished normally and there is data
+            if((dlmsg.State == DownloadState.Finished) && (dlmsg.Data != null))
+                Setup.DownloadSaveToFile(item, dlmsg.Data);
+        }
+
+        //Updates the rtfDownloadInfo when a download is selected
+        private void lstDownloads_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = lstDownloads.SelectedIndex;
+            if ((index < 0) || (index >= lstDownloads.Items.Count))
+            {
+                rtfDownloadInfo.Text = "";
+                return;
+            }
+
+            FileDownload fdl = (FileDownload)lstDownloads.Items[index];
+
+            rtfDownloadInfo.Text = "";
+            rtfDownloadInfo.AppendText("Id: #" + fdl.Id + Environment.NewLine);
+            rtfDownloadInfo.AppendText("Type: " + (Enum.GetName(typeof(DownloadType), fdl.Type)) + Environment.NewLine);
+            rtfDownloadInfo.AppendText("Url: " + (fdl.DownloadUrl ?? "-") + Environment.NewLine);
+            rtfDownloadInfo.AppendText("Filename: " + (fdl.Filename ?? "-") + Environment.NewLine);
+
+            string progress = fdl.ProgressPercentage + "%" + " (" + ((fdl.State != DownloadState.Downloading) ?
+                       (((float)fdl.TotalBytesToReceive/1024/1024).ToString("0.##") + " MB") :
+                       (((float)fdl.BytesReceived/1024/1024).ToString("0.##") + " / " +
+                        ((float)fdl.TotalBytesToReceive/1024/1024).ToString("0.##") + " MB")) + ")";
+            rtfDownloadInfo.AppendText("Progress: " + progress + Environment.NewLine);
+
+            string status = Enum.GetName(typeof(DownloadState), fdl.State) +
+                            (fdl.Message != null ? " - " + fdl.Message : "");
+            rtfDownloadInfo.AppendText("Status: " + status + Environment.NewLine);
+        }
+
+        //Click a link in the download info
+        private void rtfDownloadInfo_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            OpenWebLink(e.LinkText);
+        }
+
+        //Cancels the selected download
+        private void btnDLCancel_Click(object sender, EventArgs e)
+        {
+            int index = lstDownloads.SelectedIndex;
+            if ((index < 0) || (index >= lstDownloads.Items.Count)) return;
+
+            FileDownload fdl = (FileDownload)lstDownloads.Items[index];
+
+            if((fdl.State == DownloadState.Downloading) || (fdl.State == DownloadState.Queued))
+            {
+                DownloadMsgQueue.Enqueue(new DlStateMsg(fdl.Id, DownloadState.Canceled, null));
+            }
+        }
+
+        //Queues a canceled or failed download again
+        private void btnDLRestart_Click(object sender, EventArgs e)
+        {
+            int index = lstDownloads.SelectedIndex;
+            if ((index < 0) || (index >= lstDownloads.Items.Count)) return;
+
+            FileDownload fdl = (FileDownload)lstDownloads.Items[index];
+
+            if ((fdl.State == DownloadState.Canceled) || (fdl.State == DownloadState.Failed))
+            {
+                DownloadMsgQueue.Enqueue(new DlStateMsg(fdl.Id, DownloadState.Queued, null));
+            }
+        }
+
+        //Removes a download from the download queue (Does not remove files)
+        private void btnDLRemove_Click(object sender, EventArgs e)
+        {
+            int index = lstDownloads.SelectedIndex;
+            if ((index < 0) || (index >= lstDownloads.Items.Count)) return;
+
+            FileDownload fdl = (FileDownload)lstDownloads.Items[index];
+
+            string message = "Remove Download #" + fdl.Id + " '" + (fdl.Filename != null ? fdl.Filename : fdl.DownloadUrl) +
+                            "' from the download list?" + Environment.NewLine + Environment.NewLine +
+                            "NOTE: This only removes the download from the download list. Downloaded files are not removed.";
+            DialogResult result = Msg.MsgBox(message, "Patchlunky DownloadManager", MessageBoxButtons.YesNoCancel);
+
+            if (result != DialogResult.Yes)
+                return;
+
+            DownloadMsgQueue.Enqueue(new DlRemoveMsg(fdl.Id));
+        }
+
+        //Moves the download down in the queue
+        private void btnDLMoveDown_Click(object sender, EventArgs e)
+        {
+            int index = lstDownloads.SelectedIndex;
+            if ((index < 0) || (index >= lstDownloads.Items.Count)) return;
+
+            FileDownload fdl = (FileDownload)lstDownloads.Items[index];
+
+            DownloadMsgQueue.Enqueue(new DlMoveMsg(fdl.Id, true));
+        }
+
+        //Moves the download up in the queue
+        private void btnDLMoveUp_Click(object sender, EventArgs e)
+        {
+            int index = lstDownloads.SelectedIndex;
+            if ((index < 0) || (index >= lstDownloads.Items.Count)) return;
+
+            FileDownload fdl = (FileDownload)lstDownloads.Items[index];
+
+            DownloadMsgQueue.Enqueue(new DlMoveMsg(fdl.Id, false));
+        }
+
+        //Reloads the mods
+        private void btnReloadMods_Click(object sender, EventArgs e)
+        {
+            //TODO: Save current config?
+            Program.mainForm.ModMan.LoadAllMods();
+            Program.mainForm.UpdateModList();
+        }
+
+        //Reloads the characters
+        private void btnReloadChars_Click(object sender, EventArgs e)
+        {
+            //TODO: Save current config?
+            Program.mainForm.SkinMan.LoadAllSkins();
+            Program.mainForm.UpdateCharacterList();
+            Program.mainForm.UpdateSkinList();
+        }
+
+        //Open the Mods folder in explorer
+        private void btnOpenMods_Click(object sender, EventArgs e)
+        {
+            Process.Start(Setup.AppPath + "Mods");
+        }
+
+        //Open the Characters folder in explorer
+        private void btnOpenChars_Click(object sender, EventArgs e)
+        {
+            Process.Start(Setup.AppPath + "Skins");
         }
 
         //----------------------------------------------//

@@ -719,10 +719,10 @@ namespace Patchlunky
 
 
             //Check wether the url is valid
-            Uri resultUri;
-            bool valid = Uri.TryCreate(downloadUrl, UriKind.Absolute, out resultUri) &&
-                          (resultUri.Scheme == Uri.UriSchemeHttp ||
-                           resultUri.Scheme == Uri.UriSchemeHttps);
+            Uri downloadUri;
+            bool valid = Uri.TryCreate(downloadUrl, UriKind.Absolute, out downloadUri) &&
+                          (downloadUri.Scheme == Uri.UriSchemeHttp ||
+                           downloadUri.Scheme == Uri.UriSchemeHttps);
 
             if (!valid)
             {
@@ -734,6 +734,11 @@ namespace Patchlunky
             DialogResult result;
             string message;
 
+            //Bring Patchlunky to top
+            Program.mainForm.WindowState = FormWindowState.Minimized;
+            Program.mainForm.Show();
+            Program.mainForm.WindowState = FormWindowState.Normal;
+
             message = "Do you want to download the " + ((downloadType == 2) ? "character" : "mod") +
                       " from the internet address below?" + Environment.NewLine + Environment.NewLine +
                       downloadUrl + Environment.NewLine + Environment.NewLine +
@@ -744,101 +749,87 @@ namespace Patchlunky
             if (result != DialogResult.Yes)
                 return; //User chose NO or CANCEL
 
-            using (WebClient client = new WebClient())
+            //Send a message about the new download to the downloadmanager thread
+            long downloadId = Program.mainForm.DownloadIdCounter++;
+            DownloadType type = (downloadType == 2) ? DownloadType.Character : DownloadType.Mod;
+            Program.mainForm.DownloadMsgQueue.Enqueue(new DlNewMsg(downloadId, type, DownloadState.Queued, downloadUrl));
+        }
+
+        // Saves finished download data to a file
+        public void DownloadSaveToFile(FileDownload fdl, Byte[] data)
+        {
+            string filename = fdl.Filename;
+            string filepath = null;
+            string typestr = (fdl.Type == DownloadType.Mod) ? "mod" : "character";
+            string message;
+            DialogResult result;
+
+            //Just give it a generic filename if we couldn't get the filename from the response headers
+            if (filename == null)
             {
-                // Download the file.
-                // TODO: Show progress, use background thread, etc.
-                Byte[] data;
+                filename = ((fdl.Type == DownloadType.Mod) ? "mod" : "char") +
+                           DateTime.Now.ToString("yyyyyMMddHHmmssffff") + fdl.Id.ToString("000000") +
+                           ((fdl.Type == DownloadType.Mod) ? ".plm" :".plc");
+            }
 
-                try
-                {
-                    data = client.DownloadData(downloadUrl);
-                }
-                catch (Exception ex)
-                {
-                    Msg.MsgBox("Error downloading file:" + ex.Message, "Patchlunky URL protocol");
+            //Make sure the supplied filename is valid for patchlunky
+            if (Xmf.PathIsValid(filename) == false)
+            {
+                Msg.Log("Download #" + fdl.Id + ", filename: '" + filename + "' is not valid!");
+                return;
+            }
+
+            //Set the filepath according to the downloadtype
+            if (fdl.Type == DownloadType.Mod)
+                filepath = this.AppPath + "Mods/" + filename;
+            else if (fdl.Type == DownloadType.Character)
+                filepath = this.AppPath + "Skins/" + filename;
+
+            //Check if the file already exists
+            if (File.Exists(filepath) == true)
+            {
+                //TODO: Add an option to rename the file
+                message = "Download #" + fdl.Id + ": [" + typestr + "] " + filename + " has finished downloading, but a file with the same name already exists!" +
+                                Environment.NewLine + Environment.NewLine + "Do you want to OVERWRITE the existing " + typestr + " with the DOWNLOADED file?";
+                result = Msg.MsgBox(message, "Patchlunky DownloadManager", MessageBoxButtons.YesNoCancel);
+
+                if (result != DialogResult.Yes)
                     return;
-                }
+            }
 
-                string filepath = null;
-                string filename = null;
+            //Save the file to disk
+            try
+            {
+                File.WriteAllBytes(filepath, data);
+                Msg.Log("Download #" + fdl.Id + " saved as " + typestr + ": " + filename);
+            }
+            catch (Exception ex)
+            {
+                Msg.MsgBox("Download #" + fdl.Id +", Error saving file: " + ex.Message, "Patchlunky DownloadManager");
+                return;
+            }
 
-                // This is a hacky workaround to get the filename since System.Net.Mime.ContentDisposition
-                // does not appear to be parsing correctly..
-                string contentDisp = client.ResponseHeaders["content-disposition"];
-                string param = "filename=";
-                int start_index = contentDisp.LastIndexOf(param, StringComparison.OrdinalIgnoreCase);
-                int last_index = -1;
-                if (start_index != -1)
-                {
-                    start_index += param.Length;
-                    last_index = contentDisp.IndexOf(';', start_index);
+            //TODO: Tell how to do it manually later
+            message = "Download #" + fdl.Id + ": [" + typestr + "] " + filename + "' has finished downloading." +
+                                Environment.NewLine + Environment.NewLine + "Do you want to reload " + typestr + "s now?";
+            result = Msg.MsgBox(message, "Patchlunky DownloadManager", MessageBoxButtons.YesNoCancel);
 
-                    if(last_index != -1)
-                        filename = contentDisp.Substring(start_index, last_index-start_index);
-                    else
-                        filename = contentDisp.Substring(start_index);
+            if (result != DialogResult.Yes)
+                return;
 
-                    filename = filename.Replace("\"", "");
-                    filename = filename.TrimEnd(';');
-                    //Msg.Log("Filename: '" + filename + "'");
-                }
-
-                //Just give it a generic filename if we couldn't get the filename from the response headers
-                if (filename == null)
-                {
-                    filename = ((downloadType == 2) ? "character" : "mod") +
-                              DateTime.Now.ToString("yyyyyMMddHHmmssffff") +
-                               ((downloadType == 2) ? ".plc" : ".plm");
-                }
-
-                //Make sure the supplied filename is valid for patchlunky
-                if (Xmf.PathIsValid(filename) == false)
-                {
-                    Msg.Log("filename: '" + filename + "' is not valid!");
-                    return;
-                }
-
-                if (downloadType == 1)
-                    filepath = this.AppPath + "Mods/" + filename;
-                else if(downloadType == 2)
-                    filepath = this.AppPath + "Skins/" + filename;
-
-                //Check if the file already exists
-                if (File.Exists(filepath) == true)
-                {
-                    message = "The " + ((downloadType == 2) ? "character" : "mod") + " '" + filename + "' already exists!" +
-                                Environment.NewLine + Environment.NewLine + "Do you want to OVERWRITE it?";
-                    result = Msg.MsgBox(message, "Patchlunky URL protocol", MessageBoxButtons.YesNoCancel);
-
-                    if (result != DialogResult.Yes)
-                        return;
-                }
-
-                //Save the file to disk
-                try
-                {
-                    File.WriteAllBytes(filepath, data);
-                    Msg.Log("Download finished, " + ((downloadType == 2) ? "character" : "mod") + ": " + filename);
-                }
-                catch (Exception ex)
-                {
-                    Msg.MsgBox("Error saving file: " + ex.Message);
-                    return;
-                }
-
-                //Refresh the mods or characters
-                if (downloadType == 1)
-                {
-                    Program.mainForm.ModMan.LoadAllMods();
-                    Program.mainForm.UpdateModList();
-                }
-                else if (downloadType == 2)
-                {
-                    Program.mainForm.SkinMan.LoadAllSkins();
-                    Program.mainForm.UpdateCharacterList();
-                    Program.mainForm.UpdateSkinList();
-                }
+            //Refresh the mods or characters
+            if (fdl.Type == DownloadType.Mod)
+            {
+                //TODO: Save current config?
+                Program.mainForm.ModMan.LoadAllMods();
+                Program.mainForm.UpdateModList();
+            }
+            else if (fdl.Type == DownloadType.Character)
+            {
+                //TODO: Save current config?
+                Program.mainForm.SkinMan.LoadAllSkins();
+                Program.mainForm.UpdateCharacterList();
+                Program.mainForm.UpdateSkinList();
             }
         }
 
