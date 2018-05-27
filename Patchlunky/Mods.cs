@@ -43,6 +43,17 @@ namespace Patchlunky
         Xml = 4, //contains a mod.xml that describes the contents
     };
 
+    [Flags]
+    public enum ModContents
+    {
+        Graphics = 1,
+        Sounds = 2,
+        Music = 4,
+        Text = 8,
+        Scripts = 16,
+        Misc = 32,
+    };
+
     public class ModData
     {
         public ModType Type;
@@ -53,6 +64,7 @@ namespace Patchlunky
         public string ModPath; //Path to directory or zip file
         public string PreviewImgPath;
         public string TextFilePath;
+        public string ScriptPath; //Path to the Lua script of the mod
 
         //Mod information
         public string Name;
@@ -67,6 +79,7 @@ namespace Patchlunky
 
         public bool PatchDefaultFiles;
 
+        public ModContents Contents;
         public Image PreviewImage;
 
         public ModData(ModType type, string modpath)
@@ -92,6 +105,7 @@ namespace Patchlunky
 
             this.PatchDefaultFiles = false;
 
+            this.Contents = 0;
             this.PreviewImage = null;
         }
 
@@ -199,6 +213,22 @@ namespace Patchlunky
             {
                 this.PreviewImage = Resource.LoadBitmap(this, this.PreviewImgPath);
             }
+
+            //Check for the content types of the mod
+            foreach (GameFile gmfile in Program.mainForm.Setup.DefaultFiles)
+            {
+                if (Resource.FileExists(this, gmfile.FilePath))
+                    this.Contents |= gmfile.ContentType;
+            }
+
+            if (Resource.DirectoryExists(this, "Textures/alltex"))
+                this.Contents |= ModContents.Graphics;
+
+            if (Resource.DirectoryExists(this, "Sounds/allsounds"))
+                this.Contents |= ModContents.Sounds;
+
+            if (ScriptPath != null)
+                this.Contents |= ModContents.Scripts;
         }
     }
 
@@ -433,16 +463,28 @@ namespace Patchlunky
                 mod.Email             = Xmf.GetXMLString(node, "./Email");
                 mod.WebUrl            = Xmf.GetXMLString(node, "./WebUrl");
                 mod.Description       = Xmf.GetXMLString(node, "./Description");
+                mod.TextFilePath      = Xmf.GetXMLString(node, "./TextFile");
                 mod.PatchlunkyVersion = Xmf.GetXMLString(node, "./PatchlunkyVersion");
                 mod.PreviewImgPath    = Xmf.GetXMLString(node, "./PreviewImage");
                 string patchdf        = Xmf.GetXMLString(node, "./PatchDefaultFiles");
                 mod.PatchDefaultFiles = (patchdf ?? "false").Equals(Boolean.TrueString,StringComparison.OrdinalIgnoreCase);
+                mod.ScriptPath        = Xmf.GetXMLString(node, "./PatchScript");
 
                 //Ensure that the paths are valid format
                 if ((mod.PreviewImgPath != null) && (Xmf.PathIsValid(mod.PreviewImgPath) == false))
                 {
                     mod.PreviewImgPath = null;
                     Msg.Log("Invalid PreviewImage path for '" + mod.Id + "'!");
+                }
+                if ((mod.TextFilePath != null) && (Xmf.PathIsValid(mod.TextFilePath) == false))
+                {
+                    mod.TextFilePath = null;
+                    Msg.Log("Invalid TextFile path for '" + mod.Id + "'!");
+                }
+                if ((mod.ScriptPath != null) && (Xmf.PathIsValid(mod.ScriptPath) == false))
+                {
+                    mod.ScriptPath = null;
+                    Msg.Log("Invalid PatchScript path for '" + mod.Id + "'!");
                 }
 
                 //If the URLs don't include a protocol, add one.

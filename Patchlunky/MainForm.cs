@@ -523,6 +523,13 @@ namespace Patchlunky
             //Reset the information
             rtfModInfo.Text = "";
 
+            picModIconGraphics.Visible = false;
+            picModIconSound.Visible = false;
+            picModIconMusic.Visible = false;
+            picModIconText.Visible = false;
+            picModIconMisc.Visible = false;
+            picModIconScripts.Visible = false;
+
             picModImage.Visible = false;
             picModImage.Image = null;
 
@@ -550,11 +557,21 @@ namespace Patchlunky
             rtfModInfo.AppendText("Author: " + (mod.Author ?? "-") + Environment.NewLine);
             rtfModInfo.AppendText("Date: " + (mod.Date.HasValue ? mod.Date.Value.ToShortDateString() : "-") + Environment.NewLine);
             rtfModInfo.AppendText("Version: " + (mod.Version ?? "-") + Environment.NewLine);
+            rtfModInfo.AppendText(Environment.NewLine);
+
+            //Display a note if the mod has scripts
+            if (mod.Contents.HasFlag(ModContents.Scripts))
+            {
+                rtfModInfo.SelectionStart = rtfModInfo.TextLength;
+                rtfModInfo.SelectionLength = 0;
+                rtfModInfo.SelectionColor = Color.DodgerBlue;
+                rtfModInfo.AppendText("Mod contains Scripts" + Environment.NewLine);
+                rtfModInfo.SelectionColor = rtfModInfo.ForeColor;
+            }
 
             //Display supported version for this mod
             if (mod.PatchlunkyVersion != null)
             {
-                rtfModInfo.AppendText(Environment.NewLine);
                 rtfModInfo.SelectionStart = rtfModInfo.TextLength;
                 rtfModInfo.SelectionLength = 0;
 
@@ -569,13 +586,12 @@ namespace Patchlunky
                     rtfModInfo.AppendText("Patchlunky version needed: " + mod.PatchlunkyVersion);
                 }
                 rtfModInfo.SelectionColor = rtfModInfo.ForeColor;
-                rtfModInfo.AppendText(Environment.NewLine);
+                rtfModInfo.AppendText(Environment.NewLine + Environment.NewLine);
             }
 
             //Display description
             if (mod.Description != null)
             {
-                rtfModInfo.AppendText(Environment.NewLine);
                 rtfModInfo.AppendText(mod.Description);
                 rtfModInfo.AppendText(Environment.NewLine);
             }
@@ -595,6 +611,14 @@ namespace Patchlunky
                 lnkModEmail.Links.Add(0, lnkModEmail.Text.Length, mod.Email);
                 toolTip1.SetToolTip(lnkModEmail, mod.Email);
             }
+
+            //Display mod content icons
+            if (mod.Contents.HasFlag(ModContents.Graphics)) picModIconGraphics.Visible = true;
+            if (mod.Contents.HasFlag(ModContents.Sounds)) picModIconSound.Visible = true;
+            if (mod.Contents.HasFlag(ModContents.Music)) picModIconMusic.Visible = true;
+            if (mod.Contents.HasFlag(ModContents.Text)) picModIconText.Visible = true;
+            if (mod.Contents.HasFlag(ModContents.Misc)) picModIconMisc.Visible = true;
+            if (mod.Contents.HasFlag(ModContents.Scripts)) picModIconScripts.Visible = true;
 
             //Display preview image
             if (mod.PreviewImage != null)

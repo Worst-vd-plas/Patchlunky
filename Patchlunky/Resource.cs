@@ -204,6 +204,62 @@ namespace Patchlunky
             return result;
         }
 
+        //Check if a file exists in a mod resource
+        public static bool FileExists(ModData mod, string path)
+        {
+            if (mod.Type.HasFlag(ModType.Dir))
+            {
+                string filepath = mod.ModPath + "/" + path;
+
+                if (File.Exists(filepath) == false)
+                    return false;
+
+                return true;
+            }
+            else if (mod.Type.HasFlag(ModType.Zip))
+            {
+                ZipFile zip = new ZipFile(mod.ModPath);
+
+                if (zip.ContainsEntry(path) == false)
+                {
+                    zip.Dispose();
+                    return false;
+                }
+
+                zip.Dispose();
+                return true;
+            }
+            return false;
+        }
+
+        //Check if a directory exists in a mod resource
+        public static bool DirectoryExists(ModData mod, string path)
+        {
+            if (mod.Type.HasFlag(ModType.Dir))
+            {
+                string dirpath = mod.ModPath + "/" + path;
+
+                if (Directory.Exists(dirpath) == false)
+                    return false;
+
+                return true;
+            }
+            else if (mod.Type.HasFlag(ModType.Zip))
+            {
+                ZipFile zip = new ZipFile(mod.ModPath);
+
+                if (zip.ContainsEntry(path + "/") == false)
+                {
+                    zip.Dispose();
+                    return false;
+                }
+
+                zip.Dispose();
+                return true;
+            }
+            return false;
+        }
+
         //Load a bitmap copy of an archive resource
         public static Bitmap LoadBitmap(Archive archive, string path)
         {

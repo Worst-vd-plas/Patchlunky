@@ -102,6 +102,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Unknown16x16.png" />
+    <None Include="Audio16x16.png" />
+    <None Include="Graphic16x16.png" />
+    <None Include="LuaScript16x16.png" />
+    <None Include="Music16x16.png" />
+    <None Include="Text16x16.png" />
     <Content Include="tnt.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

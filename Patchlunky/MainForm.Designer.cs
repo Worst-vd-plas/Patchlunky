@@ -32,6 +32,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabMods = new System.Windows.Forms.TabPage();
+            this.flpModContentIcons = new System.Windows.Forms.FlowLayoutPanel();
+            this.picModIconGraphics = new System.Windows.Forms.PictureBox();
+            this.picModIconSound = new System.Windows.Forms.PictureBox();
+            this.picModIconMusic = new System.Windows.Forms.PictureBox();
+            this.picModIconText = new System.Windows.Forms.PictureBox();
+            this.picModIconMisc = new System.Windows.Forms.PictureBox();
+            this.picModIconScripts = new System.Windows.Forms.PictureBox();
             this.lnkModEmail = new System.Windows.Forms.LinkLabel();
             this.lnkModWebUrl = new System.Windows.Forms.LinkLabel();
             this.lblModList = new System.Windows.Forms.Label();
@@ -61,23 +68,37 @@
             this.lblSkinList = new System.Windows.Forms.Label();
             this.lblSkinText = new System.Windows.Forms.Label();
             this.btnRestoreSkin = new System.Windows.Forms.Button();
-            this.picCharacter = new System.Windows.Forms.PictureBox();
-            this.picSkin = new System.Windows.Forms.PictureBox();
             this.lblCharacter = new System.Windows.Forms.Label();
             this.btnDeleteSkinConfig = new System.Windows.Forms.Button();
             this.btnSaveSkinConfig = new System.Windows.Forms.Button();
             this.cboSkinConfig = new System.Windows.Forms.ComboBox();
             this.lblCharSelect = new System.Windows.Forms.Label();
             this.btnResetSkins = new System.Windows.Forms.Button();
+            this.picCharacter = new System.Windows.Forms.PictureBox();
+            this.picSkin = new System.Windows.Forms.PictureBox();
             this.lvwSkins = new System.Windows.Forms.ListView();
             this.lvwCharacters = new System.Windows.Forms.ListView();
             this.lblSkinSelect = new System.Windows.Forms.Label();
+            this.tabDownloads = new System.Windows.Forms.TabPage();
+            this.pnlDownloadInfo = new System.Windows.Forms.Panel();
+            this.rtfDownloadInfo = new System.Windows.Forms.RichTextBox();
+            this.btnReloadChars = new System.Windows.Forms.Button();
+            this.btnReloadMods = new System.Windows.Forms.Button();
+            this.btnOpenChars = new System.Windows.Forms.Button();
+            this.btnOpenMods = new System.Windows.Forms.Button();
+            this.lblSelectedDownload = new System.Windows.Forms.Label();
+            this.btnDLMoveDown = new System.Windows.Forms.Button();
+            this.btnDLMoveUp = new System.Windows.Forms.Button();
+            this.btnDLRemove = new System.Windows.Forms.Button();
+            this.btnDLRestart = new System.Windows.Forms.Button();
+            this.btnDLCancel = new System.Windows.Forms.Button();
+            this.lblDownloads = new System.Windows.Forms.Label();
+            this.lstDownloads = new System.Windows.Forms.ListBox();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.chkSkinConfigAutosave = new System.Windows.Forms.CheckBox();
             this.chkModConfigAutosave = new System.Windows.Forms.CheckBox();
             this.chkModsReplaceSkins = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnExtractArchives = new System.Windows.Forms.Button();
             this.btnRestore = new System.Windows.Forms.Button();
             this.btnSetup = new System.Windows.Forms.Button();
@@ -88,39 +109,32 @@
             this.btnGamePath = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtGamePath = new System.Windows.Forms.TextBox();
-            this.tabDownloads = new System.Windows.Forms.TabPage();
-            this.lblSelectedDownload = new System.Windows.Forms.Label();
-            this.btnDLMoveDown = new System.Windows.Forms.Button();
-            this.btnDLMoveUp = new System.Windows.Forms.Button();
-            this.btnDLRemove = new System.Windows.Forms.Button();
-            this.btnDLRestart = new System.Windows.Forms.Button();
-            this.btnDLCancel = new System.Windows.Forms.Button();
-            this.lblDownloads = new System.Windows.Forms.Label();
-            this.lstDownloads = new System.Windows.Forms.ListBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.prgPatchGame = new System.Windows.Forms.ProgressBar();
             this.btnPatch = new System.Windows.Forms.Button();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnOpenMods = new System.Windows.Forms.Button();
-            this.btnOpenChars = new System.Windows.Forms.Button();
-            this.btnReloadMods = new System.Windows.Forms.Button();
-            this.btnReloadChars = new System.Windows.Forms.Button();
-            this.rtfDownloadInfo = new System.Windows.Forms.RichTextBox();
-            this.pnlDownloadInfo = new System.Windows.Forms.Panel();
             this.tabControl1.SuspendLayout();
             this.tabMods.SuspendLayout();
+            this.flpModContentIcons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconGraphics)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconSound)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconMusic)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconText)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconMisc)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconScripts)).BeginInit();
             this.pnlModInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picModImage)).BeginInit();
             this.tabChars.SuspendLayout();
             this.pnlSkinInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picCharacter)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSkin)).BeginInit();
-            this.tabSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.groupBox1.SuspendLayout();
             this.tabDownloads.SuspendLayout();
             this.pnlDownloadInfo.SuspendLayout();
+            this.tabSettings.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -137,6 +151,7 @@
             // 
             // tabMods
             // 
+            this.tabMods.Controls.Add(this.flpModContentIcons);
             this.tabMods.Controls.Add(this.lnkModEmail);
             this.tabMods.Controls.Add(this.lnkModWebUrl);
             this.tabMods.Controls.Add(this.lblModList);
@@ -164,6 +179,91 @@
             this.tabMods.TabIndex = 0;
             this.tabMods.Text = "Mods";
             this.tabMods.UseVisualStyleBackColor = true;
+            // 
+            // flpModContentIcons
+            // 
+            this.flpModContentIcons.Controls.Add(this.picModIconGraphics);
+            this.flpModContentIcons.Controls.Add(this.picModIconSound);
+            this.flpModContentIcons.Controls.Add(this.picModIconMusic);
+            this.flpModContentIcons.Controls.Add(this.picModIconText);
+            this.flpModContentIcons.Controls.Add(this.picModIconMisc);
+            this.flpModContentIcons.Controls.Add(this.picModIconScripts);
+            this.flpModContentIcons.Location = new System.Drawing.Point(474, 4);
+            this.flpModContentIcons.Name = "flpModContentIcons";
+            this.flpModContentIcons.Size = new System.Drawing.Size(184, 16);
+            this.flpModContentIcons.TabIndex = 34;
+            // 
+            // picModIconGraphics
+            // 
+            this.picModIconGraphics.Image = global::Patchlunky.Properties.Resources.Graphic16x16;
+            this.picModIconGraphics.Location = new System.Drawing.Point(0, 0);
+            this.picModIconGraphics.Margin = new System.Windows.Forms.Padding(0);
+            this.picModIconGraphics.Name = "picModIconGraphics";
+            this.picModIconGraphics.Size = new System.Drawing.Size(16, 16);
+            this.picModIconGraphics.TabIndex = 4;
+            this.picModIconGraphics.TabStop = false;
+            this.toolTip1.SetToolTip(this.picModIconGraphics, "Graphics");
+            this.picModIconGraphics.Visible = false;
+            // 
+            // picModIconSound
+            // 
+            this.picModIconSound.Image = global::Patchlunky.Properties.Resources.Audio16x16;
+            this.picModIconSound.Location = new System.Drawing.Point(16, 0);
+            this.picModIconSound.Margin = new System.Windows.Forms.Padding(0);
+            this.picModIconSound.Name = "picModIconSound";
+            this.picModIconSound.Size = new System.Drawing.Size(16, 16);
+            this.picModIconSound.TabIndex = 1;
+            this.picModIconSound.TabStop = false;
+            this.toolTip1.SetToolTip(this.picModIconSound, "Sounds");
+            this.picModIconSound.Visible = false;
+            // 
+            // picModIconMusic
+            // 
+            this.picModIconMusic.Image = global::Patchlunky.Properties.Resources.Music16x16;
+            this.picModIconMusic.Location = new System.Drawing.Point(32, 0);
+            this.picModIconMusic.Margin = new System.Windows.Forms.Padding(0);
+            this.picModIconMusic.Name = "picModIconMusic";
+            this.picModIconMusic.Size = new System.Drawing.Size(16, 16);
+            this.picModIconMusic.TabIndex = 2;
+            this.picModIconMusic.TabStop = false;
+            this.toolTip1.SetToolTip(this.picModIconMusic, "Music");
+            this.picModIconMusic.Visible = false;
+            // 
+            // picModIconText
+            // 
+            this.picModIconText.Image = global::Patchlunky.Properties.Resources.Text16x16;
+            this.picModIconText.Location = new System.Drawing.Point(48, 0);
+            this.picModIconText.Margin = new System.Windows.Forms.Padding(0);
+            this.picModIconText.Name = "picModIconText";
+            this.picModIconText.Size = new System.Drawing.Size(16, 16);
+            this.picModIconText.TabIndex = 3;
+            this.picModIconText.TabStop = false;
+            this.toolTip1.SetToolTip(this.picModIconText, "Text");
+            this.picModIconText.Visible = false;
+            // 
+            // picModIconMisc
+            // 
+            this.picModIconMisc.Image = global::Patchlunky.Properties.Resources.Unknown16x16;
+            this.picModIconMisc.Location = new System.Drawing.Point(64, 0);
+            this.picModIconMisc.Margin = new System.Windows.Forms.Padding(0);
+            this.picModIconMisc.Name = "picModIconMisc";
+            this.picModIconMisc.Size = new System.Drawing.Size(16, 16);
+            this.picModIconMisc.TabIndex = 5;
+            this.picModIconMisc.TabStop = false;
+            this.toolTip1.SetToolTip(this.picModIconMisc, "Misc");
+            this.picModIconMisc.Visible = false;
+            // 
+            // picModIconScripts
+            // 
+            this.picModIconScripts.Image = global::Patchlunky.Properties.Resources.LuaScript16x16;
+            this.picModIconScripts.Location = new System.Drawing.Point(80, 0);
+            this.picModIconScripts.Margin = new System.Windows.Forms.Padding(0);
+            this.picModIconScripts.Name = "picModIconScripts";
+            this.picModIconScripts.Size = new System.Drawing.Size(16, 16);
+            this.picModIconScripts.TabIndex = 0;
+            this.picModIconScripts.TabStop = false;
+            this.toolTip1.SetToolTip(this.picModIconScripts, "Scripts");
+            this.picModIconScripts.Visible = false;
             // 
             // lnkModEmail
             // 
@@ -397,14 +497,14 @@
             this.tabChars.Controls.Add(this.lblSkinList);
             this.tabChars.Controls.Add(this.lblSkinText);
             this.tabChars.Controls.Add(this.btnRestoreSkin);
-            this.tabChars.Controls.Add(this.picCharacter);
-            this.tabChars.Controls.Add(this.picSkin);
             this.tabChars.Controls.Add(this.lblCharacter);
             this.tabChars.Controls.Add(this.btnDeleteSkinConfig);
             this.tabChars.Controls.Add(this.btnSaveSkinConfig);
             this.tabChars.Controls.Add(this.cboSkinConfig);
             this.tabChars.Controls.Add(this.lblCharSelect);
             this.tabChars.Controls.Add(this.btnResetSkins);
+            this.tabChars.Controls.Add(this.picCharacter);
+            this.tabChars.Controls.Add(this.picSkin);
             this.tabChars.Controls.Add(this.lvwSkins);
             this.tabChars.Controls.Add(this.lvwCharacters);
             this.tabChars.Controls.Add(this.lblSkinSelect);
@@ -498,28 +598,6 @@
             this.btnRestoreSkin.UseVisualStyleBackColor = true;
             this.btnRestoreSkin.Click += new System.EventHandler(this.btnRestoreSkin_Click);
             // 
-            // picCharacter
-            // 
-            this.picCharacter.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.picCharacter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picCharacter.Location = new System.Drawing.Point(464, 23);
-            this.picCharacter.Name = "picCharacter";
-            this.picCharacter.Size = new System.Drawing.Size(40, 40);
-            this.picCharacter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picCharacter.TabIndex = 5;
-            this.picCharacter.TabStop = false;
-            // 
-            // picSkin
-            // 
-            this.picSkin.BackColor = System.Drawing.Color.White;
-            this.picSkin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picSkin.Location = new System.Drawing.Point(538, 23);
-            this.picSkin.Name = "picSkin";
-            this.picSkin.Size = new System.Drawing.Size(80, 80);
-            this.picSkin.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.picSkin.TabIndex = 8;
-            this.picSkin.TabStop = false;
-            // 
             // lblCharacter
             // 
             this.lblCharacter.AutoSize = true;
@@ -582,6 +660,28 @@
             this.btnResetSkins.UseVisualStyleBackColor = true;
             this.btnResetSkins.Click += new System.EventHandler(this.btnResetSkins_Click);
             // 
+            // picCharacter
+            // 
+            this.picCharacter.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.picCharacter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picCharacter.Location = new System.Drawing.Point(464, 23);
+            this.picCharacter.Name = "picCharacter";
+            this.picCharacter.Size = new System.Drawing.Size(40, 40);
+            this.picCharacter.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picCharacter.TabIndex = 5;
+            this.picCharacter.TabStop = false;
+            // 
+            // picSkin
+            // 
+            this.picSkin.BackColor = System.Drawing.Color.White;
+            this.picSkin.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picSkin.Location = new System.Drawing.Point(538, 23);
+            this.picSkin.Name = "picSkin";
+            this.picSkin.Size = new System.Drawing.Size(80, 80);
+            this.picSkin.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.picSkin.TabIndex = 8;
+            this.picSkin.TabStop = false;
+            // 
             // lvwSkins
             // 
             this.lvwSkins.BackColor = System.Drawing.Color.AliceBlue;
@@ -622,13 +722,182 @@
             this.lblSkinSelect.Text = "Double-click a character to choose it.";
             this.lblSkinSelect.Visible = false;
             // 
+            // tabDownloads
+            // 
+            this.tabDownloads.Controls.Add(this.pnlDownloadInfo);
+            this.tabDownloads.Controls.Add(this.btnReloadChars);
+            this.tabDownloads.Controls.Add(this.btnReloadMods);
+            this.tabDownloads.Controls.Add(this.btnOpenChars);
+            this.tabDownloads.Controls.Add(this.btnOpenMods);
+            this.tabDownloads.Controls.Add(this.lblSelectedDownload);
+            this.tabDownloads.Controls.Add(this.btnDLMoveDown);
+            this.tabDownloads.Controls.Add(this.btnDLMoveUp);
+            this.tabDownloads.Controls.Add(this.btnDLRemove);
+            this.tabDownloads.Controls.Add(this.btnDLRestart);
+            this.tabDownloads.Controls.Add(this.btnDLCancel);
+            this.tabDownloads.Controls.Add(this.lblDownloads);
+            this.tabDownloads.Controls.Add(this.lstDownloads);
+            this.tabDownloads.Location = new System.Drawing.Point(4, 22);
+            this.tabDownloads.Name = "tabDownloads";
+            this.tabDownloads.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDownloads.Size = new System.Drawing.Size(664, 431);
+            this.tabDownloads.TabIndex = 3;
+            this.tabDownloads.Text = "Downloads";
+            this.tabDownloads.UseVisualStyleBackColor = true;
+            // 
+            // pnlDownloadInfo
+            // 
+            this.pnlDownloadInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlDownloadInfo.Controls.Add(this.rtfDownloadInfo);
+            this.pnlDownloadInfo.Location = new System.Drawing.Point(6, 314);
+            this.pnlDownloadInfo.Name = "pnlDownloadInfo";
+            this.pnlDownloadInfo.Size = new System.Drawing.Size(509, 110);
+            this.pnlDownloadInfo.TabIndex = 13;
+            // 
+            // rtfDownloadInfo
+            // 
+            this.rtfDownloadInfo.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.rtfDownloadInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rtfDownloadInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtfDownloadInfo.Location = new System.Drawing.Point(0, 0);
+            this.rtfDownloadInfo.Name = "rtfDownloadInfo";
+            this.rtfDownloadInfo.ReadOnly = true;
+            this.rtfDownloadInfo.Size = new System.Drawing.Size(507, 108);
+            this.rtfDownloadInfo.TabIndex = 12;
+            this.rtfDownloadInfo.Text = "";
+            this.rtfDownloadInfo.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtfDownloadInfo_LinkClicked);
+            // 
+            // btnReloadChars
+            // 
+            this.btnReloadChars.Location = new System.Drawing.Point(521, 341);
+            this.btnReloadChars.Name = "btnReloadChars";
+            this.btnReloadChars.Size = new System.Drawing.Size(134, 23);
+            this.btnReloadChars.TabIndex = 11;
+            this.btnReloadChars.Text = "Reload Characters";
+            this.btnReloadChars.UseVisualStyleBackColor = true;
+            this.btnReloadChars.Click += new System.EventHandler(this.btnReloadChars_Click);
+            // 
+            // btnReloadMods
+            // 
+            this.btnReloadMods.Location = new System.Drawing.Point(521, 312);
+            this.btnReloadMods.Name = "btnReloadMods";
+            this.btnReloadMods.Size = new System.Drawing.Size(134, 23);
+            this.btnReloadMods.TabIndex = 10;
+            this.btnReloadMods.Text = "Reload Mods";
+            this.btnReloadMods.UseVisualStyleBackColor = true;
+            this.btnReloadMods.Click += new System.EventHandler(this.btnReloadMods_Click);
+            // 
+            // btnOpenChars
+            // 
+            this.btnOpenChars.Location = new System.Drawing.Point(521, 401);
+            this.btnOpenChars.Name = "btnOpenChars";
+            this.btnOpenChars.Size = new System.Drawing.Size(134, 23);
+            this.btnOpenChars.TabIndex = 9;
+            this.btnOpenChars.Text = "Open Characters folder";
+            this.toolTip1.SetToolTip(this.btnOpenChars, "Open patchlunky Skins folder in Explorer.");
+            this.btnOpenChars.UseVisualStyleBackColor = true;
+            this.btnOpenChars.Click += new System.EventHandler(this.btnOpenChars_Click);
+            // 
+            // btnOpenMods
+            // 
+            this.btnOpenMods.Location = new System.Drawing.Point(521, 372);
+            this.btnOpenMods.Name = "btnOpenMods";
+            this.btnOpenMods.Size = new System.Drawing.Size(134, 23);
+            this.btnOpenMods.TabIndex = 8;
+            this.btnOpenMods.Text = "Open Mods folder";
+            this.toolTip1.SetToolTip(this.btnOpenMods, "Open patchlunky Mods folder in Explorer.");
+            this.btnOpenMods.UseVisualStyleBackColor = true;
+            this.btnOpenMods.Click += new System.EventHandler(this.btnOpenMods_Click);
+            // 
+            // lblSelectedDownload
+            // 
+            this.lblSelectedDownload.AutoSize = true;
+            this.lblSelectedDownload.Location = new System.Drawing.Point(561, 7);
+            this.lblSelectedDownload.Name = "lblSelectedDownload";
+            this.lblSelectedDownload.Size = new System.Drawing.Size(103, 13);
+            this.lblSelectedDownload.TabIndex = 7;
+            this.lblSelectedDownload.Text = "Selected Download:";
+            // 
+            // btnDLMoveDown
+            // 
+            this.btnDLMoveDown.Location = new System.Drawing.Point(565, 70);
+            this.btnDLMoveDown.Name = "btnDLMoveDown";
+            this.btnDLMoveDown.Size = new System.Drawing.Size(90, 41);
+            this.btnDLMoveDown.TabIndex = 6;
+            this.btnDLMoveDown.Text = "Down";
+            this.btnDLMoveDown.UseVisualStyleBackColor = true;
+            this.btnDLMoveDown.Click += new System.EventHandler(this.btnDLMoveDown_Click);
+            // 
+            // btnDLMoveUp
+            // 
+            this.btnDLMoveUp.Location = new System.Drawing.Point(565, 23);
+            this.btnDLMoveUp.Name = "btnDLMoveUp";
+            this.btnDLMoveUp.Size = new System.Drawing.Size(90, 41);
+            this.btnDLMoveUp.TabIndex = 5;
+            this.btnDLMoveUp.Text = "Up";
+            this.btnDLMoveUp.UseVisualStyleBackColor = true;
+            this.btnDLMoveUp.Click += new System.EventHandler(this.btnDLMoveUp_Click);
+            // 
+            // btnDLRemove
+            // 
+            this.btnDLRemove.Location = new System.Drawing.Point(565, 238);
+            this.btnDLRemove.Name = "btnDLRemove";
+            this.btnDLRemove.Size = new System.Drawing.Size(90, 41);
+            this.btnDLRemove.TabIndex = 4;
+            this.btnDLRemove.Text = "Remove";
+            this.toolTip1.SetToolTip(this.btnDLRemove, "Remove a download from the list. This does not remove the files.");
+            this.btnDLRemove.UseVisualStyleBackColor = true;
+            this.btnDLRemove.Click += new System.EventHandler(this.btnDLRemove_Click);
+            // 
+            // btnDLRestart
+            // 
+            this.btnDLRestart.Location = new System.Drawing.Point(565, 180);
+            this.btnDLRestart.Name = "btnDLRestart";
+            this.btnDLRestart.Size = new System.Drawing.Size(90, 41);
+            this.btnDLRestart.TabIndex = 3;
+            this.btnDLRestart.Text = "Restart";
+            this.toolTip1.SetToolTip(this.btnDLRestart, "Restart a canceled or failed download.");
+            this.btnDLRestart.UseVisualStyleBackColor = true;
+            this.btnDLRestart.Click += new System.EventHandler(this.btnDLRestart_Click);
+            // 
+            // btnDLCancel
+            // 
+            this.btnDLCancel.Location = new System.Drawing.Point(565, 133);
+            this.btnDLCancel.Name = "btnDLCancel";
+            this.btnDLCancel.Size = new System.Drawing.Size(90, 41);
+            this.btnDLCancel.TabIndex = 2;
+            this.btnDLCancel.Text = "Cancel";
+            this.toolTip1.SetToolTip(this.btnDLCancel, "Cancel an active or queued download.");
+            this.btnDLCancel.UseVisualStyleBackColor = true;
+            this.btnDLCancel.Click += new System.EventHandler(this.btnDLCancel_Click);
+            // 
+            // lblDownloads
+            // 
+            this.lblDownloads.AutoSize = true;
+            this.lblDownloads.Location = new System.Drawing.Point(6, 298);
+            this.lblDownloads.Name = "lblDownloads";
+            this.lblDownloads.Size = new System.Drawing.Size(251, 13);
+            this.lblDownloads.TabIndex = 1;
+            this.lblDownloads.Text = "Downloads higher in the list will be downloaded first.";
+            // 
+            // lstDownloads
+            // 
+            this.lstDownloads.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstDownloads.FormattingEnabled = true;
+            this.lstDownloads.HorizontalScrollbar = true;
+            this.lstDownloads.ItemHeight = 15;
+            this.lstDownloads.Location = new System.Drawing.Point(6, 6);
+            this.lstDownloads.Name = "lstDownloads";
+            this.lstDownloads.Size = new System.Drawing.Size(553, 289);
+            this.lstDownloads.TabIndex = 0;
+            this.lstDownloads.SelectedIndexChanged += new System.EventHandler(this.lstDownloads_SelectedIndexChanged);
+            // 
             // tabSettings
             // 
             this.tabSettings.Controls.Add(this.chkSkinConfigAutosave);
             this.tabSettings.Controls.Add(this.chkModConfigAutosave);
             this.tabSettings.Controls.Add(this.chkModsReplaceSkins);
             this.tabSettings.Controls.Add(this.label2);
-            this.tabSettings.Controls.Add(this.pictureBox1);
             this.tabSettings.Controls.Add(this.btnExtractArchives);
             this.tabSettings.Controls.Add(this.btnRestore);
             this.tabSettings.Controls.Add(this.btnSetup);
@@ -636,6 +905,7 @@
             this.tabSettings.Controls.Add(this.btnGamePath);
             this.tabSettings.Controls.Add(this.label1);
             this.tabSettings.Controls.Add(this.txtGamePath);
+            this.tabSettings.Controls.Add(this.pictureBox1);
             this.tabSettings.Location = new System.Drawing.Point(4, 22);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
@@ -690,16 +960,6 @@
             this.label2.Size = new System.Drawing.Size(285, 32);
             this.label2.TabIndex = 10;
             this.label2.Text = "Under construction.";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::Patchlunky.Properties.Resources.under_construction;
-            this.pictureBox1.Location = new System.Drawing.Point(27, 237);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(64, 64);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 9;
-            this.pictureBox1.TabStop = false;
             // 
             // btnExtractArchives
             // 
@@ -804,111 +1064,15 @@
             this.txtGamePath.TabIndex = 0;
             this.txtGamePath.Leave += new System.EventHandler(this.txtGamePath_Leave);
             // 
-            // tabDownloads
+            // pictureBox1
             // 
-            this.tabDownloads.Controls.Add(this.pnlDownloadInfo);
-            this.tabDownloads.Controls.Add(this.btnReloadChars);
-            this.tabDownloads.Controls.Add(this.btnReloadMods);
-            this.tabDownloads.Controls.Add(this.btnOpenChars);
-            this.tabDownloads.Controls.Add(this.btnOpenMods);
-            this.tabDownloads.Controls.Add(this.lblSelectedDownload);
-            this.tabDownloads.Controls.Add(this.btnDLMoveDown);
-            this.tabDownloads.Controls.Add(this.btnDLMoveUp);
-            this.tabDownloads.Controls.Add(this.btnDLRemove);
-            this.tabDownloads.Controls.Add(this.btnDLRestart);
-            this.tabDownloads.Controls.Add(this.btnDLCancel);
-            this.tabDownloads.Controls.Add(this.lblDownloads);
-            this.tabDownloads.Controls.Add(this.lstDownloads);
-            this.tabDownloads.Location = new System.Drawing.Point(4, 22);
-            this.tabDownloads.Name = "tabDownloads";
-            this.tabDownloads.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDownloads.Size = new System.Drawing.Size(664, 431);
-            this.tabDownloads.TabIndex = 3;
-            this.tabDownloads.Text = "Downloads";
-            this.tabDownloads.UseVisualStyleBackColor = true;
-            // 
-            // lblSelectedDownload
-            // 
-            this.lblSelectedDownload.AutoSize = true;
-            this.lblSelectedDownload.Location = new System.Drawing.Point(561, 7);
-            this.lblSelectedDownload.Name = "lblSelectedDownload";
-            this.lblSelectedDownload.Size = new System.Drawing.Size(103, 13);
-            this.lblSelectedDownload.TabIndex = 7;
-            this.lblSelectedDownload.Text = "Selected Download:";
-            // 
-            // btnDLMoveDown
-            // 
-            this.btnDLMoveDown.Location = new System.Drawing.Point(565, 70);
-            this.btnDLMoveDown.Name = "btnDLMoveDown";
-            this.btnDLMoveDown.Size = new System.Drawing.Size(90, 41);
-            this.btnDLMoveDown.TabIndex = 6;
-            this.btnDLMoveDown.Text = "Down";
-            this.btnDLMoveDown.UseVisualStyleBackColor = true;
-            this.btnDLMoveDown.Click += new System.EventHandler(this.btnDLMoveDown_Click);
-            // 
-            // btnDLMoveUp
-            // 
-            this.btnDLMoveUp.Location = new System.Drawing.Point(565, 23);
-            this.btnDLMoveUp.Name = "btnDLMoveUp";
-            this.btnDLMoveUp.Size = new System.Drawing.Size(90, 41);
-            this.btnDLMoveUp.TabIndex = 5;
-            this.btnDLMoveUp.Text = "Up";
-            this.btnDLMoveUp.UseVisualStyleBackColor = true;
-            this.btnDLMoveUp.Click += new System.EventHandler(this.btnDLMoveUp_Click);
-            // 
-            // btnDLRemove
-            // 
-            this.btnDLRemove.Location = new System.Drawing.Point(565, 238);
-            this.btnDLRemove.Name = "btnDLRemove";
-            this.btnDLRemove.Size = new System.Drawing.Size(90, 41);
-            this.btnDLRemove.TabIndex = 4;
-            this.btnDLRemove.Text = "Remove";
-            this.toolTip1.SetToolTip(this.btnDLRemove, "Remove a download from the list. This does not remove the files.");
-            this.btnDLRemove.UseVisualStyleBackColor = true;
-            this.btnDLRemove.Click += new System.EventHandler(this.btnDLRemove_Click);
-            // 
-            // btnDLRestart
-            // 
-            this.btnDLRestart.Location = new System.Drawing.Point(565, 180);
-            this.btnDLRestart.Name = "btnDLRestart";
-            this.btnDLRestart.Size = new System.Drawing.Size(90, 41);
-            this.btnDLRestart.TabIndex = 3;
-            this.btnDLRestart.Text = "Restart";
-            this.toolTip1.SetToolTip(this.btnDLRestart, "Restart a canceled or failed download.");
-            this.btnDLRestart.UseVisualStyleBackColor = true;
-            this.btnDLRestart.Click += new System.EventHandler(this.btnDLRestart_Click);
-            // 
-            // btnDLCancel
-            // 
-            this.btnDLCancel.Location = new System.Drawing.Point(565, 133);
-            this.btnDLCancel.Name = "btnDLCancel";
-            this.btnDLCancel.Size = new System.Drawing.Size(90, 41);
-            this.btnDLCancel.TabIndex = 2;
-            this.btnDLCancel.Text = "Cancel";
-            this.toolTip1.SetToolTip(this.btnDLCancel, "Cancel an active or queued download.");
-            this.btnDLCancel.UseVisualStyleBackColor = true;
-            this.btnDLCancel.Click += new System.EventHandler(this.btnDLCancel_Click);
-            // 
-            // lblDownloads
-            // 
-            this.lblDownloads.AutoSize = true;
-            this.lblDownloads.Location = new System.Drawing.Point(6, 298);
-            this.lblDownloads.Name = "lblDownloads";
-            this.lblDownloads.Size = new System.Drawing.Size(251, 13);
-            this.lblDownloads.TabIndex = 1;
-            this.lblDownloads.Text = "Downloads higher in the list will be downloaded first.";
-            // 
-            // lstDownloads
-            // 
-            this.lstDownloads.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstDownloads.FormattingEnabled = true;
-            this.lstDownloads.HorizontalScrollbar = true;
-            this.lstDownloads.ItemHeight = 15;
-            this.lstDownloads.Location = new System.Drawing.Point(6, 6);
-            this.lstDownloads.Name = "lstDownloads";
-            this.lstDownloads.Size = new System.Drawing.Size(553, 289);
-            this.lstDownloads.TabIndex = 0;
-            this.lstDownloads.SelectedIndexChanged += new System.EventHandler(this.lstDownloads_SelectedIndexChanged);
+            this.pictureBox1.Image = global::Patchlunky.Properties.Resources.under_construction;
+            this.pictureBox1.Location = new System.Drawing.Point(27, 237);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(64, 64);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.TabIndex = 9;
+            this.pictureBox1.TabStop = false;
             // 
             // prgPatchGame
             // 
@@ -957,70 +1121,6 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // btnOpenMods
-            // 
-            this.btnOpenMods.Location = new System.Drawing.Point(521, 372);
-            this.btnOpenMods.Name = "btnOpenMods";
-            this.btnOpenMods.Size = new System.Drawing.Size(134, 23);
-            this.btnOpenMods.TabIndex = 8;
-            this.btnOpenMods.Text = "Open Mods folder";
-            this.toolTip1.SetToolTip(this.btnOpenMods, "Open patchlunky Mods folder in Explorer.");
-            this.btnOpenMods.UseVisualStyleBackColor = true;
-            this.btnOpenMods.Click += new System.EventHandler(this.btnOpenMods_Click);
-            // 
-            // btnOpenChars
-            // 
-            this.btnOpenChars.Location = new System.Drawing.Point(521, 401);
-            this.btnOpenChars.Name = "btnOpenChars";
-            this.btnOpenChars.Size = new System.Drawing.Size(134, 23);
-            this.btnOpenChars.TabIndex = 9;
-            this.btnOpenChars.Text = "Open Characters folder";
-            this.toolTip1.SetToolTip(this.btnOpenChars, "Open patchlunky Skins folder in Explorer.");
-            this.btnOpenChars.UseVisualStyleBackColor = true;
-            this.btnOpenChars.Click += new System.EventHandler(this.btnOpenChars_Click);
-            // 
-            // btnReloadMods
-            // 
-            this.btnReloadMods.Location = new System.Drawing.Point(521, 312);
-            this.btnReloadMods.Name = "btnReloadMods";
-            this.btnReloadMods.Size = new System.Drawing.Size(134, 23);
-            this.btnReloadMods.TabIndex = 10;
-            this.btnReloadMods.Text = "Reload Mods";
-            this.btnReloadMods.UseVisualStyleBackColor = true;
-            this.btnReloadMods.Click += new System.EventHandler(this.btnReloadMods_Click);
-            // 
-            // btnReloadChars
-            // 
-            this.btnReloadChars.Location = new System.Drawing.Point(521, 341);
-            this.btnReloadChars.Name = "btnReloadChars";
-            this.btnReloadChars.Size = new System.Drawing.Size(134, 23);
-            this.btnReloadChars.TabIndex = 11;
-            this.btnReloadChars.Text = "Reload Characters";
-            this.btnReloadChars.UseVisualStyleBackColor = true;
-            this.btnReloadChars.Click += new System.EventHandler(this.btnReloadChars_Click);
-            // 
-            // rtfDownloadInfo
-            // 
-            this.rtfDownloadInfo.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.rtfDownloadInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.rtfDownloadInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtfDownloadInfo.Location = new System.Drawing.Point(0, 0);
-            this.rtfDownloadInfo.Name = "rtfDownloadInfo";
-            this.rtfDownloadInfo.ReadOnly = true;
-            this.rtfDownloadInfo.Size = new System.Drawing.Size(507, 108);
-            this.rtfDownloadInfo.TabIndex = 12;
-            this.rtfDownloadInfo.Text = "";
-            this.rtfDownloadInfo.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtfDownloadInfo_LinkClicked);
-            // 
-            // pnlDownloadInfo
-            // 
-            this.pnlDownloadInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlDownloadInfo.Controls.Add(this.rtfDownloadInfo);
-            this.pnlDownloadInfo.Location = new System.Drawing.Point(6, 314);
-            this.pnlDownloadInfo.Name = "pnlDownloadInfo";
-            this.pnlDownloadInfo.Size = new System.Drawing.Size(509, 110);
-            this.pnlDownloadInfo.TabIndex = 13;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1041,6 +1141,13 @@
             this.tabControl1.ResumeLayout(false);
             this.tabMods.ResumeLayout(false);
             this.tabMods.PerformLayout();
+            this.flpModContentIcons.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconGraphics)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconSound)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconMusic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconText)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconMisc)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picModIconScripts)).EndInit();
             this.pnlModInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picModImage)).EndInit();
             this.tabChars.ResumeLayout(false);
@@ -1048,14 +1155,14 @@
             this.pnlSkinInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picCharacter)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picSkin)).EndInit();
-            this.tabSettings.ResumeLayout(false);
-            this.tabSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.tabDownloads.ResumeLayout(false);
             this.tabDownloads.PerformLayout();
             this.pnlDownloadInfo.ResumeLayout(false);
+            this.tabSettings.ResumeLayout(false);
+            this.tabSettings.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1141,6 +1248,13 @@
         private System.Windows.Forms.Button btnReloadChars;
         private System.Windows.Forms.RichTextBox rtfDownloadInfo;
         private System.Windows.Forms.Panel pnlDownloadInfo;
+        private System.Windows.Forms.FlowLayoutPanel flpModContentIcons;
+        private System.Windows.Forms.PictureBox picModIconScripts;
+        private System.Windows.Forms.PictureBox picModIconSound;
+        private System.Windows.Forms.PictureBox picModIconMusic;
+        private System.Windows.Forms.PictureBox picModIconText;
+        private System.Windows.Forms.PictureBox picModIconGraphics;
+        private System.Windows.Forms.PictureBox picModIconMisc;
     }
 }
 

@@ -41,12 +41,14 @@ namespace Patchlunky
     {
         public string Name;
         public string FilePath;
+        public ModContents ContentType;
         public bool IsModdable;
 
-        public GameFile(string path, bool ismoddable=true)
+        public GameFile(string path, ModContents type, bool ismoddable=true)
         {
             this.Name = Path.GetFileName(path);
             this.FilePath = path;
+            this.ContentType = type;
             this.IsModdable = ismoddable;
         }
     }
@@ -158,26 +160,26 @@ namespace Patchlunky
                                     "Music/ultraegg.ogg",
                                     "Music/yamaamb.ogg" };
 
-            DefaultFiles.Add(new GameFile("Textures/alltex.wad", false));
-            DefaultFiles.Add(new GameFile("Textures/alltex.wad.wix", false));
-            DefaultFiles.Add(new GameFile("Textures/fonthud.fnt"));
-            DefaultFiles.Add(new GameFile("Textures/fontkid.fnt"));
-            DefaultFiles.Add(new GameFile("Textures/fontmain.fnt"));
-            DefaultFiles.Add(new GameFile("Textures/loadring.png"));
-            DefaultFiles.Add(new GameFile("Textures/mossmouth.png"));
+            DefaultFiles.Add(new GameFile("Textures/alltex.wad", ModContents.Graphics, false));
+            DefaultFiles.Add(new GameFile("Textures/alltex.wad.wix", ModContents.Graphics, false));
+            DefaultFiles.Add(new GameFile("Textures/fonthud.fnt", ModContents.Graphics));
+            DefaultFiles.Add(new GameFile("Textures/fontkid.fnt", ModContents.Graphics));
+            DefaultFiles.Add(new GameFile("Textures/fontmain.fnt", ModContents.Graphics));
+            DefaultFiles.Add(new GameFile("Textures/loadring.png", ModContents.Graphics));
+            DefaultFiles.Add(new GameFile("Textures/mossmouth.png", ModContents.Graphics));
 
-            DefaultFiles.Add(new GameFile("Sounds/allsounds.wad", false));
-            DefaultFiles.Add(new GameFile("Sounds/allsounds.wad.wix", false));
-            DefaultFiles.Add(new GameFile("Sounds/reverbsettings.dat"));
-            DefaultFiles.Add(new GameFile("Sounds/soundlist.dat"));
+            DefaultFiles.Add(new GameFile("Sounds/allsounds.wad", ModContents.Sounds, false));
+            DefaultFiles.Add(new GameFile("Sounds/allsounds.wad.wix", ModContents.Sounds, false));
+            DefaultFiles.Add(new GameFile("Sounds/reverbsettings.dat", ModContents.Sounds));
+            DefaultFiles.Add(new GameFile("Sounds/soundlist.dat", ModContents.Sounds));
 
-            DefaultFiles.Add(new GameFile("Animations/allanimations.wad"));
-            DefaultFiles.Add(new GameFile("Localization/strings.pct"));
-            DefaultFiles.Add(new GameFile("Shaders/infinite.fxb"));
+            DefaultFiles.Add(new GameFile("Animations/allanimations.wad", ModContents.Misc));
+            DefaultFiles.Add(new GameFile("Localization/strings.pct", ModContents.Text));
+            DefaultFiles.Add(new GameFile("Shaders/infinite.fxb", ModContents.Misc));
 
             foreach (string musfile in musicfiles)
             {
-                DefaultFiles.Add(new GameFile(musfile));
+                DefaultFiles.Add(new GameFile(musfile, ModContents.Music));
             }
         }
 
