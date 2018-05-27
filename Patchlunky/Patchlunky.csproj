@@ -113,7 +113,7 @@
     <None Include="Unknown16x16.png" />
     <None Include="Audio16x16.png" />
     <None Include="Graphic16x16.png" />
-    <Content Include="lua52.dll">
+    <Content Include="..\NLua\lua52.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="LuaScript16x16.png" />
