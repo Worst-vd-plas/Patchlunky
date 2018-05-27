@@ -52,6 +52,8 @@ namespace Patchlunky
         public Setup Setup;
         public ModManager ModMan;
         public SkinManager SkinMan;
+        public ScriptManager ScriptMan;
+
         private ListViewItem CharItem;
         private ListViewItem SkinItem;
         private bool SkinBrowserActive;
@@ -121,6 +123,7 @@ namespace Patchlunky
             Setup = new Setup();
             ModMan = new ModManager();
             SkinMan = new SkinManager();
+            ScriptMan = new ScriptManager();
 
             //Check if Patchlunky Setup should run
             if ( (Setup.CheckBackups() == false) || 

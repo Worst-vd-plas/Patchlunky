@@ -359,7 +359,7 @@ namespace Patchlunky
             //Path needs to have a single slash separating the group and file
             if ((path.Contains('/') || path.Contains('\\')) == false)
             {
-                Msg.Log("ResourceSaveBytes: path '" + path + "' is invalid!");
+                Msg.MsgBox("ResourceSaveBytes: path '" + path + "' is invalid!");
                 return false;
             }
 
@@ -371,14 +371,14 @@ namespace Patchlunky
             int grp_index = archive.Groups.FindIndex(o => o.Name.Equals(group, StringComparison.OrdinalIgnoreCase));
             if (grp_index == -1)
             {
-                Msg.Log("ResourceSaveBytes: Group '" + group + "' not found!");
+                Msg.MsgBox("ResourceSaveBytes: Group '" + group + "' not found!");
                 return false;
             }
 
             int ent_index = archive.Groups[grp_index].Entries.FindIndex(o => o.Name.Equals(file, StringComparison.OrdinalIgnoreCase));
             if (ent_index == -1)
             {
-                Msg.Log("ResourceSaveBytes: Entry '" + file + "' not found!");
+                Msg.MsgBox("ResourceSaveBytes: Entry '" + file + "' not found!");
                 return false;
             }
 

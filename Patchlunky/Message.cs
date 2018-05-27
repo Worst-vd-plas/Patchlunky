@@ -51,12 +51,13 @@ namespace Patchlunky
         }
 
         public static DialogResult MsgBox(string msg, string caption = "Patchlunky", 
-                                          MessageBoxButtons buttons = MessageBoxButtons.OK)
+                                          MessageBoxButtons buttons = MessageBoxButtons.OK,
+                                          MessageBoxIcon icon = MessageBoxIcon.None)
         {
             if (Program.mainForm != null)
-                return MessageBox.Show(Program.mainForm, msg, caption, buttons);
+                return MessageBox.Show(Program.mainForm, msg, caption, buttons, icon);
             else
-                return MessageBox.Show(msg, caption, buttons);
+                return MessageBox.Show(msg, caption, buttons, icon);
         }
     }
 

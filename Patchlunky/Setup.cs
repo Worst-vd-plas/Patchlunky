@@ -242,6 +242,7 @@ namespace Patchlunky
             ModManager modMan = Program.mainForm.ModMan;
             SkinManager skinMan = Program.mainForm.SkinMan;
             
+            DialogResult result;
             string message;
 
             if (CheckGameDir() == false)
@@ -302,10 +303,34 @@ namespace Patchlunky
                     PatchArchive(mod, "Textures/alltex");
                     PatchArchive(mod, "Sounds/allsounds");
 
-                    //Patch using patchlists provided by the mod
+                    //Features specific to XML mods
                     if (mod.Type.HasFlag(ModType.Xml))
                     {
-                        //TODO!
+                        //If the mod has a PatchScript
+                        if (mod.ScriptPath != null)
+                        {
+                            //Ask user for permission
+                            message = "The mod '" + mod.Name + "' includes a patch script. Allow the script to run?" +
+                                Environment.NewLine + Environment.NewLine +
+                                "IMPORTANT: While there are measures in place to prevent misuse, there always remains " +
+                                "the possibility that a malicious user could exploit a bug or vulnerability in order " +
+                                "to breach into your system. Consider treating scripts with the same amount of " +
+                                "precaution that you would treat any unknown piece of software with. (Note that " +
+                                "antivirus software is unlikely to detect whether or not a script is safe.)" +
+                                Environment.NewLine + Environment.NewLine +
+                                "In short: RUN THE SCRIPT AT YOUR OWN RISK.";
+                            result = Msg.MsgBox(message, "Patchlunky Setup", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+
+                            if (result == DialogResult.Yes)
+                            {
+                                string script = Resource.LoadText(mod, mod.ScriptPath);
+
+                                if (script != null)
+                                {
+                                    Program.mainForm.ScriptMan.RunScript(mod, script);
+                                }
+                            }
+                        }
                     }
                 }
             }
