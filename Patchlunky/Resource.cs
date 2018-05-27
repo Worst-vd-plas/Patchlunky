@@ -51,11 +51,14 @@ namespace Patchlunky
 
                 if (File.Exists(filepath) == false)
                 {
-                    Msg.Log("ResourceLoadBitmap: '" + filepath + "' not found!");
+                    Msg.Log("ResourceLoadBitmap: '" + skin.Id + ":" + path + "' not found!");
                     return null;
                 }
 
-                result = new Bitmap((Bitmap)Image.FromFile(filepath));
+                using (Image img = Image.FromFile(filepath))
+                {
+                    result = new Bitmap(img);
+                }
             }
             else if (skin.Type == SkinType.Zip)
             {
@@ -119,6 +122,28 @@ namespace Patchlunky
             return result;
         }
 
+        //Load a bitmap copy from Spelunky Data (actually from Patchlunky_Temp)
+        public static Bitmap LoadBitmap(string path)
+        {
+            //Only default files can be loaded.
+            int index = Program.mainForm.Setup.DefaultFiles.FindIndex(o => o.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase));
+            if (index == -1)
+                return null; //Not a default file, cannot be loaded.
+
+            string filepath = Program.mainForm.Setup.TempPath + path;
+
+            if (File.Exists(filepath) == false)
+            {
+                Msg.Log("ResourceLoadBitmap: '" + path + "' not found!");
+                return null;
+            }
+
+            using (Image img = Image.FromFile(filepath))
+            {
+                return new Bitmap(img);
+            }
+        }
+
         //Load a bitmap copy of a mod resource
         public static Bitmap LoadBitmap(ModData mod, string path)
         {
@@ -130,11 +155,14 @@ namespace Patchlunky
 
                 if (File.Exists(filepath) == false)
                 {
-                    Msg.Log("ResourceLoadBitmap: '" + filepath + "' not found!");
+                    Msg.Log("ResourceLoadBitmap: '" + mod.Id + ":" + path + "' not found!");
                     return null;
                 }
 
-                result = new Bitmap((Bitmap)Image.FromFile(filepath));
+                using (Image img = Image.FromFile(filepath))
+                {
+                    result = new Bitmap(img);
+                }
             }
             else if (mod.Type.HasFlag(ModType.Zip))
             {
@@ -230,6 +258,29 @@ namespace Patchlunky
                 return true;
             }
             return false;
+        }
+
+        //Check if a file exists in an archive
+        public static bool FileExists(Archive archive, string path)
+        {
+            //Path needs to have a single slash separating the group and file
+            if ((path.Contains('/') || path.Contains('\\')) == false)
+                return false;
+
+            //Split the path to group and file
+            int split = path.IndexOfAny(new char[] { '/', '\\' });
+            string group = path.Substring(0, split);
+            string file = path.Substring(split+1);
+
+            int grp_index = archive.Groups.FindIndex(o => o.Name.Equals(group, StringComparison.OrdinalIgnoreCase));
+            if (grp_index == -1)
+                return false;
+
+            int ent_index = archive.Groups[grp_index].Entries.FindIndex(o => o.Name.Equals(file, StringComparison.OrdinalIgnoreCase));
+            if (ent_index == -1)
+                return false;
+
+            return true;
         }
 
         //Check if a directory exists in a mod resource
@@ -334,6 +385,30 @@ namespace Patchlunky
             //Save the entry
             Entry new_entry = new Entry(archive.Groups[grp_index].Entries[ent_index].Name, bytes);
             archive.Groups[grp_index].Entries[ent_index] = new_entry;
+
+            return true;
+        }
+
+        //Replace a file in Spelunky Data (actually in Patchlunky_Temp)
+        public static bool ReplaceFile(string path, Byte[] bytes)
+        {
+            //Only default files can be replaced.
+            int index = Program.mainForm.Setup.DefaultFiles.FindIndex(o => o.FilePath.Equals(path, StringComparison.OrdinalIgnoreCase));
+            if (index == -1)
+                return false; //Not a default file, cannot be replaced.
+
+            string filepath = Program.mainForm.Setup.TempPath + path;
+
+            //Try overwriting the file
+            try
+            {
+                File.WriteAllBytes(filepath, bytes);
+            }
+            catch (Exception ex)
+            {
+                Msg.MsgBox("Error patching file: " + ex.Message, "Patchlunky Setup");
+                return false;
+            }
 
             return true;
         }
