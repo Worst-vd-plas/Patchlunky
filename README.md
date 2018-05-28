@@ -30,19 +30,19 @@ they go in the correspondingly named directories.
 
 Patchlunky uses the following third-party libraries:
 
-[DotNetZip](https://dotnetzip.codeplex.com/)
+[DotNetZip](https://dotnetzip.codeplex.com/)<br/>
 Project includes a reference to Ionic.Zip.dll
 
-[SpelunkyWad](https://github.com/Contron/SpelunkyWad)
+[SpelunkyWad](https://github.com/Contron/SpelunkyWad)<br/>
 Older version of SpelunkyWad is included in the solution.
 
-[NLua](https://github.com/NLua/NLua)
+[NLua](https://github.com/NLua/NLua)<br/>
 Project includes a reference to NLua.dll and KeraLua.dll
 
-[Lua](https://www.lua.org/)
+[Lua](https://www.lua.org/)<br/>
 Project includes a reference to lua52.dll
 
-[MersenneTwister stlalv C# port](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/c-lang.html)
+[MersenneTwister stlalv C# port](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/c-lang.html)<br/>
 Project includes the source file.
 
 ## Notes
@@ -65,34 +65,34 @@ Patchlunky is licensed under Simplified BSD License (see [LICENSE.Patchlunky.txt
 Patchlunky makes use of the following third-party code:
 
 
-SpelunkyWad  
-MIT License (see [LICENSE.SpelunkyWad.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.SpelunkyWad.txt))  
+SpelunkyWad<br/>
+MIT License (see [LICENSE.SpelunkyWad.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.SpelunkyWad.txt))<br/>
 https://github.com/Contron/SpelunkyWad
 
-Lua
-MIT License (see [LICENSE.Lua.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.Lua.txt))
+Lua<br/>
+MIT License (see [LICENSE.Lua.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.Lua.txt))<br/>
 https://www.lua.org/
 
-NLua
-MIT License (see [LICENSE.NLua.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.NLua.txt))
+NLua<br/>
+MIT License (see [LICENSE.NLua.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.NLua.txt))<br/>
 https://github.com/NLua/NLua
 
-KopiLua
-MIT License (see [LICENSE.NLua.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.NLua.txt))
+KopiLua<br/>
+MIT License (see [LICENSE.NLua.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.NLua.txt))<br/>
 http://www.ppl-pilot.com/kopilua.aspx
 
-DotNetZip  
-Microsoft Public License (see [LICENSE.DotNetZip.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.txt))  
+DotNetZip<br/>
+Microsoft Public License (see [LICENSE.DotNetZip.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.txt))<br/>
 https://dotnetzip.codeplex.com/
 
-ZLIB  
-zlib License (see [LICENSE.DotNetZip.zlib.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.zlib.txt))  
+ZLIB<br/>
+zlib License (see [LICENSE.DotNetZip.zlib.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.zlib.txt))<br/>
 http://zlib.net/
 
-BZIP2  
-BSD License/Apache License 2.0 (see [LICENSE.DotNetZip.bzip2.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.bzip2.txt))  
+BZIP2<br/>
+BSD License/Apache License 2.0 (see [LICENSE.DotNetZip.bzip2.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.DotNetZip.bzip2.txt))<br/>
 http://www.bzip.org/
 
-MersenneTwister stlalv C# port
-Mersenne Twister License (See [LICENSE.MersenneTwister.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.MersenneTwister.txt))
+MersenneTwister stlalv C# port<br/>
+Mersenne Twister License (See [LICENSE.MersenneTwister.txt](https://github.com/Worst-vd-plas/Patchlunky/blob/master/License/LICENSE.MersenneTwister.txt))<br/>
 http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/c-lang.html
