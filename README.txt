@@ -242,7 +242,160 @@ Supported tags:
 
 5. Lua Scripting Support
 ==========================
-!TODO: Add proper documentation here!
+Patchlunky mods can include a 'patch script' written in the Lua scripting language. These scripts
+can patch the game files in more advanced ways than simply replacing game files.
+
+The mods that make use of Lua scripts are more likely to be compatible with other mods since the
+scripts allow for more accurate patching, affecting less of the content that is unrelated to the
+mod at hand. This can also reduce the file size of mods when entire files don't have to be included.
+
+
+Security
+--------
+Scripts in Patchlunky are sandboxed using Lua itself to create a restricted environment for the
+scripts. In the Lua sandbox the scripts only have access to a specific subset of the Lua functions.
+
+The functions for loading and saving mod resources are restricted from acting outside of their
+intended purposes. There are limits to loading too many concurrent resources and limits to writing
+too many resources to the disk.
+
+Currently there is no protection against infinite loops and the like, which will result in the
+program hanging and ceasing to respond. In a such scenario the program will need to be terminated
+from the task manager.
+
+Despite the measures in place to prevent misuse, there still remains the possibility that a
+malicious user could exploit a bug or vulnerability in order to break out of the sandbox, and then
+breach into the system.
+
+It is probably a good idea to treat scripts with the same amount of precaution that you would treat
+any unknown piece of software with. (Note that antivirus software is unlikely to detect whether or
+not a script is safe.) If you are unsure about a script, you could ask other people for help or you
+could try studying the script yourself. (The source is always inside the mod, patchlunky does not
+allow pre-compiled scripts.)
+
+Ideally the Lua scripting interpreter would be sandboxed at the process level or even the operating
+system level to increase the fail-security of the program. Unfortunately this is not the case yet,
+and as such you have to be more careful with the scripts. At the time of writing this, I am not
+aware of any exploit in Patchlunky that would allow breaking out of the sandbox.
+
+
+Lua features
+------------
+The current version of Patchlunky uses Lua version 5.2
+For reference visit https://www.lua.org/manual/5.2/
+
+The following standard Lua functions are supported:
+  * assert
+  * error
+  * ipairs
+  * next
+  * pairs
+  * print (Only takes a single argument)
+  * select
+  * tonumber
+  * tostring
+  * type
+  * string.byte
+  * string.char
+  * string.find
+  * string.format
+  * string.gmatch
+  * string.gsub
+  * string.len
+  * string.lower
+  * string.match
+  * string.rep
+  * string.reverse
+  * string.sub
+  * string.upper
+  * table.concat
+  * table.insert
+  * table.pack
+  * table.remove
+  * table.sort
+  * table.unpack
+  * math.abs
+  * math.acos
+  * math.asin
+  * math.atan
+  * math.atan2
+  * math.ceil
+  * math.cos
+  * math.cosh
+  * math.deg
+  * math.exp
+  * math.floor
+  * math.fmod
+  * math.frexp
+  * math.huge
+  * math.ldexp
+  * math.log
+  * math.max
+  * math.min
+  * math.modf
+  * math.pi
+  * math.pow
+  * math.rad
+  * math.random
+  * math.randomseed
+  * math.sin
+  * math.sinh
+  * math.sqrt
+  * math.tan
+  * math.tanh
+  * bit32.arshift
+  * bit32.band
+  * bit32.bnot
+  * bit32.bor
+  * bit32.btest
+  * bit32.bxor
+  * bit32.extract
+  * bit32.replace
+  * bit32.lrotate
+  * bit32.lshift
+  * bit32.rrotate
+  * bit32.rshift
+
+The following Patchlunky Lua features are supported:
+  * image.load (path)
+    This function loads an image from the specified relative path. By default this is relative to
+    the mod folder. Prefix with 'game:' to have the path be relative to the spelunky data folder.
+    Prefix with 'alltex.wad:' to have the path be relative to the wad archive. For wad archives,
+    separate the group and entry name with a forward slash. Returns an Image object if the image
+    was successfully loaded.
+
+  * image.new (width, height [, color{r,g,b,a}])
+    This function creates an image with the specified size and optional background color specified
+    by a table. Returns an Image object if the image was successfully created.
+
+  - Image:clone()
+    This method returns a clone of this Image object.
+
+  - Image:free()
+    This method disposes of the resources used by the Image object. You need to call this if you
+    are loading more than 50 images in your script.
+
+  - Image:save (path)
+    This method saves the Image to the specified relative path. By default this is relative to
+    the spelunky data folder. Prefix with 'alltex.wad:' to have the path be relative to the wad
+    archive instead. During execution a patch script may only save to each path once, so images
+    should only be saved once they are completely finished.
+
+  - Image:draw_image (SrcImage, x, y, mode)
+  - Image:draw_image (SrcImage, x, y, w, h, mode)
+  - Image:draw_image (SrcImage, x, y, w, h, srcx, srcy, srcw, srch, mode)
+    These methods draw the specified source image on top of the Image calling this method.
+    x and y specify the location and w and h the size of the source image. srcx, srcy, srcw, srch
+    specify the portion of the source image to draw. If srcw or srch are either 0 or unspecified,
+    then the full source width or full source height will be used in their place. If w or h are
+    either 0 or unspecified, then the srcw or srch will be used in their place. mode specifies the
+    way the source image is drawn, supported values are:
+      MODE_REPLACE Pixels replace the pixels in the image being drawn to regardless of their alpha.
+      MODE_OVERLAY Pixels are blended to the image being drawn to based on their alpha component.
+
+Patch scripts may not load/create/clone more than 50 images at once. If you want to load more, you
+have to first call Image:free() on images that you are no longer using. All the images loaded by
+the script will be freed automatically when the script finishes.
 
 
 6. Patchlunky URL Protocol
