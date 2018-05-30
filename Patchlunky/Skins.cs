@@ -52,6 +52,7 @@ namespace Patchlunky
 
         //Paths
         public string ModPath; //Path to directory or zip file that contains the character
+        public string TextFilePath;
         public string CharacterImgPath;
         public string PreviewImgPath;
         public string LeaderImgPath;
@@ -76,6 +77,7 @@ namespace Patchlunky
             this.IsDefault = isdefault;
 
             //Init values
+            this.TextFilePath = null;
             this.CharacterImgPath = null;
             this.PreviewImgPath = null;
             this.LeaderImgPath = null;
@@ -104,6 +106,12 @@ namespace Patchlunky
             this.PreviewImage = sourceBMP.Clone(previewRect, sourceBMP.PixelFormat);
 
             sourceBMP.Dispose();
+
+            //Load the text file, if supplied
+            if (this.TextFilePath != null)
+            {
+                this.Description = Resource.LoadText(this, this.TextFilePath);
+            }
         }
     }
 
@@ -389,12 +397,18 @@ namespace Patchlunky
                 skin.Email             = Xmf.GetXMLString(node, "./Email");
                 skin.WebUrl            = Xmf.GetXMLString(node, "./WebUrl");
                 skin.Description       = Xmf.GetXMLString(node, "./Description");
+                skin.TextFilePath      = Xmf.GetXMLString(node, "./TextFile");
                 skin.PatchlunkyVersion = Xmf.GetXMLString(node, "./PatchlunkyVersion");
                 skin.CharacterImgPath  = charimgpath;
                 skin.PreviewImgPath    = Xmf.GetXMLString(node, "./PreviewImage");
                 skin.LeaderImgPath     = Xmf.GetXMLString(node, "./LeaderboardImage");
 
                 //Ensure that the paths are valid format
+                if ((skin.TextFilePath != null) && (Xmf.PathIsValid(skin.TextFilePath) == false))
+                {
+                    skin.TextFilePath = null;
+                    Msg.Log("Invalid TextFile path for '" + skin.Id + "'!");
+                }
                 // CharacterImgPath is checked earlier.
                 if ((skin.PreviewImgPath != null) && (Xmf.PathIsValid(skin.PreviewImgPath) == false))
                 {

@@ -122,6 +122,51 @@ namespace Patchlunky
             return result;
         }
 
+        //Load text of a skin resource
+        public static string LoadText(SkinData skin, string path)
+        {
+            string result = null;
+
+            if (skin.Type == SkinType.Dir)
+            {
+                string filepath = skin.ModPath + "/" + path;
+
+                if (File.Exists(filepath) == false)
+                {
+                    Msg.Log("ResourceLoadText: '" + filepath + "' not found!");
+                    return null;
+                }
+
+                result = File.ReadAllText(filepath);
+            }
+            else if (skin.Type == SkinType.Zip)
+            {
+                ZipFile zip = new ZipFile(skin.ModPath);
+
+                if (zip.ContainsEntry(path) == false)
+                {
+                    zip.Dispose();
+                    Msg.Log("ResourceLoadText: '" + path + "' not found!");
+                    return null;
+                }
+
+                //Extract the resource to a memorystream
+                MemoryStream stream = new MemoryStream();
+                zip[path].Extract(stream);
+                zip.Dispose();
+
+                //Read the text from the memorystream
+                stream.Position = 0;
+                StreamReader sr = new StreamReader(stream);
+                result = sr.ReadToEnd();
+
+                sr.Dispose();
+                stream.Dispose();
+            }
+
+            return result;
+        }
+
         //Load a bitmap copy from Spelunky Data (actually from Patchlunky_Temp)
         public static Bitmap LoadBitmap(string path)
         {

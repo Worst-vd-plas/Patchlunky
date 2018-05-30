@@ -229,6 +229,7 @@ Supported tags:
   * Email : Contact email for the character.
   * WebUrl : Web address for the character.
   * Description : The description of the character.
+  * TextFile : Path to text file with description, overrides the 'Description' tag.
   * PreviewImage : Image displayed for the character in the mod manager.
   * PatchlunkyVersion : Minimum Patchlunky version required for the character to work.
   * CharacterImage : The spritesheet for the character.
