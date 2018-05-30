@@ -315,8 +315,8 @@ namespace Patchlunky
                                 "IMPORTANT: While there are measures in place to prevent misuse, there always remains " +
                                 "the possibility that a malicious user could exploit a bug or vulnerability in order " +
                                 "to breach into your system. Consider treating scripts with the same amount of " +
-                                "precaution that you would treat any unknown piece of software with. (Note that " +
-                                "antivirus software is unlikely to detect whether or not a script is safe.)" +
+                                "precaution that you would treat any unknown piece of software with. (For more " +
+                                "details, see 'Security' under section 5. in the readme.)" +
                                 Environment.NewLine + Environment.NewLine +
                                 "In short: RUN THE SCRIPT AT YOUR OWN RISK.";
                             result = Msg.MsgBox(message, "Patchlunky Setup", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
@@ -327,9 +327,16 @@ namespace Patchlunky
 
                                 if (script != null)
                                 {
-                                    Program.mainForm.ScriptMan.RunScript(mod, script);
+                                    bool success = Program.mainForm.ScriptMan.RunScript(mod, script);
+
+                                    if (success)
+                                        Msg.Log("Patched 1 script for " + mod.Name);
+                                    else
+                                        Msg.Log("Patch script aborted for " + mod.Name);
                                 }
+                                else Msg.Log("Patch script missing for " + mod.Name);
                             }
+                            else Msg.Log("Patch script skipped for " + mod.Name);
                         }
                     }
                 }

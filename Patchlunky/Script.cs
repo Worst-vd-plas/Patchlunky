@@ -58,7 +58,7 @@ namespace Patchlunky
             PrintCounter = 0;
         }
 
-        public void RunScript(ModData mod, string script)
+        public bool RunScript(ModData mod, string script)
         {
             bool success = true;
 
@@ -81,24 +81,21 @@ namespace Patchlunky
             catch (NLua.Exceptions.LuaScriptException ex)
             {
                 Msg.Log("Lua (" + mod.Name + ") script exception: " + ex.Message);
-                Msg.Log("Patch script aborted for " + mod.Name);
                 success = false;
             }
             catch (NLua.Exceptions.LuaException ex)
             {
                 Msg.Log("Lua (" + mod.Name + ") exception: " + ex.Message);
-                Msg.Log("Patch script aborted for " + mod.Name);
                 success = false;
             }
 
             //Save archives
             alltex.Save();
 
-            if (success)
-                Msg.Log("Patched 1 script for " + mod.Name);
-
             //Perform cleanup of the resources
             CleanUp();
+
+            return success;
         }
 
         //Disposes of all the resources after the script has finished running
