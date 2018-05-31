@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>tnt.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\tnt.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
@@ -101,7 +101,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="under_construction.png" />
+    <None Include="Resources\under_construction.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpelunkyWad\SpelunkyWad.csproj">
@@ -110,17 +110,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Unknown16x16.png" />
-    <None Include="Audio16x16.png" />
-    <None Include="Graphic16x16.png" />
+    <None Include="Resources\Unknown16x16.png" />
+    <None Include="Resources\Audio16x16.png" />
+    <None Include="Resources\Graphic16x16.png" />
     <Content Include="..\NLua\lua52.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="LuaScript16x16.png" />
-    <None Include="Music16x16.png" />
-    <None Include="Text16x16.png" />
-    <Content Include="tnt.ico" />
+    <None Include="Resources\LuaScript16x16.png" />
+    <None Include="Resources\Music16x16.png" />
+    <None Include="Resources\Text16x16.png" />
+    <Content Include="Resources\tnt.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
