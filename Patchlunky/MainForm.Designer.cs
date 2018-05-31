@@ -115,6 +115,7 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.chkScriptWarning = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabMods.SuspendLayout();
             this.flpModContentIcons.SuspendLayout();
@@ -894,6 +895,7 @@
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.chkScriptWarning);
             this.tabSettings.Controls.Add(this.chkSkinConfigAutosave);
             this.tabSettings.Controls.Add(this.chkModConfigAutosave);
             this.tabSettings.Controls.Add(this.chkModsReplaceSkins);
@@ -955,7 +957,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Miriam", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(112, 250);
+            this.label2.Location = new System.Drawing.Point(112, 319);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(285, 32);
             this.label2.TabIndex = 10;
@@ -1067,7 +1069,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Image = global::Patchlunky.Properties.Resources.under_construction;
-            this.pictureBox1.Location = new System.Drawing.Point(27, 237);
+            this.pictureBox1.Location = new System.Drawing.Point(27, 306);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(64, 64);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -1120,6 +1122,19 @@
             this.toolTip1.AutoPopDelay = 8000;
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
+            // 
+            // chkScriptWarning
+            // 
+            this.chkScriptWarning.AutoSize = true;
+            this.chkScriptWarning.Location = new System.Drawing.Point(13, 230);
+            this.chkScriptWarning.Name = "chkScriptWarning";
+            this.chkScriptWarning.Size = new System.Drawing.Size(159, 17);
+            this.chkScriptWarning.TabIndex = 14;
+            this.chkScriptWarning.Text = "Ask permission to run scripts";
+            this.toolTip1.SetToolTip(this.chkScriptWarning, "If enabled, permission is asked for each script. If disabled, scripts will ALWAYS" +
+        " run.");
+            this.chkScriptWarning.UseVisualStyleBackColor = true;
+            this.chkScriptWarning.CheckedChanged += new System.EventHandler(this.chkScriptWarning_CheckedChanged);
             // 
             // MainForm
             // 
@@ -1255,6 +1270,7 @@
         private System.Windows.Forms.PictureBox picModIconText;
         private System.Windows.Forms.PictureBox picModIconGraphics;
         private System.Windows.Forms.PictureBox picModIconMisc;
+        private System.Windows.Forms.CheckBox chkScriptWarning;
     }
 }
 

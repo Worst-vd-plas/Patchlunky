@@ -153,6 +153,10 @@ Autosave mod list:
 Autosave character list:
   Enables saving the current character list when patching or closing Patchlunky.
 
+Ask permission to run scripts:
+  When this setting is enabled, Patchlunky will ask for permission to run patch scripts while
+  patching. If this setting is disabled, patch scripts will ALWAYS run during patching.
+
 
 4. Making mods for Patchlunky
 =============================

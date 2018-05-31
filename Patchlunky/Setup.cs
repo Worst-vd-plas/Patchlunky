@@ -309,17 +309,21 @@ namespace Patchlunky
                         //If the mod has a PatchScript
                         if (mod.ScriptPath != null)
                         {
-                            //Ask user for permission
-                            message = "The mod '" + mod.Name + "' includes a patch script. Allow the script to run?" +
-                                Environment.NewLine + Environment.NewLine +
-                                "IMPORTANT: While there are measures in place to prevent misuse, there always remains " +
-                                "the possibility that a malicious user could exploit a bug or vulnerability in order " +
-                                "to breach into your system. Consider treating scripts with the same amount of " +
-                                "precaution that you would treat any unknown piece of software with. (For more " +
-                                "details, see 'Security' under section 5. in the readme.)" +
-                                Environment.NewLine + Environment.NewLine +
-                                "In short: RUN THE SCRIPT AT YOUR OWN RISK.";
-                            result = Msg.MsgBox(message, "Patchlunky Setup", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                            if (settings.Check("ScriptWarning", "True"))
+                            {
+                                //Ask user for permission
+                                message = "The mod '" + mod.Name + "' includes a patch script. Allow the script to run?" +
+                                    Environment.NewLine + Environment.NewLine +
+                                    "IMPORTANT: While there are measures in place to prevent misuse, there always remains " +
+                                    "the possibility that a malicious user could exploit a bug or vulnerability in order " +
+                                    "to breach into your system. Consider treating scripts with the same amount of " +
+                                    "precaution that you would treat any unknown piece of software with. (For more " +
+                                    "details, see 'Security' under section 5. in the readme.)" +
+                                    Environment.NewLine + Environment.NewLine +
+                                    "In short: RUN THE SCRIPT AT YOUR OWN RISK.";
+                                result = Msg.MsgBox(message, "Patchlunky Setup", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                            }
+                            else result = DialogResult.Yes;
 
                             if (result == DialogResult.Yes)
                             {

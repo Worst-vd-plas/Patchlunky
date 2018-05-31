@@ -372,6 +372,7 @@ namespace Patchlunky
             chkModsReplaceSkins.Checked = Settings.Check("ModsReplaceDefaultSkins", "True");
             chkModConfigAutosave.Checked = Settings.Check("ModConfigAutosave", "True");
             chkSkinConfigAutosave.Checked = Settings.Check("SkinConfigAutosave", "True");
+            chkScriptWarning.Checked = Settings.Check("ScriptWarning", "True");
         }
 
         //Starts patchlunky setup
@@ -465,7 +466,7 @@ namespace Patchlunky
         //ModsReplaceDefaultSkins
         private void chkModsReplaceSkins_CheckedChanged(object sender, EventArgs e)
         {
-            Settings.Set("ModsReplaceDefaultSkins", chkModsReplaceSkins.Checked ? "True" : "False");            
+            Settings.Set("ModsReplaceDefaultSkins", chkModsReplaceSkins.Checked ? "True" : "False");
         }
 
         //ModConfigAutosave
@@ -478,6 +479,12 @@ namespace Patchlunky
         private void chkSkinConfigAutosave_CheckedChanged(object sender, EventArgs e)
         {
             Settings.Set("SkinConfigAutosave", chkSkinConfigAutosave.Checked ? "True" : "False");
+        }
+
+        //ScriptWarning
+        private void chkScriptWarning_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Set("ScriptWarning", chkScriptWarning.Checked ? "True" : "False");
         }
 
         //----------------------------------------------//
