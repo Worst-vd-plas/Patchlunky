@@ -39,8 +39,9 @@ namespace Patchlunky
     {
         private Lua State;
 
-        //Archives for scripts
+        //Resources for scripts
         public Archive alltex;
+        public LanguageFile Language;
 
         //For keeping track of script resource usage.
         private List<Bitmap> Bitmaps; //Holds all bitmaps used by ScriptImages
@@ -66,9 +67,11 @@ namespace Patchlunky
             State = new Lua();
             object sc_ext = new ScriptExtensions(this, mod);
 
-            //Load archives
+            //Load archives & language
             alltex = new Archive(Program.mainForm.Setup.TempPath + "Textures/alltex.wad");
             alltex.Load();
+            Language = new LanguageFile(Program.mainForm.Setup.TempPath + "Localization/strings.pct");
+            Language.Load();
 
             try
             {
@@ -89,8 +92,9 @@ namespace Patchlunky
                 success = false;
             }
 
-            //Save archives
+            //Save archives & language
             alltex.Save();
+            Language.Save();
 
             //Perform cleanup of the resources
             CleanUp();
@@ -138,6 +142,14 @@ namespace Patchlunky
               local img = sc_ext:Image_New(width, height, color)
               if not img then error('image.new failed!', 2) end
               return img
+            end
+
+            function _language_get(key)
+              return sc_ext:Language_Get(tostring(key))
+            end
+
+            function _language_set(key, value)
+              return sc_ext:Language_Set(tostring(key), tostring(value))
             end
 
             function _math_random(m, n)
@@ -256,6 +268,12 @@ namespace Patchlunky
                 new = _image_new,
                 MODE_REPLACE = 0,
                 MODE_OVERLAY = 1
+              },
+
+              -- Patchlunky Language functions
+              language = {
+                 get = _language_get,
+                 set = _language_set,
               },
 
               -- No I/O library
@@ -407,6 +425,18 @@ namespace Patchlunky
         {
             ulong seed = unchecked((ulong)value);
             PsRng.init_genrand(seed);
+        }
+
+        //Get the value of a key in the language collection
+        public string Language_Get(string key)
+        {
+            return ScriptMan.Language.Get(key);
+        }
+
+        //Set the value of a key in the language collection
+        public bool Language_Set(string key, string value)
+        {
+            return ScriptMan.Language.Set(key, value);
         }
 
         //Load an image from path

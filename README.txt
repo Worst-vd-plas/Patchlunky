@@ -358,6 +358,12 @@ The following standard Lua functions are supported:
   * bit32.rshift
 
 The following Patchlunky Lua features are supported:
+  * language.get (key)
+    This function returns the spelunky localization string for the specified key.
+
+  * language.set (key, value)
+    This function sets the spelunky localization string for the specified key.
+
   * image.load (path)
     This function loads an image from the specified relative path. By default this is relative to
     the mod folder. Prefix with 'game:' to have the path be relative to the spelunky data folder.
@@ -414,7 +420,6 @@ For these links to work, you need to register the URL protocol with the setup wi
 7. Planned Features
 ===================
  
- * A feature that allows mods to replace specific strings instead of the whole file.
  * A tab for adjusting some Spelunky settings such as windowed mode and resolution.
 
 
