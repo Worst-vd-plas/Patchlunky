@@ -132,6 +132,10 @@ namespace Patchlunky
               if not ok then error('PrintLimit exceeded!', 2) end
             end
 
+            function _program_getinput(message, default_value)
+              return sc_ext:Program_GetInput(tostring(message), tostring(default_value))
+            end
+
             function _image_load(path)
               local img = sc_ext:Image_Load(tostring(path))
               if not img then error('image.load failed!', 2) end
@@ -274,6 +278,11 @@ namespace Patchlunky
               language = {
                  get = _language_get,
                  set = _language_set,
+              },
+
+              -- Patchlunky misc functions
+              program = {
+                getinput = _program_getinput,
               },
 
               -- No I/O library
@@ -425,6 +434,20 @@ namespace Patchlunky
         {
             ulong seed = unchecked((ulong)value);
             PsRng.init_genrand(seed);
+        }
+
+        //Get an input string from the user. Returns default_value if canceled.
+        public string Program_GetInput(string message, string default_value)
+        {
+            using (InputDialog inputdialog = new InputDialog(this.Mod.Name, message, default_value))
+            {
+                System.Windows.Forms.DialogResult result = inputdialog.ShowDialog(Program.mainForm);
+
+                if (result == System.Windows.Forms.DialogResult.Cancel)
+                    return default_value;
+
+                return inputdialog.GetInputString();
+            }
         }
 
         //Get the value of a key in the language collection

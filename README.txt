@@ -368,6 +368,11 @@ The following Patchlunky Lua features are supported:
   * language.set (key, value)
     This function sets the spelunky localization string for the specified key.
 
+  * program.getinput (message, default_value)
+    This function displays an input dialog with the given message. The default_value will be set
+    into the text input field of the dialog. Returns the string in the text input field, unless
+    the dialog is canceled, in which case the default_value string is returned instead.
+
   * image.load (path)
     This function loads an image from the specified relative path. By default this is relative to
     the mod folder. Prefix with 'game:' to have the path be relative to the spelunky data folder.
