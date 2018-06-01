@@ -858,16 +858,11 @@ namespace Patchlunky
             //Refresh the mods or characters
             if (fdl.Type == DownloadType.Mod)
             {
-                //TODO: Save current config?
-                Program.mainForm.ModMan.LoadAllMods();
-                Program.mainForm.UpdateModList();
+                Program.mainForm.ReloadMods();
             }
             else if (fdl.Type == DownloadType.Character)
             {
-                //TODO: Save current config?
-                Program.mainForm.SkinMan.LoadAllSkins();
-                Program.mainForm.UpdateCharacterList();
-                Program.mainForm.UpdateSkinList();
+                Program.mainForm.ReloadChars();
             }
         }
 

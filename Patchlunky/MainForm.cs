@@ -497,6 +497,19 @@ namespace Patchlunky
         // MODS TAB                                     //
         //----------------------------------------------//
 
+        //Reloads the mods
+        public void ReloadMods()
+        {
+            UpdateModConfiguration();
+
+            if (Settings.Check("ModConfigAutosave", "True"))
+                ModMan.SaveConfig(ModMan.CurrentConfig);
+
+            ModMan.LoadAllMods();
+            ModMan.LoadConfig(ModMan.CurrentConfig);
+            UpdateModList();
+        }
+
         //Updates the mod configuration based on the checkedlistbox
         private void UpdateModConfiguration()
         {
@@ -816,6 +829,20 @@ namespace Patchlunky
         //----------------------------------------------//
         // SKINS TAB                                    //
         //----------------------------------------------//
+
+        //Reloads the characters
+        public void ReloadChars()
+        {
+            UpdateSkinConfiguration();
+
+            if (Settings.Check("SkinConfigAutosave", "True"))
+                SkinMan.SaveConfig(SkinMan.CurrentConfig);
+
+            SkinMan.LoadAllSkins();
+            SkinMan.LoadConfig(SkinMan.CurrentConfig);
+            UpdateCharacterList();
+            UpdateSkinList();
+        }
 
         //Updates skin configuration based on the character listview
         private void UpdateSkinConfiguration()
@@ -1393,18 +1420,13 @@ namespace Patchlunky
         //Reloads the mods
         private void btnReloadMods_Click(object sender, EventArgs e)
         {
-            //TODO: Save current config?
-            Program.mainForm.ModMan.LoadAllMods();
-            Program.mainForm.UpdateModList();
+            ReloadMods();
         }
 
         //Reloads the characters
         private void btnReloadChars_Click(object sender, EventArgs e)
         {
-            //TODO: Save current config?
-            Program.mainForm.SkinMan.LoadAllSkins();
-            Program.mainForm.UpdateCharacterList();
-            Program.mainForm.UpdateSkinList();
+            ReloadChars();
         }
 
         //Open the Mods folder in explorer
