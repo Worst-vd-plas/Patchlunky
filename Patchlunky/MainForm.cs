@@ -463,6 +463,12 @@ namespace Patchlunky
             Msg.Log("Extracted allsounds.wad to ./Patchlunky_Temp/allsounds/");
         }
 
+        //Open the link to Patchlunky on GitHub
+        private void btnVisitGitHub_Click(object sender, EventArgs e)
+        {
+            OpenWebLink("https://github.com/Worst-vd-plas/Patchlunky");
+        }
+
         //ModsReplaceDefaultSkins
         private void chkModsReplaceSkins_CheckedChanged(object sender, EventArgs e)
         {

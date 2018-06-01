@@ -95,6 +95,7 @@
             this.lblDownloads = new System.Windows.Forms.Label();
             this.lstDownloads = new System.Windows.Forms.ListBox();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.chkScriptWarning = new System.Windows.Forms.CheckBox();
             this.chkSkinConfigAutosave = new System.Windows.Forms.CheckBox();
             this.chkModConfigAutosave = new System.Windows.Forms.CheckBox();
             this.chkModsReplaceSkins = new System.Windows.Forms.CheckBox();
@@ -115,7 +116,7 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnRunGame = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.chkScriptWarning = new System.Windows.Forms.CheckBox();
+            this.btnVisitGitHub = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabMods.SuspendLayout();
             this.flpModContentIcons.SuspendLayout();
@@ -895,6 +896,7 @@
             // 
             // tabSettings
             // 
+            this.tabSettings.Controls.Add(this.btnVisitGitHub);
             this.tabSettings.Controls.Add(this.chkScriptWarning);
             this.tabSettings.Controls.Add(this.chkSkinConfigAutosave);
             this.tabSettings.Controls.Add(this.chkModConfigAutosave);
@@ -915,6 +917,19 @@
             this.tabSettings.TabIndex = 2;
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // chkScriptWarning
+            // 
+            this.chkScriptWarning.AutoSize = true;
+            this.chkScriptWarning.Location = new System.Drawing.Point(13, 230);
+            this.chkScriptWarning.Name = "chkScriptWarning";
+            this.chkScriptWarning.Size = new System.Drawing.Size(159, 17);
+            this.chkScriptWarning.TabIndex = 14;
+            this.chkScriptWarning.Text = "Ask permission to run scripts";
+            this.toolTip1.SetToolTip(this.chkScriptWarning, "If enabled, permission is asked for each script. If disabled, scripts will ALWAYS" +
+        " run.");
+            this.chkScriptWarning.UseVisualStyleBackColor = true;
+            this.chkScriptWarning.CheckedChanged += new System.EventHandler(this.chkScriptWarning_CheckedChanged);
             // 
             // chkSkinConfigAutosave
             // 
@@ -1123,18 +1138,18 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // chkScriptWarning
+            // btnVisitGitHub
             // 
-            this.chkScriptWarning.AutoSize = true;
-            this.chkScriptWarning.Location = new System.Drawing.Point(13, 230);
-            this.chkScriptWarning.Name = "chkScriptWarning";
-            this.chkScriptWarning.Size = new System.Drawing.Size(159, 17);
-            this.chkScriptWarning.TabIndex = 14;
-            this.chkScriptWarning.Text = "Ask permission to run scripts";
-            this.toolTip1.SetToolTip(this.chkScriptWarning, "If enabled, permission is asked for each script. If disabled, scripts will ALWAYS" +
-        " run.");
-            this.chkScriptWarning.UseVisualStyleBackColor = true;
-            this.chkScriptWarning.CheckedChanged += new System.EventHandler(this.chkScriptWarning_CheckedChanged);
+            this.btnVisitGitHub.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnVisitGitHub.ForeColor = System.Drawing.Color.Blue;
+            this.btnVisitGitHub.Location = new System.Drawing.Point(552, 387);
+            this.btnVisitGitHub.Name = "btnVisitGitHub";
+            this.btnVisitGitHub.Size = new System.Drawing.Size(106, 38);
+            this.btnVisitGitHub.TabIndex = 15;
+            this.btnVisitGitHub.Text = "Visit Patchlunky GitHub page";
+            this.toolTip1.SetToolTip(this.btnVisitGitHub, "Opens the link to the Patchlunky GitHub page.");
+            this.btnVisitGitHub.UseVisualStyleBackColor = true;
+            this.btnVisitGitHub.Click += new System.EventHandler(this.btnVisitGitHub_Click);
             // 
             // MainForm
             // 
@@ -1271,6 +1286,7 @@
         private System.Windows.Forms.PictureBox picModIconGraphics;
         private System.Windows.Forms.PictureBox picModIconMisc;
         private System.Windows.Forms.CheckBox chkScriptWarning;
+        private System.Windows.Forms.Button btnVisitGitHub;
     }
 }
 
