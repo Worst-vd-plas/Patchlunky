@@ -178,7 +178,7 @@ Instead of including the WAD files, you should create a folder at the location w
 would be, naming that folder like the WAD file, but without the file extension. So for example
 naming the folder 'alltex' or 'allsounds'. Inside that folder create subfolders that match the
 WAD groups that your mod affects, and then include the .png or .wav files that your mod changes.
-See 'Patchlunky Example Mod 1' and 'Patchlunky Example Mod 2' for examples on how to do this.
+See 'Patchlunky Example Mod 1' for an example on how to do this.
 
 In the main folder of your mod, you should create a textfile named "readme.txt" in which you can
 write a description of the mod. You can also include a .png image named "picture.png" for your mod,
@@ -201,7 +201,7 @@ If everything works, you are ready to distribute the .plm file containing your m
 XML-mods
 --------
 Mods that include a 'mod.xml' file, will be treated according to the properties they specify in the
-xml file. See 'Patchlunky XML Mod' for an example.
+xml file. See 'Patchlunky Example Mod 2' for an example.
 
 Supported tags:
   * Name : Name of the mod.
