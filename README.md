@@ -40,7 +40,7 @@ Older version of SpelunkyWad is included in the solution.
 Project includes a reference to NLua.dll and KeraLua.dll
 
 [Lua](https://www.lua.org/)<br/>
-Project includes a reference to lua52.dll
+Project includes a reference to lua52.dll (5.2.3 included in NLua package)
 
 [MersenneTwister stlalv C# port](http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/c-lang.html)<br/>
 Project includes the source file.

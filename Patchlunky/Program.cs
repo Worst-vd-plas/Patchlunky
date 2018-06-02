@@ -23,7 +23,7 @@ namespace Patchlunky
             Assembly exAss = Assembly.GetExecutingAssembly();
             string version = FileVersionInfo.GetVersionInfo(exAss.Location).ProductVersion;
             string appGuid = ((GuidAttribute)exAss.GetCustomAttributes(typeof(GuidAttribute), false).GetValue(0)).Value;
-            string windowName = "Patchlunky " + version + " Beta";
+            string windowName = "Patchlunky " + version;
 
             //The patchlunkyUrl is for use with a custom URI scheme
             string patchlunkyUrl = null;

@@ -1,6 +1,6 @@
 
 Patchlunky - Mod Manager for Spelunky HD
-Version 1.0.0.2 Beta
+Version 1.0.0.2
 Copyright (c) 2018, Worst-vd-plas
 
 Web site: https://github.com/Worst-vd-plas/Patchlunky
@@ -435,7 +435,7 @@ For these links to work, you need to register the URL protocol with the setup wi
 8. Changelog
 ============
 
-- version 1.0.0.2 Beta
+- version 1.0.0.2
  * Support GOG version of Spelunky
  * XML-based mods and characters
  * Patchlunky URL protocol
