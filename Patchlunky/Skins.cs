@@ -99,13 +99,18 @@ namespace Patchlunky
         {
             string imgfile = this.PreviewImgPath ?? this.CharacterImgPath;
 
-            Bitmap sourceBMP = Resource.LoadBitmap(this, imgfile);
-            Rectangle previewRect = new Rectangle(0, 0, 80, 80);
+            if (imgfile != null)
+            {
+                Bitmap sourceBMP = Resource.LoadBitmap(this, imgfile);
+                Rectangle previewRect = new Rectangle(0, 0, 80, 80);
 
-            //TODO: Add error handling here
-            this.PreviewImage = sourceBMP.Clone(previewRect, sourceBMP.PixelFormat);
+                if (sourceBMP != null)
+                {
+                    this.PreviewImage = sourceBMP.Clone(previewRect, sourceBMP.PixelFormat);
 
-            sourceBMP.Dispose();
+                    sourceBMP.Dispose();
+                }
+            }
 
             //Load the text file, if supplied
             if (this.TextFilePath != null)
@@ -194,7 +199,10 @@ namespace Patchlunky
 
             foreach (var skin in this.Skins)
             {
-                SkinImageList.Images.Add(skin.Id, skin.PreviewImage);
+                if (skin.PreviewImage != null)
+                    SkinImageList.Images.Add(skin.Id, skin.PreviewImage);
+                else
+                    SkinImageList.Images.Add(skin.Id, Patchlunky.Properties.Resources.MissingChar);
             }
         }
 

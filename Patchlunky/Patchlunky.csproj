@@ -129,6 +129,7 @@
     <None Include="Resources\LuaScript16x16.png" />
     <None Include="Resources\Music16x16.png" />
     <None Include="Resources\Text16x16.png" />
+    <None Include="Resources\MissingChar.png" />
     <Content Include="Resources\tnt.ico" />
   </ItemGroup>
   <ItemGroup />
