@@ -143,6 +143,7 @@ namespace Patchlunky
             end
 
             function _image_new(width, height, color)
+              color = color or {}
               local img = sc_ext:Image_New(width, height, color)
               if not img then error('image.new failed!', 2) end
               return img
@@ -466,7 +467,7 @@ namespace Patchlunky
         public ScriptImage Image_Load(string fullpath)
         {
             string path;
-            string group = "default";
+            string group = "mod"; //Default to 'mod'
 
             //Check if there is a group identifier in the path
             if (fullpath.Contains(':'))
@@ -476,7 +477,11 @@ namespace Patchlunky
                 group = fullpath.Substring(0, split);
                 path  = fullpath.Substring(split+1);
             }
-            else path = fullpath;
+            else
+            {
+                path = fullpath;
+                fullpath = group + ":" + path;
+            }
 
             //Make sure the path is ok
             if (Xmf.PathIsValid(path) == false)
@@ -485,7 +490,7 @@ namespace Patchlunky
             Bitmap bmp = null;
 
             //Mod folder/zip
-            if (group.Equals("default", StringComparison.OrdinalIgnoreCase))
+            if (group.Equals("mod", StringComparison.OrdinalIgnoreCase))
             {
                 bmp = Resource.LoadBitmap(this.Mod, path);
             }
