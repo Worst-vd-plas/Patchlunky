@@ -42,6 +42,7 @@ namespace Patchlunky
         //Resources for scripts
         public Archive alltex;
         public LanguageFile Language;
+        public SoundListFile SoundList;
 
         //For keeping track of script resource usage.
         private List<Bitmap> Bitmaps; //Holds all bitmaps used by ScriptImages
@@ -72,6 +73,8 @@ namespace Patchlunky
             alltex.Load();
             Language = new LanguageFile(Program.mainForm.Setup.TempPath + "Localization/strings.pct");
             Language.Load();
+            SoundList = new SoundListFile(Program.mainForm.Setup.TempPath + "Sounds/soundlist.dat");
+            SoundList.Load();
 
             try
             {
@@ -95,6 +98,7 @@ namespace Patchlunky
             //Save archives & language
             alltex.Save();
             Language.Save();
+            SoundList.Save();
 
             //Perform cleanup of the resources
             CleanUp();
@@ -155,6 +159,10 @@ namespace Patchlunky
 
             function _language_set(key, value)
               return sc_ext:Language_Set(tostring(key), tostring(value))
+            end
+
+            function _soundlist_set(key, val1, val2, val3)
+              return sc_ext:SoundList_Set(tostring(key), val1, val2, val3)
             end
 
             function _math_random(m, n)
@@ -279,6 +287,11 @@ namespace Patchlunky
               language = {
                  get = _language_get,
                  set = _language_set,
+              },
+
+              -- Patchlunky Soundlist functions
+              soundlist = {
+                set = _soundlist_set,
               },
 
               -- Patchlunky misc functions
@@ -449,6 +462,12 @@ namespace Patchlunky
 
                 return inputdialog.GetInputString();
             }
+        }
+
+        //Set the value of a key in the soundlist collection
+        public bool SoundList_Set(string key, int val1, int val2, int val3)
+        {
+            return ScriptMan.SoundList.Set(key, val1, val2, val3);
         }
 
         //Get the value of a key in the language collection
