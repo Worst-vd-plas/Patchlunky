@@ -386,6 +386,20 @@ namespace Patchlunky
                     archive.Groups[i].Entries[j] = new_entry;
                     //Msg.Log("Patching skin '" + oldSkin.Name + " to '" + newSkin.Name + "'.");
 
+                    //char_white is a special case that needs to be replaced in the TUTORIAL group as well
+                    if (oldSkin.Id.Equals("char_white", StringComparison.OrdinalIgnoreCase))
+                    {
+                        int k = archive.Groups.FindIndex(o => o.Name.Equals("TUTORIAL", StringComparison.OrdinalIgnoreCase));
+                        if (k != -1)
+                        {
+                            j = archive.Groups[k].Entries.FindIndex(o => o.Name.Equals(oldSkin.Id + ".png", StringComparison.OrdinalIgnoreCase));
+                            if (j != -1)
+                            {
+                                archive.Groups[k].Entries[j] = new Entry(oldSkin.Id + ".png", new_data);
+                            }
+                        }
+                    }
+
                     //Patch leaderboards image if included
                     if (newSkin.LeaderImgPath != null)
                     {
