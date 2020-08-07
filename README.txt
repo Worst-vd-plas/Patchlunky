@@ -1,7 +1,7 @@
 
 Patchlunky - Mod Manager for Spelunky HD
-Version 1.0.0.3
-Copyright (c) 2018, Worst-vd-plas
+Version 1.0.0.4
+Copyright (c) 2020, Worst-vd-plas
 
 Web site: https://github.com/Worst-vd-plas/Patchlunky
 
@@ -437,6 +437,10 @@ For these links to work, you need to register the URL protocol with the setup wi
 
 8. Changelog
 ============
+
+- version 1.0.0.4
+ * Minor update
+ * Fixed Yang character skin replacement
 
 - version 1.0.0.3
  * Minor update
