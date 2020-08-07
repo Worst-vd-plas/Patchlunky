@@ -131,6 +131,7 @@
     <None Include="Resources\Music16x16.png" />
     <None Include="Resources\Text16x16.png" />
     <None Include="Resources\MissingChar.png" />
+    <None Include="Resources\character.xml" />
     <Content Include="Resources\tnt.ico" />
   </ItemGroup>
   <ItemGroup />

@@ -168,6 +168,33 @@ namespace Patchlunky
                 if(File.Exists(filepath) == false)
                     File.WriteAllBytes(filepath, entry.Data);
             }
+
+            CreateDefaultXMLSkins();
+        }
+
+        //Creates a default 'character.xml' file inside the Patchlunky_Backup/Characters folder
+        private void CreateDefaultXMLSkins()
+        {
+            Setup setup = Program.mainForm.Setup;
+
+            string filepath = setup.BackupPath + "Characters/" + "character.xml";
+
+            if (File.Exists(filepath) == false)
+            {
+                Msg.Log("Default character.xml is missing, creating a new one.");
+
+                string charxml = Properties.Resources.default_character_xml;
+
+                try
+                {
+                    File.WriteAllText(filepath, charxml);
+                }
+                catch (Exception ex)
+                {
+                    Msg.Log("Error creating character.xml: " + ex.Message);
+                    return;
+                }
+            }
         }
 
         //GetSkin - Finds a skin by id

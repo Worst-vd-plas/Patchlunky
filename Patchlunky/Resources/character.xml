@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<!-- Original spelunky characters, listed in internal order -->
+<Characters>
+
+<Character>
+	<Name>Spelunker</Name>
+	<Id>char_orange</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_orange.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Red</Name>
+	<Id>char_red</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_red.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Green</Name>
+	<Id>char_green</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_green.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Blue</Name>
+	<Id>char_blue</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_blue.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Yang</Name>
+	<Id>char_white</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_white.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Meat Boy</Name>
+	<Id>char_pink</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_pink.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Yellow</Name>
+	<Id>char_yellow</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_yellow.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Jungle Warrior</Name>
+	<Id>char_brown</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_brown.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Purple</Name>
+	<Id>char_purple</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_purple.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Van Helsing</Name>
+	<Id>char_black</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_black.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Cyan</Name>
+	<Id>char_cyan</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_cyan.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Lime</Name>
+	<Id>char_lime</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_lime.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Eskimo</Name>
+	<Id>char_dlc1</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_dlc1.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Round Girl</Name>
+	<Id>char_dlc2</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_dlc2.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Ninja</Name>
+	<Id>char_dlc3</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_dlc3.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Viking</Name>
+	<Id>char_dlc4</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_dlc4.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Round Boy</Name>
+	<Id>char_dlc5</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_dlc5.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Cyclops</Name>
+	<Id>char_dlc6</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_dlc6.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Robot</Name>
+	<Id>char_dlc7</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_dlc7.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+<Character>
+	<Name>Golden Monk</Name>
+	<Id>char_dlc8</Id>
+	<Author>Mossmouth</Author>
+	<Description>
+	</Description>
+	<CharacterImage>char_dlc8.png</CharacterImage>
+	<PatchlunkyVersion>1.0.0.2</PatchlunkyVersion>
+</Character>
+
+</Characters>

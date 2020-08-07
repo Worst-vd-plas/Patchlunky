@@ -71,6 +71,36 @@ namespace Patchlunky.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;!-- Original spelunky characters, listed in internal order --&gt;
+        ///&lt;Characters&gt;
+        ///
+        ///&lt;Character&gt;
+        ///	&lt;Name&gt;Spelunker&lt;/Name&gt;
+        ///	&lt;Id&gt;char_orange&lt;/Id&gt;
+        ///	&lt;Author&gt;Mossmouth&lt;/Author&gt;
+        ///	&lt;Description&gt;
+        ///	&lt;/Description&gt;
+        ///	&lt;CharacterImage&gt;char_orange.png&lt;/CharacterImage&gt;
+        ///	&lt;PatchlunkyVersion&gt;1.0.0.2&lt;/PatchlunkyVersion&gt;
+        ///&lt;/Character&gt;
+        ///
+        ///&lt;Character&gt;
+        ///	&lt;Name&gt;Red&lt;/Name&gt;
+        ///	&lt;Id&gt;char_red&lt;/Id&gt;
+        ///	&lt;Author&gt;Mossmouth&lt;/Author&gt;
+        ///	&lt;Description&gt;
+        ///	&lt;/Description&gt;
+        ///	&lt;CharacterImage&gt;char_red.png&lt;/CharacterImage&gt;
+        ///	&lt;Patch [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string default_character_xml {
+            get {
+                return ResourceManager.GetString("default_character_xml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Graphic16x16 {
